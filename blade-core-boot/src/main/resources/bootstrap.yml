@@ -32,6 +32,8 @@ spring:
   devtools:
     restart:
       log-condition-evaluation-delta: false
+  main:
+    allow-bean-definition-overriding: true
 
 
 #配置日志地址
