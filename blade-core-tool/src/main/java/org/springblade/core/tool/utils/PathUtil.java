@@ -1,6 +1,5 @@
 package org.springblade.core.tool.utils;
 
-import com.sun.javafx.scene.shape.PathUtils;
 import lombok.experimental.UtilityClass;
 import org.springframework.lang.Nullable;
 
@@ -31,7 +30,7 @@ public class PathUtil {
 			URL url = PathUtil.class.getResource(StringPool.SLASH).toURI().toURL();
 			return PathUtil.toFilePath(url);
 		} catch (Exception e) {
-			String path = PathUtils.class.getResource(StringPool.EMPTY).getPath();
+			String path = PathUtil.class.getResource(StringPool.EMPTY).getPath();
 			return new File(path).getParentFile().getParentFile().getAbsolutePath();
 		}
 	}
