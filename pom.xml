@@ -15,7 +15,7 @@
         <maven.plugin.version>3.8.0</maven.plugin.version>
         <swagger.version>2.9.2</swagger.version>
         <swagger.models.version>1.5.21</swagger.models.version>
-        <swagger.bootstrapui.version>1.8.8</swagger.bootstrapui.version>
+        <swagger.bootstrapui.version>1.8.9</swagger.bootstrapui.version>
         <mybatis.plus.version>3.0.7.1</mybatis.plus.version>
         <curator.framework.version>4.0.1</curator.framework.version>
         <protostuff.version>1.6.0</protostuff.version>
