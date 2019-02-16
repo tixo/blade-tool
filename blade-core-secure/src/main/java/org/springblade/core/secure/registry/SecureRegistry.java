@@ -45,6 +45,7 @@ public class SecureRegistry {
 		this.defaultExcludePatterns.add("/log/**");
 		this.defaultExcludePatterns.add("/user/userInfo");
 		this.defaultExcludePatterns.add("/error/**");
+		this.defaultExcludePatterns.add("/assets/**");
 	}
 
 	/**
