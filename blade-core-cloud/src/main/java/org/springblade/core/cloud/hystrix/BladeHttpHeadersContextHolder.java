@@ -42,7 +42,7 @@ public class BladeHttpHeadersContextHolder {
 	 * X-Real-IP x-forwarded-for 请求和转发的ip
 	 */
 	private static final String[] ALLOW_HEADS = new String[]{
-		"X-Real-IP", "x-forwarded-for", "Authorization"
+		"X-Real-IP", "x-forwarded-for", "Authorization", "blade-auth"
 	};
 
 	static void set(HttpHeaders httpHeaders) {
