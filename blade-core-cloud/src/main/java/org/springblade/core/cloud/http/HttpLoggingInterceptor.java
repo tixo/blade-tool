@@ -142,6 +142,9 @@ public final class HttpLoggingInterceptor implements Interceptor {
 		return level;
 	}
 
+	private String gzip = "gzip";
+	private String contentEncoding = "Content-Encoding";
+
 	@Override
 	public Response intercept(Chain chain) throws IOException {
 		Level level = this.level;
@@ -250,7 +253,7 @@ public final class HttpLoggingInterceptor implements Interceptor {
 				Buffer buffer = source.buffer();
 
 				Long gzippedLength = null;
-				if ("gzip".equalsIgnoreCase(headers.get("Content-Encoding"))) {
+				if (gzip.equalsIgnoreCase(headers.get(contentEncoding))) {
 					gzippedLength = buffer.size();
 					GzipSource gzippedResponseBody = null;
 					try {
@@ -297,12 +300,13 @@ public final class HttpLoggingInterceptor implements Interceptor {
 	 * Returns true if the body in question probably contains human readable text. Uses a small sample
 	 * of code points to detect unicode control characters commonly used in binary file signatures.
 	 */
+	private static int plainCnt = 16;
 	private static boolean isPlaintext(Buffer buffer) {
 		try {
 			Buffer prefix = new Buffer();
 			long byteCount = buffer.size() < 64 ? buffer.size() : 64;
 			buffer.copyTo(prefix, 0, byteCount);
-			for (int i = 0; i < 16; i++) {
+			for (int i = 0; i < plainCnt; i++) {
 				if (prefix.exhausted()) {
 					break;
 				}

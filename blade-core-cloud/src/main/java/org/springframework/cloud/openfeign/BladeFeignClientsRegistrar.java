@@ -138,7 +138,6 @@ public class BladeFeignClientsRegistrar implements ImportBeanDefinitionRegistrar
 	private void validate(Map<String, Object> attributes) {
 		AnnotationAttributes annotation = AnnotationAttributes.fromMap(attributes);
 		// This blows up if an aliased property is overspecified
-		// FIXME annotation.getAliasedString("name", FeignClient.class, null);
 		FeignClientsRegistrar.validateFallback(annotation.getClass("fallback"));
 		FeignClientsRegistrar.validateFallbackFactory(annotation.getClass("fallbackFactory"));
 	}

@@ -80,5 +80,7 @@ public interface StringPool {
 	String ZERO				= "0";
 	String DOLLAR_LEFT_BRACE= "${";
 	String UNKNOWN			= "unknown";
+	String GET				= "GET";
+	String POST				= "POST";
 
 }

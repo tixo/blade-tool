@@ -20,6 +20,7 @@ import feign.MethodMetadata;
 import org.springblade.core.cloud.annotation.ApiVersion;
 import org.springblade.core.cloud.annotation.UrlVersion;
 import org.springblade.core.cloud.version.BladeMediaType;
+import org.springblade.core.tool.utils.StringPool;
 import org.springblade.core.tool.utils.StringUtil;
 import org.springframework.cloud.openfeign.AnnotatedParameterProcessor;
 import org.springframework.cloud.openfeign.support.SpringMvcContract;
@@ -87,7 +88,7 @@ public class BladeSpringMvcContract extends SpringMvcContract {
 	protected boolean processAnnotationsOnParameter(MethodMetadata data, Annotation[] annotations, int paramIndex) {
 		boolean httpAnnotation = super.processAnnotationsOnParameter(data, annotations, paramIndex);
 		// 在 springMvc 中如果是 Get 请求且参数中是对象 没有声明为@RequestBody 则默认为 Param
-		if (!httpAnnotation && "GET".equals(data.template().method().toUpperCase())) {
+		if (!httpAnnotation && StringPool.GET.equals(data.template().method().toUpperCase())) {
 			for (Annotation parameterAnnotation : annotations) {
 				if (!(parameterAnnotation instanceof RequestBody)) {
 					return false;
