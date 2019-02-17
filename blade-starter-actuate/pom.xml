@@ -11,20 +11,20 @@
 
     <artifactId>blade-starter-actuate</artifactId>
     <name>${project.artifactId}</name>
-    <version>${blade.tool.version}</version>
+    <version>${bladex.tool.version}</version>
     <packaging>jar</packaging>
 
     <dependencies>
         <dependency>
             <groupId>org.springblade</groupId>
             <artifactId>blade-core-tool</artifactId>
-            <version>${blade.tool.version}</version>
+            <version>${bladex.tool.version}</version>
         </dependency>
         <!-- Auto -->
         <dependency>
             <groupId>org.springblade</groupId>
             <artifactId>blade-core-auto</artifactId>
-            <version>${blade.tool.version}</version>
+            <version>${bladex.tool.version}</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

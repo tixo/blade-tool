@@ -13,7 +13,7 @@
 
     <artifactId>blade-core-auto</artifactId>
     <name>${project.artifactId}</name>
-    <version>${blade.tool.version}</version>
+    <version>${bladex.tool.version}</version>
     <packaging>jar</packaging>
 
     <build>

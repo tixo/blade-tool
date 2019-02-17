@@ -12,7 +12,7 @@
 
     <artifactId>blade-starter-mybatis</artifactId>
     <name>${project.artifactId}</name>
-    <version>${blade.tool.version}</version>
+    <version>${bladex.tool.version}</version>
     <packaging>jar</packaging>
 
     <dependencies>
@@ -26,17 +26,17 @@
         <dependency>
             <groupId>org.springblade</groupId>
             <artifactId>blade-core-tool</artifactId>
-            <version>${blade.tool.version}</version>
+            <version>${bladex.tool.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springblade</groupId>
             <artifactId>blade-core-secure</artifactId>
-            <version>${blade.tool.version}</version>
+            <version>${bladex.tool.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springblade</groupId>
             <artifactId>blade-core-secure</artifactId>
-            <version>${blade.tool.version}</version>
+            <version>${bladex.tool.version}</version>
         </dependency>
     </dependencies>
 

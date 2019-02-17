@@ -12,7 +12,7 @@
 
     <artifactId>blade-core-boot</artifactId>
     <name>${project.artifactId}</name>
-    <version>${blade.tool.version}</version>
+    <version>${bladex.tool.version}</version>
     <packaging>jar</packaging>
 
     <dependencies>
@@ -35,23 +35,23 @@
         <dependency>
             <groupId>org.springblade</groupId>
             <artifactId>blade-core-cloud</artifactId>
-            <version>${blade.tool.version}</version>
+            <version>${bladex.tool.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springblade</groupId>
             <artifactId>blade-starter-redis</artifactId>
-            <version>${blade.tool.version}</version>
+            <version>${bladex.tool.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springblade</groupId>
             <artifactId>blade-starter-log</artifactId>
-            <version>${blade.tool.version}</version>
+            <version>${bladex.tool.version}</version>
         </dependency>
         <!--MyBatis-->
         <dependency>
             <groupId>org.springblade</groupId>
             <artifactId>blade-starter-mybatis</artifactId>
-            <version>${blade.tool.version}</version>
+            <version>${bladex.tool.version}</version>
         </dependency>
         <dependency>
             <groupId>com.baomidou</groupId>
@@ -85,7 +85,7 @@
         <dependency>
             <groupId>org.springblade</groupId>
             <artifactId>blade-core-auto</artifactId>
-            <version>${blade.tool.version}</version>
+            <version>${bladex.tool.version}</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
