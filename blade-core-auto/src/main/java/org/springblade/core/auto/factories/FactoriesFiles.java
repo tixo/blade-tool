@@ -76,7 +76,7 @@ class FactoriesFiles {
 	static void writeDevToolsFile(String projectName,
 								  OutputStream output) throws IOException {
 		BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(output, UTF_8));
-		// restart.include.mica-cloud=/mica-cloud[\\w-]+\.jar
+		// restart.include.blade-cloud=/blade-cloud[\\w-]+\.jar
 		String format = "restart.include.%s=/%s[\\\\w-]+\\.jar";
 		writer.write(String.format(format, projectName, projectName));
 		writer.flush();

@@ -14,7 +14,6 @@
  *  this software without specific prior written permission.
  *  Author: DreamLu 卢春梦 (596392912@qq.com)
  */
-
 package org.springblade.core.cloud.feign;
 
 import feign.MethodMetadata;
@@ -35,8 +34,10 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 /**
- * 支持 版本 处理
+ * 支持 blade-boot 的 版本 处理
  *
+ * @see org.springblade.core.cloud.annotation.UrlVersion
+ * @see org.springblade.core.cloud.annotation.ApiVersion
  * @author L.cm
  */
 public class BladeSpringMvcContract extends SpringMvcContract {
@@ -70,8 +71,8 @@ public class BladeSpringMvcContract extends SpringMvcContract {
 				apiVersion = AnnotatedElementUtils.findMergedAnnotation(targetType, ApiVersion.class);
 			}
 			if (apiVersion != null && StringUtil.isNotBlank(apiVersion.value())) {
-				BladeMediaType micaMediaType = new BladeMediaType(apiVersion.value());
-				data.template().header(HttpHeaders.ACCEPT, micaMediaType.toString());
+				BladeMediaType BladeMediaType = new BladeMediaType(apiVersion.value());
+				data.template().header(HttpHeaders.ACCEPT, BladeMediaType.toString());
 			}
 		}
 	}
@@ -86,8 +87,7 @@ public class BladeSpringMvcContract extends SpringMvcContract {
 	protected boolean processAnnotationsOnParameter(MethodMetadata data, Annotation[] annotations, int paramIndex) {
 		boolean httpAnnotation = super.processAnnotationsOnParameter(data, annotations, paramIndex);
 		// 在 springMvc 中如果是 Get 请求且参数中是对象 没有声明为@RequestBody 则默认为 Param
-		String get = "GET";
-		if (!httpAnnotation && get.equals(data.template().method().toUpperCase())) {
+		if (!httpAnnotation && "GET".equals(data.template().method().toUpperCase())) {
 			for (Annotation parameterAnnotation : annotations) {
 				if (!(parameterAnnotation instanceof RequestBody)) {
 					return false;

@@ -1,5 +1,5 @@
 /*
- *      Copyright (c) 2018-2028, Chill Zhuang All rights reserved.
+ *      Copyright (c) 2018-2028, DreamLu All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions are met:
@@ -12,48 +12,34 @@
  *  Neither the name of the dreamlu.net developer nor the names of its
  *  contributors may be used to endorse or promote products derived from
  *  this software without specific prior written permission.
- *  Author: Chill 庄骞 (smallchill@163.com)
+ *  Author: DreamLu 卢春梦 (596392912@qq.com)
  */
 package org.springblade.core.cloud.feign;
 
+import feign.Target;
 import feign.hystrix.FallbackFactory;
-import lombok.extern.slf4j.Slf4j;
-import org.springblade.core.tool.api.R;
-import org.springblade.core.tool.api.ResultCode;
+import lombok.AllArgsConstructor;
 import org.springframework.cglib.proxy.Enhancer;
-import org.springframework.cglib.proxy.MethodInterceptor;
-import org.springframework.lang.Nullable;
 
 /**
  * 默认 Fallback，避免写过多fallback类
  *
  * @param <T> 泛型标记
- * @author Chill
+ * @author L.cm
  */
-@Slf4j(topic = "FeignFallBack")
-public final class BladeFallbackFactory<T> implements FallbackFactory<T> {
-	public static final BladeFallbackFactory INSTANCE = new BladeFallbackFactory();
+@AllArgsConstructor
+public class BladeFallbackFactory<T> implements FallbackFactory<T> {
+	private final Target<T> target;
 
-	private BladeFallbackFactory() {
-	}
-
-	@SuppressWarnings("unchecked")
-	T create(final Class<?> type, final Throwable cause) {
-		// 重写 Feign ErrorDecoder，message 知己为 body 数据，反序列化为 R
-		final R result = cause instanceof BladeFeignException ? ((BladeFeignException) cause).getResult() : R.fail(ResultCode.INTERNAL_SERVER_ERROR, cause.getMessage());
-		Enhancer enhancer = new Enhancer();
-		enhancer.setSuperclass(type);
-		enhancer.setUseCache(true);
-		enhancer.setCallback((MethodInterceptor) (obj, method, args, proxy) -> {
-			log.error("Fallback class:[{}] method:[{}] message:[{}]", type.getName(), method.getName(), cause.getMessage());
-			return result;
-		});
-		return (T) enhancer.create();
-	}
-
-	@Nullable
 	@Override
+	@SuppressWarnings("unchecked")
 	public T create(Throwable cause) {
-		return null;
+		final Class<T> targetType = target.type();
+		final String targetName = target.name();
+		Enhancer enhancer = new Enhancer();
+		enhancer.setSuperclass(targetType);
+		enhancer.setUseCache(true);
+		enhancer.setCallback(new BladeFeignFallback<>(targetType, targetName, cause));
+		return (T) enhancer.create();
 	}
 }

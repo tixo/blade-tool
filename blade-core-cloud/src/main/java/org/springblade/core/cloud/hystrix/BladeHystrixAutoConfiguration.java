@@ -1,5 +1,5 @@
 /*
- *      Copyright (c) 2018-2028, Chill Zhuang All rights reserved.
+ *      Copyright (c) 2018-2028, DreamLu All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions are met:
@@ -12,7 +12,7 @@
  *  Neither the name of the dreamlu.net developer nor the names of its
  *  contributors may be used to endorse or promote products derived from
  *  this software without specific prior written permission.
- *  Author: Chill 庄骞 (smallchill@163.com)
+ *  Author: DreamLu 卢春梦 (596392912@qq.com)
  */
 package org.springblade.core.cloud.hystrix;
 
@@ -35,7 +35,7 @@ import javax.annotation.PostConstruct;
 /**
  * Hystrix 配置
  *
- * @author Chill
+ * @author L.cm
  */
 @Configuration
 @ConditionalOnClass(Hystrix.class)

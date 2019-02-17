@@ -21,7 +21,7 @@ import lombok.Getter;
 import org.springframework.http.MediaType;
 
 /**
- * mica Media Types，application/vnd.github.VERSION+json
+ * blade Media Types，application/vnd.github.VERSION+json
  *
  * <p>
  * https://developer.github.com/v3/media/
@@ -33,7 +33,7 @@ import org.springframework.http.MediaType;
 public class BladeMediaType {
 	private static final String MEDIA_TYPE_TEMP = "application/vnd.%s.%s+json";
 
-	private final String appName = "mica";
+	private final String appName = "blade";
 	private final String version;
 	private final MediaType mediaType;
 

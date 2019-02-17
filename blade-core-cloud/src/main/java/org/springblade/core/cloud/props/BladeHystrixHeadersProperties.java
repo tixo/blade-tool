@@ -1,5 +1,5 @@
 /*
- *      Copyright (c) 2018-2028, Chill Zhuang All rights reserved.
+ *      Copyright (c) 2018-2028, DreamLu All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions are met:
@@ -12,7 +12,7 @@
  *  Neither the name of the dreamlu.net developer nor the names of its
  *  contributors may be used to endorse or promote products derived from
  *  this software without specific prior written permission.
- *  Author: Chill 庄骞 (smallchill@163.com)
+ *  Author: DreamLu 卢春梦 (596392912@qq.com)
  */
 package org.springblade.core.cloud.props;
 
@@ -28,24 +28,28 @@ import java.util.List;
 /**
  * Hystrix Headers 配置
  *
- * @author Chill
+ * @author L.cm
  */
 @Getter
 @Setter
 @RefreshScope
 @ConfigurationProperties("blade.hystrix.headers")
 public class BladeHystrixHeadersProperties {
+
 	/**
 	 * 用于 聚合层 向调用层传递用户信息 的请求头，默认：X-BLADE-ACCOUNT
 	 */
 	private String account = "X-BLADE-ACCOUNT";
+
 	/**
-	 * RestTemplate 和 Feign 透传到下层的 Headers 名称表达式
+	 * RestTemplate 和 Fegin 透传到下层的 Headers 名称表达式
 	 */
 	@Nullable
-	private String pattern = "BLADE*";
+	private String pattern = "blade*";
+
 	/**
-	 * RestTemplate 和 Feign 透传到下层的 Headers 名称列表
+	 * RestTemplate 和 Fegin 透传到下层的 Headers 名称列表
 	 */
 	private List<String> allowed = Arrays.asList("X-Real-IP", "x-forwarded-for", "Authorization", "blade-auth");
+
 }

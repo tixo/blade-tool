@@ -21,7 +21,7 @@ public abstract class BladeBeanMap extends BeanMap {
 	}
 
 	public static BladeBeanMap create(Object bean) {
-		MicaGenerator gen = new MicaGenerator();
+		BladeGenerator gen = new BladeGenerator();
 		gen.setBean(bean);
 		return gen.create();
 	}
@@ -34,14 +34,14 @@ public abstract class BladeBeanMap extends BeanMap {
 	@Override
 	public abstract BladeBeanMap newInstance(Object o);
 
-	public static class MicaGenerator extends AbstractClassGenerator {
+	public static class BladeGenerator extends AbstractClassGenerator {
 		private static final Source SOURCE = new Source(BladeBeanMap.class.getName());
 
 		private Object bean;
 		private Class beanClass;
 		private int require;
 
-		public MicaGenerator() {
+		public BladeGenerator() {
 			super(SOURCE);
 		}
 

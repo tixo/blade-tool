@@ -14,7 +14,6 @@
  *  this software without specific prior written permission.
  *  Author: DreamLu 卢春梦 (596392912@qq.com)
  */
-
 package org.springblade.core.cloud.annotation;
 
 import org.springframework.core.annotation.AliasFor;
@@ -28,7 +27,7 @@ import java.lang.annotation.*;
  *
  * <p>
  *     1. url 版本号：添加到 url 前
- *     2. Accept 版本：application/vnd.mica.VERSION+json
+ *     2. Accept 版本：application/vnd.blade.VERSION+json
  * </p>
  *
  * @author L.cm

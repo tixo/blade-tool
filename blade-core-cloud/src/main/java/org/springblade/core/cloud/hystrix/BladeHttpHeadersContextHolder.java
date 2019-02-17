@@ -1,5 +1,5 @@
 /*
- *      Copyright (c) 2018-2028, Chill Zhuang All rights reserved.
+ *      Copyright (c) 2018-2028, DreamLu All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions are met:
@@ -12,7 +12,7 @@
  *  Neither the name of the dreamlu.net developer nor the names of its
  *  contributors may be used to endorse or promote products derived from
  *  this software without specific prior written permission.
- *  Author: Chill 庄骞 (smallchill@163.com)
+ *  Author: DreamLu 卢春梦 (596392912@qq.com)
  */
 package org.springblade.core.cloud.hystrix;
 
@@ -33,7 +33,7 @@ import java.util.List;
 /**
  * HttpHeadersContext
  *
- * @author Chill
+ * @author L.cm
  */
 public class BladeHttpHeadersContextHolder {
 	private static final ThreadLocal<HttpHeaders> HTTP_HEADERS_HOLDER = new NamedThreadLocal<>("Blade hystrix HttpHeaders");
@@ -42,7 +42,7 @@ public class BladeHttpHeadersContextHolder {
 	 * X-Real-IP x-forwarded-for 请求和转发的ip
 	 */
 	private static final String[] ALLOW_HEADS = new String[]{
-		"X-Real-IP", "x-forwarded-for", "Authorization", "blade-auth"
+		"X-Real-IP", "x-forwarded-for", "blade-auth"
 	};
 
 	static void set(HttpHeaders httpHeaders) {
@@ -93,6 +93,7 @@ public class BladeHttpHeadersContextHolder {
 						headers.add(key, values);
 					}
 				}
+
 			}
 		}
 		return headers.isEmpty() ? null : headers;

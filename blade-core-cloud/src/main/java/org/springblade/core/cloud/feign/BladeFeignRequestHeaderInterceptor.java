@@ -1,5 +1,5 @@
 /*
- *      Copyright (c) 2018-2028, Chill Zhuang All rights reserved.
+ *      Copyright (c) 2018-2028, DreamLu All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions are met:
@@ -12,7 +12,7 @@
  *  Neither the name of the dreamlu.net developer nor the names of its
  *  contributors may be used to endorse or promote products derived from
  *  this software without specific prior written permission.
- *  Author: Chill 庄骞 (smallchill@163.com)
+ *  Author: DreamLu 卢春梦 (596392912@qq.com)
  */
 package org.springblade.core.cloud.feign;
 
@@ -25,12 +25,12 @@ import org.springframework.http.HttpHeaders;
  * feign 传递Request header
  *
  * <p>
- * https://blog.csdn.net/u014519194/article/details/77160958
- * http://tietang.wang/2016/02/25/hystrix/Hystrix%E5%8F%82%E6%95%B0%E8%AF%A6%E8%A7%A3/
- * https://github.com/Netflix/Hystrix/issues/92#issuecomment-260548068
+ *     https://blog.csdn.net/u014519194/article/details/77160958
+ *     http://tietang.wang/2016/02/25/hystrix/Hystrix%E5%8F%82%E6%95%B0%E8%AF%A6%E8%A7%A3/
+ *     https://github.com/Netflix/Hystrix/issues/92#issuecomment-260548068
  * </p>
  *
- * @author Chill
+ * @author L.cm
  */
 public class BladeFeignRequestHeaderInterceptor implements RequestInterceptor {
 
@@ -38,7 +38,9 @@ public class BladeFeignRequestHeaderInterceptor implements RequestInterceptor {
 	public void apply(RequestTemplate requestTemplate) {
 		HttpHeaders headers = BladeHttpHeadersContextHolder.get();
 		if (headers != null && !headers.isEmpty()) {
-			headers.forEach((key, values) -> values.forEach(value -> requestTemplate.header(key, value)));
+			headers.forEach((key, values) -> {
+				values.forEach(value -> requestTemplate.header(key, value));
+			});
 		}
 	}
 

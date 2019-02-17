@@ -1,5 +1,5 @@
 /*
- *      Copyright (c) 2018-2028, Chill Zhuang All rights reserved.
+ *      Copyright (c) 2018-2028, DreamLu All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions are met:
@@ -12,15 +12,15 @@
  *  Neither the name of the dreamlu.net developer nor the names of its
  *  contributors may be used to endorse or promote products derived from
  *  this software without specific prior written permission.
- *  Author: Chill 庄骞 (smallchill@163.com)
+ *  Author: DreamLu 卢春梦 (596392912@qq.com)
  */
 package org.springblade.core.cloud.http;
+
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import org.springblade.core.cloud.hystrix.BladeHystrixAccountGetter;
 import org.springblade.core.cloud.props.BladeHystrixHeadersProperties;
-import org.springblade.core.tool.jackson.MappingApiJackson2HttpMessageConverter;
 import org.springblade.core.tool.utils.Charsets;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -46,18 +46,16 @@ import java.util.concurrent.TimeUnit;
 /**
  * Http RestTemplateHeaderInterceptor 配置
  *
- * @author Chill
+ * @author L.cm
  */
 @Configuration
+@ConditionalOnClass(okhttp3.OkHttpClient.class)
 @AllArgsConstructor
-@ConditionalOnClass(name = "okhttp3.OkHttpClient")
 public class RestTemplateConfiguration {
-
 	private final ObjectMapper objectMapper;
 
 	/**
 	 * dev, test 环境打印出BODY
-	 *
 	 * @return HttpLoggingInterceptor
 	 */
 	@Bean("httpLoggingInterceptor")
@@ -70,7 +68,6 @@ public class RestTemplateConfiguration {
 
 	/**
 	 * ontest 环境 打印 请求头
-	 *
 	 * @return HttpLoggingInterceptor
 	 */
 	@Bean("httpLoggingInterceptor")
@@ -83,7 +80,6 @@ public class RestTemplateConfiguration {
 
 	/**
 	 * prod 环境只打印请求url
-	 *
 	 * @return HttpLoggingInterceptor
 	 */
 	@Bean("httpLoggingInterceptor")
@@ -96,9 +92,8 @@ public class RestTemplateConfiguration {
 
 	/**
 	 * okhttp3 链接池配置
-	 *
 	 * @param connectionPoolFactory 链接池配置
-	 * @param httpClientProperties  httpClient配置
+	 * @param httpClientProperties httpClient配置
 	 * @return okhttp3.ConnectionPool
 	 */
 	@Bean
@@ -114,11 +109,10 @@ public class RestTemplateConfiguration {
 
 	/**
 	 * 配置OkHttpClient
-	 *
-	 * @param httpClientFactory    httpClient 工厂
-	 * @param connectionPool       链接池配置
+	 * @param httpClientFactory httpClient 工厂
+	 * @param connectionPool 链接池配置
 	 * @param httpClientProperties httpClient配置
-	 * @param interceptor          拦截器
+	 * @param interceptor 拦截器
 	 * @return OkHttpClient
 	 */
 	@Bean
@@ -144,7 +138,7 @@ public class RestTemplateConfiguration {
 	public RestTemplateHeaderInterceptor requestHeaderInterceptor(
 		@Autowired(required = false) @Nullable BladeHystrixAccountGetter accountGetter,
 		BladeHystrixHeadersProperties properties) {
-		return new RestTemplateHeaderInterceptor(accountGetter, properties);
+		return new RestTemplateHeaderInterceptor(accountGetter,properties);
 	}
 
 	/**
@@ -179,6 +173,6 @@ public class RestTemplateConfiguration {
 	private void configMessageConverters(List<HttpMessageConverter<?>> converters) {
 		converters.removeIf(x -> x instanceof StringHttpMessageConverter || x instanceof MappingJackson2HttpMessageConverter);
 		converters.add(new StringHttpMessageConverter(Charsets.UTF_8));
-		converters.add(new MappingApiJackson2HttpMessageConverter(objectMapper));
+		converters.add(new MappingJackson2HttpMessageConverter(objectMapper));
 	}
 }

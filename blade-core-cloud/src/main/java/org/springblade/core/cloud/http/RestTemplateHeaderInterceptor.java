@@ -1,5 +1,5 @@
 /*
- *      Copyright (c) 2018-2028, Chill Zhuang All rights reserved.
+ *      Copyright (c) 2018-2028, DreamLu All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions are met:
@@ -12,7 +12,7 @@
  *  Neither the name of the dreamlu.net developer nor the names of its
  *  contributors may be used to endorse or promote products derived from
  *  this software without specific prior written permission.
- *  Author: Chill 庄骞 (smallchill@163.com)
+ *  Author: DreamLu 卢春梦 (596392912@qq.com)
  */
 package org.springblade.core.cloud.http;
 
@@ -32,7 +32,7 @@ import java.io.IOException;
 /**
  * RestTemplateHeaderInterceptor 传递Request header
  *
- * @author Chill
+ * @author L.cm
  */
 @AllArgsConstructor
 public class RestTemplateHeaderInterceptor implements ClientHttpRequestInterceptor {
@@ -45,7 +45,7 @@ public class RestTemplateHeaderInterceptor implements ClientHttpRequestIntercept
 		HttpRequest request, byte[] bytes,
 		ClientHttpRequestExecution execution) throws IOException {
 		HttpHeaders headers = BladeHttpHeadersContextHolder.get();
-		// 考虑2中情况 1. RestTemplate 不使用 hystrix 2. 使用 hystrix
+		// 考虑2中情况 1. RestTemplate 不是用 hystrix 2. 使用 hystrix
 		if (headers == null) {
 			headers = BladeHttpHeadersContextHolder.toHeaders(accountGetter, properties);
 		}

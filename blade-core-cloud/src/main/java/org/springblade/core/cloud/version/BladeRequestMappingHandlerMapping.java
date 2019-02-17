@@ -1,5 +1,5 @@
 /*
- *      Copyright (c) 2018-2028, Chill Zhuang All rights reserved.
+ *      Copyright (c) 2018-2028, DreamLu All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions are met:
@@ -12,7 +12,7 @@
  *  Neither the name of the dreamlu.net developer nor the names of its
  *  contributors may be used to endorse or promote products derived from
  *  this software without specific prior written permission.
- *  Author: Chill 庄骞 (smallchill@163.com)
+ *  Author: DreamLu 卢春梦 (596392912@qq.com)
  */
 package org.springblade.core.cloud.version;
 
@@ -30,9 +30,16 @@ import java.lang.reflect.Method;
 import java.util.Map;
 
 /**
- * url版本号处理
+ * url版本号处理 和 header 版本处理
  *
- * @author hanchao
+ * <p>
+ *     url: /v1/user/{id}
+ *     header: Accept application/vnd.blade.VERSION+json
+ * </p>
+ *
+ * 注意：c 代表客户端版本
+ *
+ * @author L.cm
  */
 public class BladeRequestMappingHandlerMapping extends RequestMappingHandlerMapping {
 

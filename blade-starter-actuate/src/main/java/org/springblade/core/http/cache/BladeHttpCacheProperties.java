@@ -32,7 +32,7 @@ import java.util.List;
 @ConfigurationProperties("blade.http.cache")
 public class BladeHttpCacheProperties {
 	/**
-	 * Http-cache 的 spring cache名，默认：micaHttpCache
+	 * Http-cache 的 spring cache名，默认：bladeHttpCache
 	 */
 	@Getter
 	@Setter

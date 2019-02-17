@@ -1,5 +1,5 @@
 /*
- *      Copyright (c) 2018-2028, Chill Zhuang All rights reserved.
+ *      Copyright (c) 2018-2028, DreamLu All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions are met:
@@ -12,7 +12,7 @@
  *  Neither the name of the dreamlu.net developer nor the names of its
  *  contributors may be used to endorse or promote products derived from
  *  this software without specific prior written permission.
- *  Author: Chill 庄骞 (smallchill@163.com)
+ *  Author: DreamLu 卢春梦 (596392912@qq.com)
  */
 package org.springblade.core.cloud.http;
 
@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * OkHttp Slf4j logger
  *
- * @author Chill
+ * @author L.cm
  */
 @Slf4j
 public class OkHttpSlf4jLogger implements HttpLoggingInterceptor.Logger {

@@ -1,5 +1,5 @@
 /*
- *      Copyright (c) 2018-2028, Chill Zhuang All rights reserved.
+ *      Copyright (c) 2018-2028, DreamLu All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions are met:
@@ -12,7 +12,7 @@
  *  Neither the name of the dreamlu.net developer nor the names of its
  *  contributors may be used to endorse or promote products derived from
  *  this software without specific prior written permission.
- *  Author: Chill 庄骞 (smallchill@163.com)
+ *  Author: DreamLu 卢春梦 (596392912@qq.com)
  */
 package org.springblade.core.cloud.http;
 
@@ -39,7 +39,7 @@ import static okhttp3.internal.platform.Platform.INFO;
  * this class should not be considered stable and may change slightly between releases. If you need
  * a stable logging format, use your own interceptor.
  *
- * @author http
+ * @author L.cm
  */
 public final class HttpLoggingInterceptor implements Interceptor {
 	private static final Charset UTF8 = StandardCharsets.UTF_8;
@@ -65,7 +65,7 @@ public final class HttpLoggingInterceptor implements Interceptor {
 		 *
 		 * <p>Example:
 		 * <pre>{@code
-		 * --> POST /greeting org.springblade.cloud.http/1.1
+		 * --> POST /greeting http/1.1
 		 * Host: example.com
 		 * Content-Type: plain/text
 		 * Content-Length: 3
@@ -104,9 +104,8 @@ public final class HttpLoggingInterceptor implements Interceptor {
 
 	public interface Logger {
 		/**
-		 * 日志
-		 *
-		 * @param message
+		 * log
+		 * @param message message
 		 */
 		void log(String message);
 
@@ -128,11 +127,8 @@ public final class HttpLoggingInterceptor implements Interceptor {
 
 	private volatile Level level = Level.NONE;
 
-	private final static int SIZE = 16;
-
 	/**
 	 * Change the level at which this interceptor logs.
-	 *
 	 * @param level log Level
 	 * @return HttpLoggingInterceptor
 	 */
@@ -148,7 +144,6 @@ public final class HttpLoggingInterceptor implements Interceptor {
 
 	@Override
 	public Response intercept(Chain chain) throws IOException {
-
 		Level level = this.level;
 
 		Request request = chain.request();
@@ -255,9 +250,7 @@ public final class HttpLoggingInterceptor implements Interceptor {
 				Buffer buffer = source.buffer();
 
 				Long gzippedLength = null;
-				String gzip = "gzip";
-				String header = "Content-Encoding";
-				if (gzip.equalsIgnoreCase(headers.get(header))) {
+				if ("gzip".equalsIgnoreCase(headers.get("Content-Encoding"))) {
 					gzippedLength = buffer.size();
 					GzipSource gzippedResponseBody = null;
 					try {
@@ -309,7 +302,7 @@ public final class HttpLoggingInterceptor implements Interceptor {
 			Buffer prefix = new Buffer();
 			long byteCount = buffer.size() < 64 ? buffer.size() : 64;
 			buffer.copyTo(prefix, 0, byteCount);
-			for (int i = 0; i < SIZE; i++) {
+			for (int i = 0; i < 16; i++) {
 				if (prefix.exhausted()) {
 					break;
 				}

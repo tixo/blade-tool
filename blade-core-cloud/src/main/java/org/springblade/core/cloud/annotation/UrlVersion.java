@@ -14,7 +14,6 @@
  *  this software without specific prior written permission.
  *  Author: DreamLu 卢春梦 (596392912@qq.com)
  */
-
 package org.springblade.core.cloud.annotation;
 
 import java.lang.annotation.*;
