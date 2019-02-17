@@ -33,10 +33,12 @@
             <artifactId>blade-core-secure</artifactId>
             <version>${bladex.tool.version}</version>
         </dependency>
+        <!-- Auto -->
         <dependency>
             <groupId>org.springblade</groupId>
-            <artifactId>blade-core-secure</artifactId>
+            <artifactId>blade-core-auto</artifactId>
             <version>${bladex.tool.version}</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
