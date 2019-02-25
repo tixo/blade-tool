@@ -916,7 +916,7 @@ public class StringUtil extends org.springframework.util.StringUtils {
 		char firstChar = str.charAt(0);
 		if (firstChar >= CharPool.UPPER_A && firstChar <= CharPool.UPPER_Z) {
 			char[] arr = str.toCharArray();
-			arr[0] += (CharPool.LOWER_Z - CharPool.UPPER_A);
+			arr[0] += (CharPool.LOWER_A - CharPool.UPPER_A);
 			return new String(arr);
 		}
 		return str;
