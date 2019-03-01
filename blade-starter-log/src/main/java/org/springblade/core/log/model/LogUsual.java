@@ -32,7 +32,6 @@ import java.time.LocalDateTime;
  * 实体类
  *
  * @author Chill
- * @since 2018-10-12
  */
 @Data
 @TableName("blade_log_usual")
