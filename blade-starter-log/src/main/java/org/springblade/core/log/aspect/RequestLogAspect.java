@@ -147,7 +147,7 @@ public class RequestLogAspect {
 		long startNs = System.nanoTime();
 		try {
 			Object result = point.proceed();
-			logBuilder.append("===Result===  {}\n");
+			logBuilder.append("===result====  {}\n");
 			logArgs.add(JsonUtil.toJson(result));
 			return result;
 		} finally {

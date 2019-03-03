@@ -14,52 +14,25 @@
  *  this software without specific prior written permission.
  *  Author: Chill 庄骞 (smallchill@163.com)
  */
-package org.springblade.core.secure;
+package org.springblade.core.tenant.mp;
+
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-
-import java.io.Serializable;
+import org.springblade.core.mp.base.BaseEntity;
 
 /**
- * 用户实体
+ * 租户基础实体类
  *
  * @author Chill
  */
 @Data
-public class BladeUser implements Serializable {
+public class TenantEntity extends BaseEntity {
 
-	private static final long serialVersionUID = 1L;
-
-	/**
-	 * 用户id
-	 */
-	@ApiModelProperty(hidden = true)
-	private Integer userId;
 	/**
 	 * 租户编号
 	 */
-	@ApiModelProperty(hidden = true)
+	@ApiModelProperty(value = "租户编号")
 	private String tenantCode;
-	/**
-	 * 昵称
-	 */
-	@ApiModelProperty(hidden = true)
-	private String userName;
-	/**
-	 * 账号
-	 */
-	@ApiModelProperty(hidden = true)
-	private String account;
-	/**
-	 * 角色id
-	 */
-	@ApiModelProperty(hidden = true)
-	private String roleId;
-	/**
-	 * 角色名
-	 */
-	@ApiModelProperty(hidden = true)
-	private String roleName;
 
 }

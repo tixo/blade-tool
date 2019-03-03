@@ -27,13 +27,12 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
 /**
  * blade自动配置类
+ *
  * @author Chill
  */
 @Slf4j
 @Configuration
-@EnableConfigurationProperties({
-	BladeProperties.class
-})
+@EnableConfigurationProperties(BladeProperties.class)
 @EnableAspectJAutoProxy(proxyTargetClass = true, exposeProxy = true)
 @AllArgsConstructor
 public class BladeBootAutoConfiguration {

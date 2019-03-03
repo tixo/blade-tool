@@ -14,52 +14,38 @@
  *  this software without specific prior written permission.
  *  Author: Chill 庄骞 (smallchill@163.com)
  */
-package org.springblade.core.secure;
+package org.springblade.core.tenant;
 
-import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
-import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
- * 用户实体
+ * 多租户配置
  *
  * @author Chill
  */
-@Data
-public class BladeUser implements Serializable {
+@Getter
+@Setter
+@ConfigurationProperties(prefix = "blade.tenant")
+public class BladeTenantProperties {
 
-	private static final long serialVersionUID = 1L;
+	/**
+	 * 多租户字段名称
+	 */
+	private String column = "tenant_code";
 
 	/**
-	 * 用户id
+	 * 多租户数据表
 	 */
-	@ApiModelProperty(hidden = true)
-	private Integer userId;
-	/**
-	 * 租户编号
-	 */
-	@ApiModelProperty(hidden = true)
-	private String tenantCode;
-	/**
-	 * 昵称
-	 */
-	@ApiModelProperty(hidden = true)
-	private String userName;
-	/**
-	 * 账号
-	 */
-	@ApiModelProperty(hidden = true)
-	private String account;
-	/**
-	 * 角色id
-	 */
-	@ApiModelProperty(hidden = true)
-	private String roleId;
-	/**
-	 * 角色名
-	 */
-	@ApiModelProperty(hidden = true)
-	private String roleName;
+	private List<String> tables = new ArrayList<>();
 
+	/**
+	 * 多租户系统数据表
+	 */
+	private List<String> bladeTables = Arrays.asList("blade_notice", "blade_dept", "blade_dict", "blade_menu", "blade_role", "blade_role_menu", "blade_param", "blade_user", "blade_log_api", "blade_log_error", "blade_log_usual");
 }

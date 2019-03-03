@@ -49,6 +49,7 @@ public class SecureUtil {
 	public final static String ROLE_ID = "roleId";
 	public final static String USER_NAME = "userName";
 	public final static String ROLE_NAME = "roleName";
+	public final static String TENANT_CODE = "tenantCode";
 	public final static Integer AUTH_LENGTH = 7;
 	public static String BASE64_SECURITY = Base64.getEncoder().encodeToString("BladeX".getBytes(Charsets.UTF_8));
 
@@ -83,14 +84,18 @@ public class SecureUtil {
 			return null;
 		}
 		Integer userId = Func.toInt(claims.get(SecureUtil.USER_ID));
+		String tenantCode = Func.toStr(claims.get(SecureUtil.TENANT_CODE));
 		String roleId = Func.toStr(claims.get(SecureUtil.ROLE_ID));
 		String account = Func.toStr(claims.get(SecureUtil.ACCOUNT));
 		String roleName = Func.toStr(claims.get(SecureUtil.ROLE_NAME));
+		String userName = Func.toStr(claims.get(SecureUtil.USER_NAME));
 		BladeUser bladeUser = new BladeUser();
-		bladeUser.setAccount(account);
 		bladeUser.setUserId(userId);
+		bladeUser.setTenantCode(tenantCode);
+		bladeUser.setAccount(account);
 		bladeUser.setRoleId(roleId);
 		bladeUser.setRoleName(roleName);
+		bladeUser.setUserName(userName);
 		return bladeUser;
 	}
 
@@ -137,6 +142,47 @@ public class SecureUtil {
 		return (null == user) ? StringPool.EMPTY : user.getAccount();
 	}
 
+	/**
+	 * 获取用户名
+	 *
+	 * @return userName
+	 */
+	public static String getUserName() {
+		BladeUser user = getUser();
+		return (null == user) ? StringPool.EMPTY : user.getUserName();
+	}
+
+	/**
+	 * 获取用户名
+	 *
+	 * @param request request
+	 * @return userName
+	 */
+	public static String getUserName(HttpServletRequest request) {
+		BladeUser user = getUser(request);
+		return (null == user) ? StringPool.EMPTY : user.getUserName();
+	}
+
+	/**
+	 * 获取租户编号
+	 *
+	 * @return tenantCode
+	 */
+	public static String getTenantCode() {
+		BladeUser user = getUser();
+		return (null == user) ? StringPool.EMPTY : user.getTenantCode();
+	}
+
+	/**
+	 * 获取租户编号
+	 *
+	 * @param request request
+	 * @return tenantCode
+	 */
+	public static String getTenantCode(HttpServletRequest request) {
+		BladeUser user = getUser(request);
+		return (null == user) ? StringPool.EMPTY : user.getTenantCode();
+	}
 
 	/**
 	 * 获取Claims

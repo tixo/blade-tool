@@ -43,6 +43,7 @@
         <module>blade-starter-mybatis</module>
         <module>blade-starter-redis</module>
         <module>blade-starter-swagger</module>
+        <module>blade-starter-tenant</module>
     </modules>
 
     <dependencyManagement>

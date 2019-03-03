@@ -37,9 +37,9 @@ import java.util.List;
 public class BladeHystrixHeadersProperties {
 
 	/**
-	 * 用于 聚合层 向调用层传递用户信息 的请求头，默认：X-BLADE-ACCOUNT
+	 * 用于 聚合层 向调用层传递用户信息 的请求头，默认：x-blade-account
 	 */
-	private String account = "X-BLADE-ACCOUNT";
+	private String account = "x-blade-account";
 
 	/**
 	 * RestTemplate 和 Fegin 透传到下层的 Headers 名称表达式
