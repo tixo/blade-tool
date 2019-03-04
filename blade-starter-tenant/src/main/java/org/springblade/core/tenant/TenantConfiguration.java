@@ -16,17 +16,17 @@
  */
 package org.springblade.core.tenant;
 
+import com.baomidou.mybatisplus.core.MybatisConfiguration;
 import com.baomidou.mybatisplus.core.parser.ISqlParser;
 import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.tenant.TenantHandler;
 import com.baomidou.mybatisplus.extension.plugins.tenant.TenantSqlParser;
 import lombok.AllArgsConstructor;
+import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,10 +38,13 @@ import java.util.List;
  */
 @Configuration
 @AllArgsConstructor
-@Order(Ordered.HIGHEST_PRECEDENCE)
+@AutoConfigureBefore(MybatisConfiguration.class)
 @EnableConfigurationProperties(BladeTenantProperties.class)
 public class TenantConfiguration {
 
+	/**
+	 * 多租户配置类
+	 */
 	private final BladeTenantProperties properties;
 
 	/**
@@ -53,6 +56,17 @@ public class TenantConfiguration {
 	@ConditionalOnMissingBean(TenantHandler.class)
 	public TenantHandler bladeTenantHandler() {
 		return new BladeTenantHandler(properties);
+	}
+
+	/**
+	 * 自定义租户id生成器
+	 *
+	 * @return TenantId
+	 */
+	@Bean
+	@ConditionalOnMissingBean(TenantId.class)
+	public TenantId tenantId() {
+		return new BladeTenantId();
 	}
 
 	/**
