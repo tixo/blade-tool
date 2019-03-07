@@ -23,7 +23,7 @@ package org.springblade.core.tool.constant;
  */
 public class RoleConstant {
 
-	public static final String ADMIN = "admin";
+	public static final String ADMIN = "administrator";
 
 	public static final String HAS_ROLE_ADMIN = "hasRole('" + ADMIN + "')";
 
