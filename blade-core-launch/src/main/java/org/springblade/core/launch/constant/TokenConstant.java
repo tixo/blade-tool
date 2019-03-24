@@ -14,38 +14,24 @@
  *  this software without specific prior written permission.
  *  Author: Chill 庄骞 (smallchill@163.com)
  */
-package org.springblade.core.tenant;
-
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+package org.springblade.core.launch.constant;
 
 /**
- * 多租户配置
+ * Token配置常量.
  *
  * @author Chill
  */
-@Getter
-@Setter
-@ConfigurationProperties(prefix = "blade.tenant")
-public class BladeTenantProperties {
+public interface TokenConstant {
 
-	/**
-	 * 多租户字段名称
-	 */
-	private String column = "tenant_code";
+	String AVATAR = "avatar";
+	String HEADER = "blade-auth";
+	String BEARER = "bearer";
+	String ACCOUNT = "account";
+	String USER_ID = "user_id";
+	String ROLE_ID = "role_id";
+	String USER_NAME = "user_name";
+	String ROLE_NAME = "role_name";
+	String TENANT_CODE = "tenant_code";
+	Integer AUTH_LENGTH = 7;
 
-	/**
-	 * 多租户数据表
-	 */
-	private List<String> tables = new ArrayList<>();
-
-	/**
-	 * 多租户系统数据表
-	 */
-	private List<String> bladeTables = Arrays.asList("blade_notice", "blade_log_api", "blade_log_error", "blade_log_usual", "blade_client");
 }
