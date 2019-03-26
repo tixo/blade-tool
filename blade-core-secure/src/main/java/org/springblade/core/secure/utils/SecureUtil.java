@@ -49,7 +49,7 @@ public class SecureUtil {
 	private final static String ROLE_NAME = TokenConstant.ROLE_NAME;
 	private final static String TENANT_CODE = TokenConstant.TENANT_CODE;
 	private final static Integer AUTH_LENGTH = TokenConstant.AUTH_LENGTH;
-	private static String BASE64_SECURITY = Base64.getEncoder().encodeToString("BladeX".getBytes(Charsets.UTF_8));
+	private static String BASE64_SECURITY = Base64.getEncoder().encodeToString(TokenConstant.SIGN_KEY.getBytes(Charsets.UTF_8));
 
 	/**
 	 * 获取用户信息
@@ -290,6 +290,15 @@ public class SecureUtil {
 		cal.set(Calendar.MINUTE, 0);
 		cal.set(Calendar.MILLISECOND, 0);
 		return cal.getTimeInMillis() - System.currentTimeMillis();
+	}
+
+	/**
+	 * 获取过期时间的秒数(次日凌晨3点)
+	 *
+	 * @return expire
+	 */
+	public static int getExpireSeconds() {
+		return (int) (getExpire() / 1000);
 	}
 
 }
