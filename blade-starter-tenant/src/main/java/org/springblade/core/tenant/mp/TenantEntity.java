@@ -33,6 +33,6 @@ public class TenantEntity extends BaseEntity {
 	 * 租户编号
 	 */
 	@ApiModelProperty(value = "租户编号")
-	private String tenantCode;
+	private String tenantCode = "000000";
 
 }
