@@ -14,30 +14,21 @@
  *  this software without specific prior written permission.
  *  Author: Chill 庄骞 (smallchill@163.com)
  */
-package org.springblade.core.secure.config;
-
-
-import org.springblade.core.secure.registry.SecureRegistry;
-import org.springframework.boot.autoconfigure.AutoConfigureBefore;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
+package org.springblade.core.secure.provider;
 
 /**
- * secure注册默认配置
+ * 多终端注册接口
  *
  * @author Chill
  */
-@Order
-@Configuration
-@AutoConfigureBefore(SecureConfiguration.class)
-public class RegistryConfiguration {
+public interface IClientDetailsService {
 
-	@Bean
-	@ConditionalOnMissingBean(SecureRegistry.class)
-	public SecureRegistry secureRegistry() {
-		return new SecureRegistry();
-	}
+	/**
+	 * 根据clientId获取Client详情
+	 *
+	 * @param clientId 客户端id
+	 * @return
+	 */
+	IClientDetails loadClientByClientId(String clientId);
 
 }

@@ -14,30 +14,43 @@
  *  this software without specific prior written permission.
  *  Author: Chill 庄骞 (smallchill@163.com)
  */
-package org.springblade.core.secure.config;
-
-
-import org.springblade.core.secure.registry.SecureRegistry;
-import org.springframework.boot.autoconfigure.AutoConfigureBefore;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
+package org.springblade.core.secure.constant;
 
 /**
- * secure注册默认配置
+ * 授权校验常量
  *
  * @author Chill
  */
-@Order
-@Configuration
-@AutoConfigureBefore(SecureConfiguration.class)
-public class RegistryConfiguration {
+public interface SecureConstant {
 
-	@Bean
-	@ConditionalOnMissingBean(SecureRegistry.class)
-	public SecureRegistry secureRegistry() {
-		return new SecureRegistry();
-	}
+	/**
+	 * 认证请求头
+	 */
+	String BASIC_HEADER_KEY = "Authorization";
+
+	/**
+	 * 认证请求头前缀
+	 */
+	String BASIC_HEADER_PREFIX = "Basic ";
+
+	/**
+	 * blade_client表字段
+	 */
+	String CLIENT_FIELDS = "client_id, client_secret, access_token_validity, refresh_token_validity";
+
+	/**
+	 * blade_client查询语句
+	 */
+	String BASE_STATEMENT = "select " + CLIENT_FIELDS + " from blade_client";
+
+	/**
+	 * blade_client查询排序
+	 */
+	String DEFAULT_FIND_STATEMENT = BASE_STATEMENT + " order by client_id";
+
+	/**
+	 * 查询client_id
+	 */
+	String DEFAULT_SELECT_STATEMENT = BASE_STATEMENT + " where client_id = ?";
 
 }

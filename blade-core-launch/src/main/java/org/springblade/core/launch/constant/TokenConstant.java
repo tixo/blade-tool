@@ -37,6 +37,7 @@ public interface TokenConstant {
 	String USER_NAME = "user_name";
 	String ROLE_NAME = "role_name";
 	String TENANT_CODE = "tenant_code";
+	String CLIENT_ID = "client_id";
 	String LICENSE = "license";
 	String LICENSE_NAME = "powered by bladex";
 	String DEFAULT_AVATAR = "https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png";

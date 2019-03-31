@@ -14,30 +14,39 @@
  *  this software without specific prior written permission.
  *  Author: Chill 庄骞 (smallchill@163.com)
  */
-package org.springblade.core.secure.config;
+package org.springblade.core.secure.provider;
 
-
-import org.springblade.core.secure.registry.SecureRegistry;
-import org.springframework.boot.autoconfigure.AutoConfigureBefore;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 
 /**
- * secure注册默认配置
+ * 客户端详情
  *
  * @author Chill
  */
-@Order
-@Configuration
-@AutoConfigureBefore(SecureConfiguration.class)
-public class RegistryConfiguration {
+@Data
+public class ClientDetails implements IClientDetails {
 
-	@Bean
-	@ConditionalOnMissingBean(SecureRegistry.class)
-	public SecureRegistry secureRegistry() {
-		return new SecureRegistry();
-	}
+	/**
+	 * 客户端id
+	 */
+	@ApiModelProperty(value = "客户端id")
+	private String clientId;
+	/**
+	 * 客户端密钥
+	 */
+	@ApiModelProperty(value = "客户端密钥")
+	private String clientSecret;
+
+	/**
+	 * 令牌过期秒数
+	 */
+	@ApiModelProperty(value = "令牌过期秒数")
+	private Integer accessTokenValidity;
+	/**
+	 * 刷新令牌过期秒数
+	 */
+	@ApiModelProperty(value = "刷新令牌过期秒数")
+	private Integer refreshTokenValidity;
 
 }

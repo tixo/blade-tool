@@ -14,30 +14,30 @@
  *  this software without specific prior written permission.
  *  Author: Chill 庄骞 (smallchill@163.com)
  */
-package org.springblade.core.secure.config;
+package org.springblade.core.secure.provider;
 
-
-import org.springblade.core.secure.registry.SecureRegistry;
-import org.springframework.boot.autoconfigure.AutoConfigureBefore;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
+import lombok.AllArgsConstructor;
+import org.springblade.core.secure.constant.SecureConstant;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 /**
- * secure注册默认配置
+ * 获取客户端详情
  *
  * @author Chill
  */
-@Order
-@Configuration
-@AutoConfigureBefore(SecureConfiguration.class)
-public class RegistryConfiguration {
+@AllArgsConstructor
+public class ClientDetailsServiceImpl implements IClientDetailsService {
 
-	@Bean
-	@ConditionalOnMissingBean(SecureRegistry.class)
-	public SecureRegistry secureRegistry() {
-		return new SecureRegistry();
+	private final JdbcTemplate jdbcTemplate;
+
+	@Override
+	public IClientDetails loadClientByClientId(String clientId) {
+		try {
+			return jdbcTemplate.queryForObject(SecureConstant.DEFAULT_SELECT_STATEMENT, new String[]{clientId}, new BeanPropertyRowMapper<>(ClientDetails.class));
+		} catch (Exception ex) {
+			return null;
+		}
 	}
 
 }

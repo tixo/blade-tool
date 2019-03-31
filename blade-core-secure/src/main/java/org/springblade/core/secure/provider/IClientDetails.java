@@ -14,30 +14,43 @@
  *  this software without specific prior written permission.
  *  Author: Chill 庄骞 (smallchill@163.com)
  */
-package org.springblade.core.secure.config;
+package org.springblade.core.secure.provider;
 
-
-import org.springblade.core.secure.registry.SecureRegistry;
-import org.springframework.boot.autoconfigure.AutoConfigureBefore;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
+import java.io.Serializable;
 
 /**
- * secure注册默认配置
+ * 多终端详情接口
  *
  * @author Chill
  */
-@Order
-@Configuration
-@AutoConfigureBefore(SecureConfiguration.class)
-public class RegistryConfiguration {
+public interface IClientDetails extends Serializable {
 
-	@Bean
-	@ConditionalOnMissingBean(SecureRegistry.class)
-	public SecureRegistry secureRegistry() {
-		return new SecureRegistry();
-	}
+	/**
+	 * 客户端id.
+	 *
+	 * @return String.
+	 */
+	String getClientId();
+
+	/**
+	 * 客户端密钥.
+	 *
+	 * @return String.
+	 */
+	String getClientSecret();
+
+	/**
+	 * 客户端token过期时间
+	 *
+	 * @return Integer
+	 */
+	Integer getAccessTokenValidity();
+
+	/**
+	 * 客户端刷新token过期时间
+	 *
+	 * @return Integer
+	 */
+	Integer getRefreshTokenValidity();
 
 }
