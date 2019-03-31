@@ -36,13 +36,13 @@ public @interface BladeBootTest {
 	 * @return appName
 	 */
 	@AliasFor("appName")
-	String value() default "mica-test";
+	String value() default "blade-test";
 	/**
 	 * 服务名：appName
 	 * @return appName
 	 */
 	@AliasFor("value")
-	String appName() default "mica-test";
+	String appName() default "blade-test";
 	/**
 	 * profile
 	 * @return profile

@@ -19,9 +19,9 @@
         <AsyncLogger name="springfox.bean.validators" level="ERROR"/>
         <!-- 基础组件 -->
         <AsyncLogger name="RocketmqClient" level="WARN"/>
-        <!-- mica日志 -->
-        <AsyncLogger name="net.dreamlu.mica" level="WARN" />
-        <AsyncLogger name="net.dreamlu.mica.http" level="INFO"/>
+        <!-- blade日志 -->
+        <AsyncLogger name="org.springblade.core" level="WARN" />
+        <AsyncLogger name="org.springblade.core.http" level="INFO"/>
         <Root level="INFO" additivity="false">
             <AppenderRef ref="Console"/>
             <AppenderRef ref="RollingFile"/>

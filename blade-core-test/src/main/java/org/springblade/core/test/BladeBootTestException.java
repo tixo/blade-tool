@@ -18,7 +18,7 @@
 package org.springblade.core.test;
 
 /**
- * mica test 异常
+ * blade test 异常
  *
  * @author L.cm
  */

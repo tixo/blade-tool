@@ -21,8 +21,8 @@
         <AsyncLogger name="RocketmqClient" level="WARN"/>
         <!-- mongo no sql -->
         <AsyncLogger name="org.springframework.data.mongodb.core" level="DEBUG"/>
-        <!-- mica日志 -->
-        <AsyncLogger name="net.dreamlu.mica" level="INFO"/>
+        <!-- blade日志 -->
+        <AsyncLogger name="org.springblade.core" level="INFO"/>
         <Root level="INFO" additivity="false">
             <AppenderRef ref="Console"/>
             <AppenderRef ref="RollingFile"/>
