@@ -35,6 +35,7 @@
         <module>blade-core-launch</module>
         <module>blade-core-log4j2</module>
         <module>blade-core-secure</module>
+        <module>blade-core-test</module>
         <module>blade-core-tool</module>
         <module>blade-starter-actuate</module>
         <module>blade-starter-lock</module>
