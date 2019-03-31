@@ -46,6 +46,11 @@ public enum ResultCode implements IResultCode {
 	UN_AUTHORIZED(HttpServletResponse.SC_UNAUTHORIZED, "请求未授权"),
 
 	/**
+	 * 客户端请求未授权
+	 */
+	CLIENT_UN_AUTHORIZED(HttpServletResponse.SC_UNAUTHORIZED, "客户端请求未授权"),
+
+	/**
 	 * 404 没找到请求
 	 */
 	NOT_FOUND(HttpServletResponse.SC_NOT_FOUND, "404 没找到请求"),
