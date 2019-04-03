@@ -50,6 +50,6 @@ public class BladeHystrixHeadersProperties {
 	/**
 	 * RestTemplate 和 Fegin 透传到下层的 Headers 名称列表
 	 */
-	private List<String> allowed = Arrays.asList("X-Real-IP", "x-forwarded-for", "Authorization", "blade-auth");
+	private List<String> allowed = Arrays.asList("X-Real-IP", "x-forwarded-for", "authorization", "blade-auth");
 
 }

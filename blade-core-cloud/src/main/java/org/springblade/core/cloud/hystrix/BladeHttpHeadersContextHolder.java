@@ -39,10 +39,10 @@ public class BladeHttpHeadersContextHolder {
 	private static final ThreadLocal<HttpHeaders> HTTP_HEADERS_HOLDER = new NamedThreadLocal<>("Blade hystrix HttpHeaders");
 
 	/**
-	 * X-Real-IP x-forwarded-for 请求和转发的ip
+	 * 请求和转发的ip
 	 */
 	private static final String[] ALLOW_HEADS = new String[]{
-		"X-Real-IP", "x-forwarded-for", "blade-auth"
+		"X-Real-IP", "x-forwarded-for", "authorization", "blade-auth"
 	};
 
 	static void set(HttpHeaders httpHeaders) {
