@@ -69,7 +69,13 @@
             <artifactId>ehcache</artifactId>
             <version>2.10.5</version>
         </dependency>
-        <!-- MySQL -->
+        <!-- Druid -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid-spring-boot-starter</artifactId>
+            <version>1.1.13</version>
+        </dependency>
+        <!-- MySql -->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
