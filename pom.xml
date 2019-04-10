@@ -45,6 +45,7 @@
         <module>blade-starter-redis</module>
         <module>blade-starter-swagger</module>
         <module>blade-starter-tenant</module>
+        <module>blade-starter-cache</module>
     </modules>
 
     <dependencyManagement>
@@ -87,10 +88,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.retry</groupId>
@@ -141,23 +138,6 @@
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>3.1.0</version>
             </plugin>
-            <!-- 打source包 -->
-            <!--<plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>3.0.1</version>
-                <configuration>
-                    <attach>true</attach>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>-->
         </plugins>
     </build>
 
@@ -188,5 +168,33 @@
             <url>http://nexus.gitee.ltd/repository/maven-releases/</url>
         </repository>
     </distributionManagement>
+
+
+    <profiles>
+        <profile>
+            <id>develop</id>
+            <build>
+                <plugins>
+                    <!-- 打source包 -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <version>3.0.1</version>
+                        <configuration>
+                            <attach>true</attach>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <phase>compile</phase>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
 </project>

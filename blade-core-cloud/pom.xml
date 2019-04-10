@@ -57,11 +57,18 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <!-- Actuator -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <!-- Admin -->
         <dependency>
             <groupId>de.codecentric</groupId>
             <artifactId>spring-boot-admin-starter-client</artifactId>
             <version>${spring.boot.admin.version}</version>
         </dependency>
+        <!-- Nacos -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
@@ -72,6 +79,7 @@
             <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
             <version>${alibaba.cloud.version}</version>
         </dependency>
+        <!-- Sentinel -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>

@@ -37,4 +37,26 @@ public interface NacosConstant {
 	 * nacos 配置文件类型
 	 */
 	String NACOS_CONFIG_FORMAT = "yaml";
+
+	/**
+	 * nacos 是否刷新
+	 */
+	String NACOS_CONFIG_REFRESH = "true";
+
+	/**
+	 * nacos 分组
+	 */
+	String NACOS_CONFIG_GROUP = "DEFAULT_GROUP";
+
+	/**
+	 * 构建服务对应的 dataId
+	 *
+	 * @param appName 服务名
+	 * @param profile 环境变量
+	 * @return dataId
+	 */
+	static String dataId(String appName, String profile) {
+		return appName + "-" + profile + "." + NACOS_CONFIG_FORMAT;
+	}
+
 }

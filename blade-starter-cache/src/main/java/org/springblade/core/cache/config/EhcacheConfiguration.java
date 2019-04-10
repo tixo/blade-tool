@@ -14,37 +14,18 @@
  *  this software without specific prior written permission.
  *  Author: Chill 庄骞 (smallchill@163.com)
  */
-package org.springblade.core.tool.node;
+package org.springblade.core.cache.config;
 
-import java.util.List;
+import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.context.annotation.Configuration;
 
 /**
- * 森林节点归并类
+ * Ehcache配置类
  *
- * @author smallchill
+ * @author Chill
  */
-public class ForestNodeMerger {
-
-	/**
-	 * 将节点数组归并为一个森林（多棵树）（填充节点的children域）
-	 * 时间复杂度为O(n^2)
-	 *
-	 * @param items 节点域
-	 * @return 多棵树的根节点集合
-	 */
-	public static <T extends INode> List<T> merge(List<T> items) {
-		ForestNodeManager<T> forestNodeManager = new ForestNodeManager<>(items);
-		items.forEach(forestNode -> {
-			if (forestNode.getParentId() != 0) {
-				INode node = forestNodeManager.getTreeNodeAT(forestNode.getParentId());
-				if (node != null) {
-					node.getChildren().add(forestNode);
-				} else {
-					forestNodeManager.addParentId(forestNode.getId());
-				}
-			}
-		});
-		return forestNodeManager.getRoot();
-	}
+@EnableCaching
+@Configuration
+public class EhcacheConfiguration {
 
 }

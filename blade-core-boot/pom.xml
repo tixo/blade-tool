@@ -27,10 +27,6 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-cache</artifactId>
-        </dependency>
         <!-- Blade -->
         <dependency>
             <groupId>org.springblade</groupId>
@@ -39,7 +35,7 @@
         </dependency>
         <dependency>
             <groupId>org.springblade</groupId>
-            <artifactId>blade-starter-redis</artifactId>
+            <artifactId>blade-starter-cache</artifactId>
             <version>${bladex.tool.version}</version>
         </dependency>
         <dependency>
@@ -63,17 +59,11 @@
             <artifactId>mybatis-typehandlers-jsr310</artifactId>
             <version>1.0.2</version>
         </dependency>
-        <!-- Ehcache -->
-        <dependency>
-            <groupId>net.sf.ehcache</groupId>
-            <artifactId>ehcache</artifactId>
-            <version>2.10.5</version>
-        </dependency>
         <!-- Druid -->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid-spring-boot-starter</artifactId>
-            <version>1.1.13</version>
+            <version>1.1.16</version>
         </dependency>
         <!-- MySql -->
         <dependency>

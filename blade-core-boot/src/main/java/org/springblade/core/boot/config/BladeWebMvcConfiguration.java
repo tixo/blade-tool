@@ -21,7 +21,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springblade.core.boot.props.BladeUploadProperties;
 import org.springblade.core.boot.resolver.TokenArgumentResolver;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -38,7 +37,6 @@ import java.util.List;
  */
 @Slf4j
 @Configuration
-@EnableCaching
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @AllArgsConstructor
 @EnableConfigurationProperties({

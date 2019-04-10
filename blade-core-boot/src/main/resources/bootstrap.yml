@@ -12,9 +12,6 @@ server:
 
 #spring配置
 spring:
-  cache:
-    ehcache:
-      config: classpath:config/ehcache.xml
   http:
     encoding:
       charset: UTF-8

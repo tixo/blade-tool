@@ -70,6 +70,14 @@ public interface AppConstant {
 	 */
 	String APPLICATION_DEVELOP_NAME = APPLICATION_NAME_PREFIX + "develop";
 	/**
+	 * 流程设计器模块名称
+	 */
+	String APPLICATION_FLOWDESIGN_NAME = APPLICATION_NAME_PREFIX + "flowdesign";
+	/**
+	 * 工作流模块名称
+	 */
+	String APPLICATION_FLOWABLE_NAME = APPLICATION_NAME_PREFIX + "flowable";
+	/**
 	 * 测试模块名称
 	 */
 	String APPLICATION_TEST_NAME = APPLICATION_NAME_PREFIX + "test";
