@@ -286,7 +286,7 @@ public class BladeCodeGenerator {
 	 */
 	private Properties getProperties() {
 		// 读取配置文件
-		Resource resource = new ClassPathResource("/templates/props/generator.properties");
+		Resource resource = new ClassPathResource("/templates/code.properties");
 		Properties props = new Properties();
 		try {
 			props = PropertiesLoaderUtils.loadProperties(resource);
