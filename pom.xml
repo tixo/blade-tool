@@ -38,6 +38,8 @@
         <module>blade-core-test</module>
         <module>blade-core-tool</module>
         <module>blade-starter-actuate</module>
+        <module>blade-starter-cache</module>
+        <module>blade-starter-develop</module>
         <module>blade-starter-lock</module>
         <module>blade-starter-log</module>
         <module>blade-starter-mongo</module>
@@ -45,7 +47,6 @@
         <module>blade-starter-redis</module>
         <module>blade-starter-swagger</module>
         <module>blade-starter-tenant</module>
-        <module>blade-starter-cache</module>
     </modules>
 
     <dependencyManagement>

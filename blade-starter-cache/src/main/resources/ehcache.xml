@@ -2,7 +2,7 @@
 <ehcache updateCheck="false" dynamicConfig="false">
     <diskStore path="java.io.tmpdir"/>
 
-    <cache name="RETRY_LIMIT_CACHE"
+    <cache name="retry:limit:cache"
            maxEntriesLocalHeap="2000"
            eternal="false"
            timeToIdleSeconds="1800"

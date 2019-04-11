@@ -14,23 +14,21 @@
  *  this software without specific prior written permission.
  *  Author: Chill 庄骞 (smallchill@163.com)
  */
-package org.springblade.core.tool.constant;
+package org.springblade.develop.constant;
 
 /**
- * 缓存名
+ * 系统常量.
  *
- * @author Chill
+ * @author zhuangqian
  */
-public interface CacheConstant {
+public interface DevelopConstant {
+	/**
+	 * sword 系统名
+	 */
+	String SWORD_NAME = "sword";
 
-	String DEFAULT_CACHE = "DEFAULT_CACHE";
-
-	String RETRY_LIMIT_CACHE = "RETRY_LIMIT_CACHE";
-
-	String HALF_HOUR = "HALF_HOUR";
-
-	String HOUR = "HOUR";
-
-	String ONE_DAY = "ONE_DAY";
-
+	/**
+	 * saber 系统名
+	 */
+	String SABER_NAME = "saber";
 }
