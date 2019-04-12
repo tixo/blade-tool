@@ -76,7 +76,7 @@ public interface AppConstant {
 	/**
 	 * 工作流模块名称
 	 */
-	String APPLICATION_FLOWABLE_NAME = APPLICATION_NAME_PREFIX + "flowable";
+	String APPLICATION_FLOW_NAME = APPLICATION_NAME_PREFIX + "flow";
 	/**
 	 * 测试模块名称
 	 */

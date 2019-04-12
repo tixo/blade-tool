@@ -20,16 +20,19 @@ package org.springblade.core.swagger;
 
 
 import com.github.xiaoymin.swaggerbootstrapui.annotations.EnableSwaggerBootstrapUI;
+import com.google.common.base.Function;
+import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
+import org.springblade.core.tool.utils.StringPool;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import springfox.documentation.RequestHandler;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
-import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.*;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.contexts.SecurityContext;
@@ -82,7 +85,7 @@ public class SwaggerAutoConfiguration {
 		return new Docket(DocumentationType.SWAGGER_2)
 			.host(swaggerProperties.getHost())
 			.apiInfo(apiInfo(swaggerProperties)).select()
-			.apis(RequestHandlerSelectors.basePackage(swaggerProperties.getBasePackage()))
+			.apis(basePackage(swaggerProperties.getBasePackage()))
 			.paths(Predicates.and(Predicates.not(Predicates.or(excludePath)), Predicates.or(basePath)))
 			.build()
 			.securitySchemes(Collections.singletonList(securitySchema()))
@@ -136,6 +139,27 @@ public class SwaggerAutoConfiguration {
 			.contact(new Contact(swaggerProperties.getContact().getName(), swaggerProperties.getContact().getUrl(), swaggerProperties.getContact().getEmail()))
 			.version(swaggerProperties.getVersion())
 			.build();
+	}
+
+	public static Predicate<RequestHandler> basePackage(final String basePackage) {
+		return input -> declaringClass(input).transform(handlerPackage(basePackage)).or(true);
+	}
+
+	private static Function<Class<?>, Boolean> handlerPackage(final String basePackage)     {
+		return input -> {
+			// 循环判断匹配
+			for (String strPackage : basePackage.split(StringPool.COMMA)) {
+				boolean isMatch = input.getPackage().getName().startsWith(strPackage);
+				if (isMatch) {
+					return true;
+				}
+			}
+			return false;
+		};
+	}
+
+	private static Optional<? extends Class<?>> declaringClass(RequestHandler input) {
+		return Optional.fromNullable(input.declaringClass());
 	}
 
 }
