@@ -16,6 +16,7 @@
  */
 package org.springblade.core.secure.auth;
 
+import org.springblade.core.secure.BladeUser;
 import org.springblade.core.secure.utils.SecureUtil;
 import org.springblade.core.tool.constant.RoleConstant;
 import org.springblade.core.tool.utils.CollectionUtil;
@@ -64,7 +65,11 @@ public class AuthFun {
 	 * @return {boolean}
 	 */
 	public boolean hasAnyRole(String... role) {
-		String userRole = SecureUtil.getUser().getRoleName();
+		BladeUser user = SecureUtil.getUser();
+		if (user == null) {
+			return false;
+		}
+		String userRole = user.getRoleName();
 		if (StringUtil.isBlank(userRole)) {
 			return false;
 		}
