@@ -48,11 +48,11 @@ public class SwaggerProperties {
 	/**
 	 * 标题
 	 **/
-	private String title = "SpringBlade 接口文档系统";
+	private String title = "BladeX 接口文档系统";
 	/**
 	 * 描述
 	 **/
-	private String description = "SpringBlade 接口文档系统";
+	private String description = "BladeX 接口文档系统";
 	/**
 	 * 版本
 	 **/
@@ -60,15 +60,15 @@ public class SwaggerProperties {
 	/**
 	 * 许可证
 	 **/
-	private String license = "";
+	private String license = "Powered By BladeX";
 	/**
 	 * 许可证URL
 	 **/
-	private String licenseUrl = "";
+	private String licenseUrl = "https://bladex.vip";
 	/**
 	 * 服务条款URL
 	 **/
-	private String termsOfServiceUrl = "";
+	private String termsOfServiceUrl = "https://bladex.vip";
 
 	/**
 	 * host信息
@@ -94,7 +94,7 @@ public class SwaggerProperties {
 		/**
 		 * 联系人url
 		 **/
-		private String url = "";
+		private String url = "https://gitee.com/smallc";
 		/**
 		 * 联系人email
 		 **/
