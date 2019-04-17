@@ -414,7 +414,7 @@ public class Func {
 	 * @return String
 	 */
 	public static String toStr(Object str, String defaultValue) {
-		if (null == str) {
+		if (null == str || str.equals(StringPool.NULL)) {
 			return defaultValue;
 		}
 		return String.valueOf(str);
