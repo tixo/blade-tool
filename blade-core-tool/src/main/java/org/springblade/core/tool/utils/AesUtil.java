@@ -21,6 +21,7 @@ import org.springframework.util.Assert;
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
+import java.nio.charset.Charset;
 import java.util.Arrays;
 
 /**
@@ -46,7 +47,7 @@ public class AesUtil {
 		return encrypt(content.getBytes(Charsets.UTF_8), aesTextKey.getBytes(Charsets.UTF_8));
 	}
 
-	public static byte[] encrypt(String content, java.nio.charset.Charset charset, String aesTextKey) {
+	public static byte[] encrypt(String content, Charset charset, String aesTextKey) {
 		return encrypt(content.getBytes(charset), aesTextKey.getBytes(Charsets.UTF_8));
 	}
 

@@ -21,11 +21,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import org.springblade.core.tool.jackson.MappingApiJackson2HttpMessageConverter;
 import org.springblade.core.tool.support.xss.XssFilter;
+import org.springblade.core.tool.utils.DateUtil;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
+import org.springframework.format.FormatterRegistry;
+import org.springframework.format.datetime.DateFormatter;
 import org.springframework.http.converter.*;
 import org.springframework.http.converter.json.AbstractJackson2HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -58,6 +61,15 @@ public class MessageConfiguration implements WebMvcConfigurer {
 		converters.add(new ResourceHttpMessageConverter());
 		converters.add(new ResourceRegionHttpMessageConverter());
 		converters.add(new MappingApiJackson2HttpMessageConverter(objectMapper));
+	}
+
+	/**
+	 * 日期格式化
+	 */
+	@Override
+	public void addFormatters(FormatterRegistry registry) {
+		registry.addFormatter(new DateFormatter(DateUtil.PATTERN_DATE));
+		registry.addFormatter(new DateFormatter(DateUtil.PATTERN_DATETIME));
 	}
 
 	/**
