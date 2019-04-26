@@ -52,6 +52,15 @@
            overflowToDisk="false"
            diskPersistent="false" />
 
+    <!-- 缓存半小时 -->
+    <cache name="flow:process"
+           maxElementsInMemory="10000"
+           maxElementsOnDisk="100000"
+           eternal="false"
+           timeToIdleSeconds="1800"
+           timeToLiveSeconds="1800"
+           overflowToDisk="false"
+           diskPersistent="false" />
 
     <!-- =================系统缓存================= -->
     <!-- 缓存半小时 -->
