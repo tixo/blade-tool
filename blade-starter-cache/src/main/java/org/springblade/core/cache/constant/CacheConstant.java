@@ -23,9 +23,11 @@ package org.springblade.core.cache.constant;
  */
 public interface CacheConstant {
 
-	String DICT_VALUE = "blade_dict:value";
+	String DICT_VALUE = "blade:dict:value";
 
-	String DICT_LIST = "blade_dict:list";
+	String DICT_LIST = "blade:dict:list";
+
+	String AUTH_ROUTES = "blade:menu:auth:routes";
 
 	String DEFAULT_CACHE = "default:cache";
 
