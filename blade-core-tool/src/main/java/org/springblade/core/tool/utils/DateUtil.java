@@ -353,7 +353,7 @@ public class DateUtil {
 	 */
 	public static String secondToTime(Long second) {
 		// 判断是否为空
-		if (second == null) {
+		if (second == null || second == 0L) {
 			return StringPool.EMPTY;
 		}
 		//转换天数
