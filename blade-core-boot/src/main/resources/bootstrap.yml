@@ -97,7 +97,7 @@ swagger:
   description: BladeX 接口文档系统
   version: 2.0.0
   license: Powered By BladeX
-  licenseUrl: https://bladex.vip
+  license-url: https://bladex.vip
   terms-of-service-url: https://bladex.vip
   contact:
     name: smallchill
