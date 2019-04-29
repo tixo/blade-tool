@@ -85,7 +85,7 @@ public interface AppConstant {
 	/**
 	 * 开发环境
 	 */
-	String DEV_CDOE = "dev";
+	String DEV_CODE = "dev";
 	/**
 	 * 生产环境
 	 */

@@ -52,7 +52,7 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 @Aspect
 @Configuration
-@Profile({AppConstant.DEV_CDOE, AppConstant.TEST_CODE})
+@Profile({AppConstant.DEV_CODE, AppConstant.TEST_CODE})
 public class RequestLogAspect {
 
 	/**
