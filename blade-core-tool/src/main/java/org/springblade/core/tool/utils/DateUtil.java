@@ -1,14 +1,19 @@
 package org.springblade.core.tool.utils;
 
 import lombok.experimental.UtilityClass;
+import org.springframework.util.Assert;
 
 import java.text.ParseException;
-import java.time.Duration;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.Period;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.Temporal;
+import java.time.temporal.TemporalAccessor;
 import java.time.temporal.TemporalAmount;
+import java.time.temporal.TemporalQuery;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
 /**
  * 日期工具类
@@ -18,6 +23,22 @@ import java.util.Date;
 @UtilityClass
 public class DateUtil {
 
+	public static final String PATTERN_DATETIME = "yyyy-MM-dd HH:mm:ss";
+	public static final String PATTERN_DATE = "yyyy-MM-dd";
+	public static final String PATTERN_TIME = "HH:mm:ss";
+	/**
+	 * 老 date 格式化
+	 */
+	public static final ConcurrentDateFormat DATETIME_FORMAT = ConcurrentDateFormat.of(PATTERN_DATETIME);
+	public static final ConcurrentDateFormat DATE_FORMAT = ConcurrentDateFormat.of(PATTERN_DATE);
+	public static final ConcurrentDateFormat TIME_FORMAT = ConcurrentDateFormat.of(PATTERN_TIME);
+	/**
+	 * java 8 时间格式化
+	 */
+	public static final DateTimeFormatter DATETIME_FORMATTER = DateTimeFormatter.ofPattern(DateUtil.PATTERN_DATETIME);
+	public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern(DateUtil.PATTERN_DATE);
+	public static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern(DateUtil.PATTERN_TIME);
+
 	/**
 	 * 添加年
 	 *
@@ -26,7 +47,7 @@ public class DateUtil {
 	 * @return 设置后的时间
 	 */
 	public static Date plusYears(Date date, int yearsToAdd) {
-		return DateUtil.plus(date, Period.ofYears(yearsToAdd));
+		return DateUtil.set(date, Calendar.YEAR, yearsToAdd);
 	}
 
 	/**
@@ -37,7 +58,7 @@ public class DateUtil {
 	 * @return 设置后的时间
 	 */
 	public static Date plusMonths(Date date, int monthsToAdd) {
-		return DateUtil.plus(date, Period.ofMonths(monthsToAdd));
+		return DateUtil.set(date, Calendar.MONTH, monthsToAdd);
 	}
 
 	/**
@@ -126,8 +147,7 @@ public class DateUtil {
 	 */
 	public static Date plus(Date date, TemporalAmount amount) {
 		Instant instant = date.toInstant();
-		instant.plus(amount);
-		return Date.from(instant);
+		return Date.from(instant.plus(amount));
 	}
 
 	/**
@@ -138,7 +158,7 @@ public class DateUtil {
 	 * @return 设置后的时间
 	 */
 	public static Date minusYears(Date date, int years) {
-		return DateUtil.minus(date, Period.ofYears(years));
+		return DateUtil.set(date, Calendar.YEAR, -years);
 	}
 
 	/**
@@ -149,7 +169,7 @@ public class DateUtil {
 	 * @return 设置后的时间
 	 */
 	public static Date minusMonths(Date date, int months) {
-		return DateUtil.minus(date, Period.ofMonths(months));
+		return DateUtil.set(date, Calendar.MONTH, -months);
 	}
 
 	/**
@@ -238,19 +258,25 @@ public class DateUtil {
 	 */
 	public static Date minus(Date date, TemporalAmount amount) {
 		Instant instant = date.toInstant();
-		instant.minus(amount);
-		return Date.from(instant);
+		return Date.from(instant.minus(amount));
 	}
 
-	public static final String PATTERN_DATETIME = "yyyy-MM-dd HH:mm:ss";
-	public static final String PATTERN_DATE = "yyyy-MM-dd";
-	public static final String PATTERN_TIME = "HH:mm:ss";
 	/**
-	 * 格式化
+	 * 设置日期属性
+	 *
+	 * @param date          时间
+	 * @param calendarField 更改的属性
+	 * @param amount        更改数，-1表示减少
+	 * @return 设置后的时间
 	 */
-	public static final ConcurrentDateFormat DATETIME_FORMAT = ConcurrentDateFormat.of(PATTERN_DATETIME);
-	public static final ConcurrentDateFormat DATE_FORMAT = ConcurrentDateFormat.of(PATTERN_DATE);
-	public static final ConcurrentDateFormat TIME_FORMAT = ConcurrentDateFormat.of(PATTERN_TIME);
+	private static Date set(Date date, int calendarField, int amount) {
+		Assert.notNull(date, "The date must not be null");
+		Calendar c = Calendar.getInstance();
+		c.setLenient(false);
+		c.setTime(date);
+		c.add(calendarField, amount);
+		return c.getTime();
+	}
 
 	/**
 	 * 日期时间格式化
@@ -294,6 +320,47 @@ public class DateUtil {
 	}
 
 	/**
+	 * java8 日期时间格式化
+	 *
+	 * @param temporal 时间
+	 * @return 格式化后的时间
+	 */
+	public static String formatDateTime(TemporalAccessor temporal) {
+		return DATETIME_FORMATTER.format(temporal);
+	}
+
+	/**
+	 * java8 日期时间格式化
+	 *
+	 * @param temporal 时间
+	 * @return 格式化后的时间
+	 */
+	public static String formatDate(TemporalAccessor temporal) {
+		return DATE_FORMATTER.format(temporal);
+	}
+
+	/**
+	 * java8 时间格式化
+	 *
+	 * @param temporal 时间
+	 * @return 格式化后的时间
+	 */
+	public static String formatTime(TemporalAccessor temporal) {
+		return TIME_FORMATTER.format(temporal);
+	}
+
+	/**
+	 * java8 日期格式化
+	 *
+	 * @param temporal 时间
+	 * @param pattern  表达式
+	 * @return 格式化后的时间
+	 */
+	public static String format(TemporalAccessor temporal, String pattern) {
+		return DateTimeFormatter.ofPattern(pattern).format(temporal);
+	}
+
+	/**
 	 * 将字符串转换为时间
 	 *
 	 * @param dateStr 时间字符串
@@ -325,13 +392,145 @@ public class DateUtil {
 	}
 
 	/**
+	 * 将字符串转换为时间
+	 *
+	 * @param dateStr 时间字符串
+	 * @param pattern 表达式
+	 * @return 时间
+	 */
+	public static <T> T parse(String dateStr, String pattern, TemporalQuery<T> query) {
+		return DateTimeFormatter.ofPattern(pattern).parse(dateStr, query);
+	}
+
+	/**
+	 * 时间转 Instant
+	 *
+	 * @param dateTime 时间
+	 * @return Instant
+	 */
+	public static Instant toInstant(LocalDateTime dateTime) {
+		return dateTime.atZone(ZoneId.systemDefault()).toInstant();
+	}
+
+	/**
+	 * Instant 转 时间
+	 *
+	 * @param instant Instant
+	 * @return Instant
+	 */
+	public static LocalDateTime toDateTime(Instant instant) {
+		return LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
+	}
+
+	/**
+	 * 转换成 date
+	 *
+	 * @param dateTime LocalDateTime
+	 * @return Date
+	 */
+	public static Date toDate(LocalDateTime dateTime) {
+		return Date.from(DateUtil.toInstant(dateTime));
+	}
+
+	/**
+	 * 转换成 date
+	 *
+	 * @param localDate LocalDate
+	 * @return Date
+	 */
+	public static Date toDate(final LocalDate localDate) {
+		return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+	}
+
+	/**
+	 * Converts local date time to Calendar.
+	 */
+	public static Calendar toCalendar(final LocalDateTime localDateTime) {
+		return GregorianCalendar.from(ZonedDateTime.of(localDateTime, ZoneId.systemDefault()));
+	}
+
+	/**
+	 * localDateTime 转换成毫秒数
+	 *
+	 * @param localDateTime LocalDateTime
+	 * @return long
+	 */
+	public static long toMilliseconds(final LocalDateTime localDateTime) {
+		return localDateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+	}
+
+	/**
+	 * localDate 转换成毫秒数
+	 *
+	 * @param localDate LocalDate
+	 * @return long
+	 */
+	public static long toMilliseconds(LocalDate localDate) {
+		return toMilliseconds(localDate.atStartOfDay());
+	}
+
+	/**
+	 * 转换成java8 时间
+	 *
+	 * @param calendar 日历
+	 * @return LocalDateTime
+	 */
+	public static LocalDateTime fromCalendar(final Calendar calendar) {
+		TimeZone tz = calendar.getTimeZone();
+		ZoneId zid = tz == null ? ZoneId.systemDefault() : tz.toZoneId();
+		return LocalDateTime.ofInstant(calendar.toInstant(), zid);
+	}
+
+	/**
+	 * 转换成java8 时间
+	 *
+	 * @param instant Instant
+	 * @return LocalDateTime
+	 */
+	public static LocalDateTime fromInstant(final Instant instant) {
+		return LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
+	}
+
+	/**
 	 * 转换成java8 时间
 	 *
 	 * @param date Date
 	 * @return LocalDateTime
 	 */
-	public static LocalDateTime toDateTime(Date date) {
-		return DateTimeUtil.toDateTime(date.toInstant());
+	public static LocalDateTime fromDate(final Date date) {
+		return LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
+	}
+
+	/**
+	 * 转换成java8 时间
+	 *
+	 * @param milliseconds 毫秒数
+	 * @return LocalDateTime
+	 */
+	public static LocalDateTime fromMilliseconds(final long milliseconds) {
+		return LocalDateTime.ofInstant(Instant.ofEpochMilli(milliseconds), ZoneId.systemDefault());
+	}
+
+	/**
+	 * 比较2个时间差，跨度比较小
+	 *
+	 * @param startInclusive 开始时间
+	 * @param endExclusive   结束时间
+	 * @return 时间间隔
+	 */
+	public static Duration between(Temporal startInclusive, Temporal endExclusive) {
+		return Duration.between(startInclusive, endExclusive);
+	}
+
+	/**
+	 * 比较2个时间差，跨度比较大，年月日为单位
+	 *
+	 * @param startDate 开始时间
+	 * @param endDate   结束时间
+	 * @return 时间间隔
+	 */
+	public static Period between(LocalDate startDate, LocalDate endDate) {
+		return Period.between(startDate, endDate);
 	}
 
 	/**
