@@ -20,12 +20,11 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * Ehcache配置类
+ * Cache配置类
  *
  * @author Chill
  */
 @EnableCaching
 @Configuration
-public class EhcacheConfiguration {
-
+public class CacheConfiguration {
 }

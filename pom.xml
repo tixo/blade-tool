@@ -48,6 +48,7 @@
         <module>blade-starter-redis</module>
         <module>blade-starter-swagger</module>
         <module>blade-starter-tenant</module>
+        <module>blade-starter-ehcache</module>
     </modules>
 
     <dependencyManagement>
