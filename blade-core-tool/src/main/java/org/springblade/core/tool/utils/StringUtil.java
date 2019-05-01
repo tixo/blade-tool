@@ -106,6 +106,16 @@ public class StringUtil extends org.springframework.util.StringUtils {
 	}
 
 	/**
+	 * 是否全为 Blank
+	 *
+	 * @param css CharSequence
+	 * @return boolean
+	 */
+	public static boolean isAllBlank(final CharSequence... css) {
+		return Stream.of(css).allMatch(StringUtil::isBlank);
+	}
+
+	/**
 	 * 判断一个字符串是否是数字
 	 *
 	 * @param cs the CharSequence to check, may be null
