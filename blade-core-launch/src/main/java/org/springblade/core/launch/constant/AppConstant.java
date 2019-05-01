@@ -81,6 +81,10 @@ public interface AppConstant {
 	 * 测试模块名称
 	 */
 	String APPLICATION_TEST_NAME = APPLICATION_NAME_PREFIX + "test";
+	/**
+	 * 演示模块名称
+	 */
+	String APPLICATION_DEMO_NAME = APPLICATION_NAME_PREFIX + "demo";
 
 	/**
 	 * 开发环境
