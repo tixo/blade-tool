@@ -14,30 +14,23 @@
  *  this software without specific prior written permission.
  *  Author: Chill 庄骞 (smallchill@163.com)
  */
-package org.springblade.core.tool.config;
+package org.springblade.core.tool.support.xss;
 
+import lombok.Data;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
-import org.springblade.core.tool.support.xss.XssProperties;
-import org.springblade.core.tool.utils.SpringUtil;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * 工具配置类
+ * Xss配置类
  *
  * @author Chill
  */
-@Configuration
-@EnableConfigurationProperties(XssProperties.class)
-public class ToolConfiguration {
+@Data
+@ConfigurationProperties("blade.xss.url")
+public class XssProperties {
 
-	/**
-	 * Spring上下文缓存
-	 */
-	@Bean
-	public SpringUtil springUtils() {
-		return new SpringUtil();
-	}
+	private final List<String> excludePatterns = new ArrayList<>();
 
 }
