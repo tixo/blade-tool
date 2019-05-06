@@ -71,7 +71,7 @@ public class BaseServiceImpl<M extends BaseMapper<T>, T extends BaseEntity> exte
 	}
 
 	@Override
-	public boolean deleteLogic(@NotEmpty List<Integer> ids) {
+	public boolean deleteLogic(@NotEmpty List<Long> ids) {
 		BladeUser user = SecureUtil.getUser();
 		T entity = BeanUtil.newInstance(modelClass);
 		entity.setUpdateUser(user.getUserId());

@@ -34,7 +34,7 @@ public class ForestNode extends BaseNode {
 	 */
 	private Object content;
 
-	public ForestNode(Integer id, Integer parentId, Object content) {
+	public ForestNode(Long id, Long parentId, Object content) {
 		this.id = id;
 		this.parentId = parentId;
 		this.content = content;

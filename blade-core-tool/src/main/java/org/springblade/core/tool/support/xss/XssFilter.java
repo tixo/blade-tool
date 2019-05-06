@@ -40,8 +40,9 @@ public class XssFilter implements Filter {
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 		String path = ((HttpServletRequest) request).getServletPath();
-		if (xssProperties.getExcludePatterns().contains(path)) {
-			chain.doFilter(request, response);
+		if (xssProperties.getExcludePatterns().stream().anyMatch(path::contains)) {
+			HttpServletRequestWrapper httpRequest = new HttpServletRequestWrapper((HttpServletRequest) request);
+			chain.doFilter(httpRequest, response);
 		} else {
 			XssHttpServletRequestWrapper xssRequest = new XssHttpServletRequestWrapper((HttpServletRequest) request);
 			chain.doFilter(xssRequest, response);

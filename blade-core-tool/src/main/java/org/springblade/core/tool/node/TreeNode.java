@@ -30,8 +30,8 @@ public class TreeNode extends BaseNode {
 
 	private String title;
 
-	private Integer key;
+	private Long key;
 
-	private Integer value;
+	private Long value;
 
 }
