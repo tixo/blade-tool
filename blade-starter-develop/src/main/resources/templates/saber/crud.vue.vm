@@ -18,7 +18,7 @@
                    size="small"
                    icon="el-icon-delete"
                    plain
-                   v-if="permission.$!{table.entityPath}_delete"
+                   v-if="permission.$!{table.entityKey}_delete"
                    @click="handleDelete">删 除
         </el-button>
       </template>
@@ -69,10 +69,10 @@
       ...mapGetters(["permission"]),
       permissionList() {
         return {
-          addBtn: this.vaildData(this.permission.$!{table.entityPath}_add),
-          viewBtn: this.vaildData(this.permission.$!{table.entityPath}_view),
-          delBtn: this.vaildData(this.permission.$!{table.entityPath}_delete),
-          editBtn: this.vaildData(this.permission.$!{table.entityPath}_edit)
+          addBtn: this.vaildData(this.permission.$!{table.entityKey}_add),
+          viewBtn: this.vaildData(this.permission.$!{table.entityKey}_view),
+          delBtn: this.vaildData(this.permission.$!{table.entityKey}_delete),
+          editBtn: this.vaildData(this.permission.$!{table.entityKey}_edit)
         };
       },
       ids() {
