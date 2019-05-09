@@ -47,6 +47,7 @@ public class SecureRegistry {
 		this.defaultExcludePatterns.add("/menu/auth-routes");
 		this.defaultExcludePatterns.add("/process/resource-view");
 		this.defaultExcludePatterns.add("/process/diagram-view");
+		this.defaultExcludePatterns.add("/manager/check-upload");
 		this.defaultExcludePatterns.add("/error/**");
 		this.defaultExcludePatterns.add("/assets/**");
 	}
