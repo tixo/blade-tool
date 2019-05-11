@@ -24,7 +24,6 @@ import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
-import org.springblade.core.tool.utils.StringPool;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -85,7 +84,7 @@ public class SwaggerAutoConfiguration {
 		return new Docket(DocumentationType.SWAGGER_2)
 			.host(swaggerProperties.getHost())
 			.apiInfo(apiInfo(swaggerProperties)).select()
-			.apis(basePackage(swaggerProperties.getBasePackage()))
+			.apis(basePackages(swaggerProperties.getBasePackages()))
 			.paths(Predicates.and(Predicates.not(Predicates.or(excludePath)), Predicates.or(basePath)))
 			.build()
 			.securitySchemes(Collections.singletonList(securitySchema()))
@@ -141,14 +140,14 @@ public class SwaggerAutoConfiguration {
 			.build();
 	}
 
-	public static Predicate<RequestHandler> basePackage(final String basePackage) {
-		return input -> declaringClass(input).transform(handlerPackage(basePackage)).or(true);
+	public static Predicate<RequestHandler> basePackages(final List<String> basePackages) {
+		return input -> declaringClass(input).transform(handlerPackage(basePackages)).or(true);
 	}
 
-	private static Function<Class<?>, Boolean> handlerPackage(final String basePackage)     {
+	private static Function<Class<?>, Boolean> handlerPackage(final List<String> basePackages) {
 		return input -> {
 			// 循环判断匹配
-			for (String strPackage : basePackage.split(StringPool.COMMA)) {
+			for (String strPackage : basePackages) {
 				boolean isMatch = input.getPackage().getName().startsWith(strPackage);
 				if (isMatch) {
 					return true;
