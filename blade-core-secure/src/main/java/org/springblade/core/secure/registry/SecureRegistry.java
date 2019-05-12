@@ -38,6 +38,7 @@ public class SecureRegistry {
 
 	public SecureRegistry() {
 		this.defaultExcludePatterns.add("/client/user-info");
+		this.defaultExcludePatterns.add("/client/role-aliases");
 		this.defaultExcludePatterns.add("/actuator/health/**");
 		this.defaultExcludePatterns.add("/v2/api-docs/**");
 		this.defaultExcludePatterns.add("/v2/api-docs-ext/**");
