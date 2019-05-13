@@ -14,25 +14,18 @@
  *  this software without specific prior written permission.
  *  Author: Chill 庄骞 (smallchill@163.com)
  */
-package org.springblade.core.tenant.mp;
-
-
-import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
-import org.springblade.core.mp.base.BaseEntity;
+package org.springblade.core.tenant.constant;
 
 /**
- * 租户基础实体类
+ * 租户常量.
  *
- * @author Chill
+ * @author zhuangqian
  */
-@Data
-public class TenantEntity extends BaseEntity {
+public interface TenantConstant {
 
 	/**
-	 * 租户编号
+	 * 默认租户编号
 	 */
-	@ApiModelProperty(value = "租户编号")
-	private String tenantCode;
+	String DEFAULT_TENANT_CODE = "000000";
 
 }

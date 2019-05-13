@@ -22,6 +22,8 @@ import lombok.extern.slf4j.Slf4j;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.StringValue;
 import org.springblade.core.secure.utils.SecureUtil;
+import org.springblade.core.tenant.constant.TenantConstant;
+import org.springblade.core.tool.utils.Func;
 import org.springblade.core.tool.utils.StringUtil;
 
 /**
@@ -42,7 +44,7 @@ public class BladeTenantHandler implements TenantHandler {
 	 */
 	@Override
 	public Expression getTenantId() {
-		return new StringValue(SecureUtil.getTenantCode());
+		return new StringValue(Func.toStr(SecureUtil.getTenantCode(), TenantConstant.DEFAULT_TENANT_CODE));
 	}
 
 	/**
