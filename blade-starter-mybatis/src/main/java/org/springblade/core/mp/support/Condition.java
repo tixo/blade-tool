@@ -21,7 +21,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springblade.core.tool.utils.BeanUtil;
 import org.springblade.core.tool.utils.Func;
-import org.springblade.core.tool.utils.StringUtil;
 
 import java.util.Map;
 
@@ -69,13 +68,7 @@ public class Condition {
 		query.remove("size");
 		QueryWrapper<T> qw = new QueryWrapper<>();
 		qw.setEntity(BeanUtil.newInstance(clazz));
-		if (Func.isNotEmpty(query)) {
-			query.forEach((k, v) -> {
-				if (Func.isNotEmpty(v)) {
-					qw.like(StringUtil.humpToUnderline(k), v);
-				}
-			});
-		}
+		SqlKeyword.buildCondition(query, qw);
 		return qw;
 	}
 
