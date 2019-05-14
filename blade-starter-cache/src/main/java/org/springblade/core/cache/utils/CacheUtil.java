@@ -16,6 +16,7 @@
  */
 package org.springblade.core.cache.utils;
 
+import org.springblade.core.tool.utils.Func;
 import org.springblade.core.tool.utils.SpringUtil;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
@@ -46,51 +47,64 @@ public class CacheUtil {
 	 * 获取缓存
 	 *
 	 * @param cacheName 缓存名
-	 * @param key       缓存键
+	 * @param keyPrefix 缓存键前缀
+	 * @param key       缓存键值
 	 * @return
 	 */
 	@Nullable
-	public static Object get(String cacheName, Object key) {
-		return getCache(cacheName).get(key).get();
+	public static Object get(String cacheName, String keyPrefix, Object key) {
+		if (Func.hasEmpty(cacheName, keyPrefix, key)) {
+			return null;
+		}
+		return getCache(cacheName).get(keyPrefix.concat(String.valueOf(key))).get();
 	}
 
 	/**
 	 * 获取缓存
 	 *
 	 * @param cacheName 缓存名
-	 * @param key       缓存键
+	 * @param keyPrefix 缓存键前缀
+	 * @param key       缓存键值
 	 * @param type
 	 * @param <T>
 	 * @return
 	 */
 	@Nullable
-	public static <T> T get(String cacheName, Object key, @Nullable Class<T> type) {
-		return getCache(cacheName).get(key, type);
+	public static <T> T get(String cacheName, String keyPrefix, Object key, @Nullable Class<T> type) {
+		if (Func.hasEmpty(cacheName, keyPrefix, key)) {
+			return null;
+		}
+		return getCache(cacheName).get(keyPrefix.concat(String.valueOf(key)), type);
 	}
 
 	/**
 	 * 获取缓存
 	 *
 	 * @param cacheName   缓存名
-	 * @param key         缓存键
+	 * @param keyPrefix   缓存键前缀
+	 * @param key         缓存键值
 	 * @param valueLoader 重载对象
 	 * @param <T>
 	 * @return
 	 */
 	@Nullable
-	public static <T> T get(String cacheName, Object key, Callable<T> valueLoader) {
-		return getCache(cacheName).get(key, valueLoader);
+	public static <T> T get(String cacheName, String keyPrefix, Object key, Callable<T> valueLoader) {
+		if (Func.hasEmpty(cacheName, keyPrefix, key)) {
+			return null;
+		}
+		return getCache(cacheName).get(keyPrefix.concat(String.valueOf(key)), valueLoader);
 	}
 
 	/**
 	 * 设置缓存
 	 *
 	 * @param cacheName 缓存名
-	 * @param key       缓存键
+	 * @param keyPrefix 缓存键前缀
+	 * @param key       缓存键值
 	 * @param value     缓存值
 	 */
-	public static void put(String cacheName, Object key, @Nullable Object value) {
-		getCache(cacheName).put(key, value);
+	public static void put(String cacheName, String keyPrefix, Object key, @Nullable Object value) {
+		getCache(cacheName).put(keyPrefix.concat(String.valueOf(key)), value);
 	}
 
 }
