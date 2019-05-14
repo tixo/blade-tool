@@ -16,19 +16,21 @@
  */
 package org.springblade.core.log.aspect;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.springblade.core.launch.constant.AppConstant;
 import org.springblade.core.tool.jackson.JsonUtil;
 import org.springblade.core.tool.utils.BeanUtil;
 import org.springblade.core.tool.utils.ClassUtil;
 import org.springblade.core.tool.utils.StringUtil;
 import org.springblade.core.tool.utils.WebUtil;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 import org.springframework.core.MethodParameter;
 import org.springframework.core.io.InputStreamSource;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,6 +41,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.util.*;
@@ -52,8 +55,12 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 @Aspect
 @Configuration
-@Profile({AppConstant.DEV_CODE, AppConstant.TEST_CODE})
+@AllArgsConstructor
+@ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
+@ConditionalOnProperty(value = "blade.log.request.enabled", havingValue = "true", matchIfMissing = true)
 public class RequestLogAspect {
+
+	private ObjectMapper objectMapper;
 
 	/**
 	 * AOP 环切 控制器 R 返回值
@@ -82,39 +89,54 @@ public class RequestLogAspect {
 				continue;
 			}
 			RequestBody requestBody = methodParam.getParameterAnnotation(RequestBody.class);
+			String parameterName = methodParam.getParameterName();
 			Object value = args[i];
 			// 如果是body的json则是对象
-			if (requestBody != null && value != null) {
-				paraMap.putAll(BeanUtil.toMap(value));
+			if (requestBody != null) {
+				if (value == null) {
+					paraMap.put(parameterName, null);
+				} else if (ClassUtil.isPrimitiveOrWrapper(value.getClass())) {
+					paraMap.put(parameterName, value);
+				} else {
+					paraMap.putAll(BeanUtil.toMap(value));
+				}
 				continue;
-			}
-			// 处理 List
-			if (value instanceof List) {
-				value = ((List) value).get(0);
 			}
 			// 处理 参数
 			if (value instanceof HttpServletRequest) {
 				paraMap.putAll(((HttpServletRequest) value).getParameterMap());
+				continue;
 			} else if (value instanceof WebRequest) {
 				paraMap.putAll(((WebRequest) value).getParameterMap());
+				continue;
+			} else if (value instanceof HttpServletResponse) {
+				continue;
 			} else if (value instanceof MultipartFile) {
 				MultipartFile multipartFile = (MultipartFile) value;
 				String name = multipartFile.getName();
 				String fileName = multipartFile.getOriginalFilename();
 				paraMap.put(name, fileName);
-			} else if (value instanceof HttpServletResponse) {
-			} else if (value instanceof InputStream) {
-			} else if (value instanceof InputStreamSource) {
-			} else {
-				// 参数名
-				RequestParam requestParam = methodParam.getParameterAnnotation(RequestParam.class);
-				String paraName;
-				if (requestParam != null && StringUtil.isNotBlank(requestParam.value())) {
-					paraName = requestParam.value();
-				} else {
-					paraName = methodParam.getParameterName();
-				}
+				continue;
+			}
+			// 参数名
+			RequestParam requestParam = methodParam.getParameterAnnotation(RequestParam.class);
+			String paraName = parameterName;
+			if (requestParam != null && StringUtil.isNotBlank(requestParam.value())) {
+				paraName = requestParam.value();
+			}
+			if (value == null) {
+				paraMap.put(paraName, null);
+			} else if (ClassUtil.isPrimitiveOrWrapper(value.getClass())) {
 				paraMap.put(paraName, value);
+			} else if (value instanceof InputStream) {
+				paraMap.put(paraName, "InputStream");
+			} else if (value instanceof InputStreamSource) {
+				paraMap.put(paraName, "InputStreamSource");
+			} else if (canJsonSerialize(value)) {
+				// 判断模型能被 json 序列化，则添加
+				paraMap.put(paraName, value);
+			} else {
+				paraMap.put(paraName, "【注意】不能序列化为json");
 			}
 		}
 		HttpServletRequest request = WebUtil.getRequest();
@@ -169,6 +191,15 @@ public class RequestLogAspect {
 			afterReqArgs.add(tookMs);
 			afterReqLog.append("================  Response End   ================\n");
 			log.info(afterReqLog.toString(), afterReqArgs.toArray());
+		}
+	}
+
+	private boolean canJsonSerialize(Object value) {
+		try {
+			objectMapper.writeValueAsBytes(value);
+			return true;
+		} catch (IOException e) {
+			return false;
 		}
 	}
 
