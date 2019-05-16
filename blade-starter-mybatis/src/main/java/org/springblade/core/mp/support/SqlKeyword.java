@@ -52,7 +52,7 @@ public class SqlKeyword {
 			return;
 		}
 		query.forEach((k, v) -> {
-			if (Func.isEmpty(k) || k.endsWith(IGNORE)) {
+			if (Func.hasEmpty(k, v) || k.endsWith(IGNORE)) {
 				return;
 			}
 			if (k.endsWith(EQUAL)) {

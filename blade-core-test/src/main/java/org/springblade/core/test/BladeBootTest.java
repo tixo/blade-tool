@@ -17,6 +17,7 @@
 
 package org.springblade.core.test;
 
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.annotation.AliasFor;
 
 import java.lang.annotation.*;
@@ -30,6 +31,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Inherited
+@SpringBootTest
 public @interface BladeBootTest {
 	/**
 	 * 服务名：appName
