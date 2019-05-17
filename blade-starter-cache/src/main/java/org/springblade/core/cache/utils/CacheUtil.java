@@ -116,7 +116,7 @@ public class CacheUtil {
 	 * @param keyPrefix 缓存键前缀
 	 * @param key       缓存键值
 	 */
-	public static void evit(String cacheName, String keyPrefix, Object key) {
+	public static void evict(String cacheName, String keyPrefix, Object key) {
 		if (Func.hasEmpty(cacheName, keyPrefix, key)) {
 			return;
 		}
@@ -128,7 +128,7 @@ public class CacheUtil {
 	 *
 	 * @param cacheName 缓存名
 	 */
-	public static void evit(String cacheName) {
+	public static void clear(String cacheName) {
 		if (Func.isEmpty(cacheName)) {
 			return;
 		}
