@@ -109,4 +109,30 @@ public class CacheUtil {
 		getCache(cacheName).put(keyPrefix.concat(String.valueOf(key)), value);
 	}
 
+	/**
+	 * 清除缓存
+	 *
+	 * @param cacheName 缓存名
+	 * @param keyPrefix 缓存键前缀
+	 * @param key       缓存键值
+	 */
+	public static void evit(String cacheName, String keyPrefix, Object key) {
+		if (Func.hasEmpty(cacheName, keyPrefix, key)) {
+			return;
+		}
+		getCache(cacheName).evict(keyPrefix.concat(String.valueOf(key)));
+	}
+
+	/**
+	 * 清空缓存
+	 *
+	 * @param cacheName 缓存名
+	 */
+	public static void evit(String cacheName) {
+		if (Func.isEmpty(cacheName)) {
+			return;
+		}
+		getCache(cacheName).clear();
+	}
+
 }
