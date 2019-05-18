@@ -61,7 +61,7 @@ public interface NacosConstant {
 	 * @return dataId
 	 */
 	static String dataId(String appName, String profile) {
-		return appName + "-" + profile + "." + NACOS_CONFIG_FORMAT;
+		return dataId(appName, profile, NACOS_CONFIG_FORMAT);
 	}
 
 	/**
