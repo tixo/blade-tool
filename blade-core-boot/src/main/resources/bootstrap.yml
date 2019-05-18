@@ -59,12 +59,11 @@ spring:
     restart:
       log-condition-evaluation-delta: false
 
-
 #配置日志地址
 logging:
-  config: classpath:log/logback_${blade.env}.xml
+  config: classpath:log/logback-${blade.env}.xml
 
-# mybatis
+#mybatis-plus配置
 mybatis-plus:
   mapper-locations: classpath:org/springblade/**/mapper/*Mapper.xml
   #实体扫描，多个package用逗号或者分号分隔
