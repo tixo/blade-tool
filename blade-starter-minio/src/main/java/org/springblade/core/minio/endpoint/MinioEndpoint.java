@@ -76,7 +76,8 @@ public class MinioEndpoint {
 	@SneakyThrows
 	@PostMapping("/make-bucket/{bucketName}")
 	public R<Bucket> makeBucket(@PathVariable String bucketName) {
-		return R.data(template.makeBucket(bucketName));
+		template.makeBucket(bucketName);
+		return R.data(template.getBucket(bucketName));
 	}
 
 	/**

@@ -65,11 +65,10 @@ public class MinioTemplate {
 	 * @param bucketName 存储桶名称
 	 */
 	@SneakyThrows
-	public Bucket makeBucket(String bucketName) {
+	public void makeBucket(String bucketName) {
 		if (!client.bucketExists(getBucketName(bucketName))) {
 			client.makeBucket(getBucketName(bucketName));
 		}
-		return getBucket(getBucketName(bucketName));
 	}
 
 	/**
