@@ -21,6 +21,9 @@ import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import org.springblade.core.minio.MinIoTemplate;
 import org.springblade.core.minio.props.MinIoProperties;
+import org.springblade.core.minio.rule.BladeBucketRule;
+import org.springblade.core.minio.rule.IBucketRule;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -35,21 +38,28 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @AllArgsConstructor
 @EnableConfigurationProperties(MinIoProperties.class)
-@ConditionalOnProperty(value = "blade.minio.endpoint", havingValue = "true")
+@ConditionalOnProperty(value = "minio.endpoint.enable", havingValue = "true")
 public class MinIoConfiguration {
 
 	private MinIoProperties minioProperties;
 
 	@Bean
+	@ConditionalOnMissingBean(IBucketRule.class)
+	public IBucketRule bucketRule() {
+		return new BladeBucketRule(minioProperties.getTenantMode());
+	}
+
+	@Bean
 	@SneakyThrows
+	@ConditionalOnBean(IBucketRule.class)
 	@ConditionalOnMissingBean(MinIoTemplate.class)
-	public MinIoTemplate minioTemplate() {
+	public MinIoTemplate minioTemplate(IBucketRule bucketRule) {
 		MinioClient minioClient = new MinioClient(
 			minioProperties.getEndpoint(),
 			minioProperties.getAccessKey(),
 			minioProperties.getSecretKey()
 		);
-		return new MinIoTemplate(minioClient);
+		return new MinIoTemplate(minioClient, bucketRule);
 	}
 
 }

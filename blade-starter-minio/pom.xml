@@ -18,7 +18,7 @@
         <!--Blade-->
         <dependency>
             <groupId>org.springblade</groupId>
-            <artifactId>blade-core-tool</artifactId>
+            <artifactId>blade-core-secure</artifactId>
             <version>${bladex.tool.version}</version>
         </dependency>
         <!--MinIO-->

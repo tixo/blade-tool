@@ -14,38 +14,21 @@
  *  this software without specific prior written permission.
  *  Author: Chill 庄骞 (smallchill@163.com)
  */
-package org.springblade.core.minio.props;
-
-import lombok.Data;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+package org.springblade.core.minio.rule;
 
 /**
- * Minio参数配置类
+ * 生成存储桶命名规则
  *
  * @author Chill
  */
-@Data
-@ConfigurationProperties(prefix = "minio")
-public class MinIoProperties {
+public interface IBucketRule {
 
 	/**
-	 * 是否开启租户模式
+	 * 获取存储桶规则
+	 *
+	 * @param bucketName 存储桶名称
+	 * @return String
 	 */
-	private Boolean tenantMode;
-
-	/**
-	 * 对象存储服务的URL
-	 */
-	private String endpoint;
-
-	/**
-	 * Access key就像用户ID，可以唯一标识你的账户
-	 */
-	private String accessKey;
-
-	/**
-	 * Secret key是你账户的密码
-	 */
-	private String secretKey;
+	String name(String bucketName);
 
 }

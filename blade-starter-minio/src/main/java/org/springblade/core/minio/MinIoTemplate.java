@@ -24,6 +24,7 @@ import io.minio.messages.Item;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import org.springblade.core.minio.model.MinIoItem;
+import org.springblade.core.minio.rule.IBucketRule;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -44,15 +45,31 @@ public class MinIoTemplate {
 	private MinioClient client;
 
 	/**
+	 * 存储桶命名规则
+	 */
+	private IBucketRule bucketRule;
+
+	/**
+	 * 根据规则生成存储桶名称规则
+	 *
+	 * @param bucketName 存储桶名称
+	 * @return String
+	 */
+	private String getBucketName(String bucketName) {
+		return bucketRule.name(bucketName);
+	}
+
+	/**
 	 * 创建 存储桶
 	 *
 	 * @param bucketName 存储桶名称
 	 */
 	@SneakyThrows
-	public void makeBucket(String bucketName) {
-		if (!client.bucketExists(bucketName)) {
-			client.makeBucket(bucketName);
+	public Bucket makeBucket(String bucketName) {
+		if (!client.bucketExists(getBucketName(bucketName))) {
+			client.makeBucket(getBucketName(bucketName));
 		}
+		return getBucket(getBucketName(bucketName));
 	}
 
 	/**
@@ -62,7 +79,7 @@ public class MinIoTemplate {
 	 */
 	@SneakyThrows
 	public Bucket getBucket(String bucketName) {
-		Optional<Bucket> bucketOptional = client.listBuckets().stream().filter(bucket -> bucket.name().equals(bucketName)).findFirst();
+		Optional<Bucket> bucketOptional = client.listBuckets().stream().filter(bucket -> bucket.name().equals(getBucketName(bucketName))).findFirst();
 		return bucketOptional.orElse(null);
 	}
 
@@ -83,7 +100,7 @@ public class MinIoTemplate {
 	 */
 	@SneakyThrows
 	public void removeBucket(String bucketName) {
-		client.removeBucket(bucketName);
+		client.removeBucket(getBucketName(bucketName));
 	}
 
 	/**
@@ -93,7 +110,7 @@ public class MinIoTemplate {
 	 */
 	@SneakyThrows
 	public String getBucketLifeCycle(String bucketName) {
-		return client.getBucketLifeCycle(bucketName);
+		return client.getBucketLifeCycle(getBucketName(bucketName));
 	}
 
 	/**
@@ -103,7 +120,39 @@ public class MinIoTemplate {
 	 */
 	@SneakyThrows
 	public void deleteBucketLifeCycle(String bucketName) {
-		client.deleteBucketLifeCycle(bucketName);
+		client.deleteBucketLifeCycle(getBucketName(bucketName));
+	}
+
+	/**
+	 * 存储桶是否存在
+	 *
+	 * @param bucketName 存储桶名称
+	 * @return boolean
+	 */
+	@SneakyThrows
+	public boolean bucketExists(String bucketName) {
+		return client.bucketExists(getBucketName(bucketName));
+	}
+
+	/**
+	 * 获取存储桶策略
+	 *
+	 * @param bucketName 存储桶名称
+	 */
+	@SneakyThrows
+	public void getBucketPolicy(String bucketName) {
+		client.getBucketPolicy(getBucketName(bucketName));
+	}
+
+	/**
+	 * 设置存储桶策略
+	 *
+	 * @param bucketName 存储桶名称
+	 * @param policy     名称
+	 */
+	@SneakyThrows
+	public void setBucketPolicy(String bucketName, String policy) {
+		client.setBucketPolicy(getBucketName(bucketName), policy);
 	}
 
 	/**
@@ -115,7 +164,7 @@ public class MinIoTemplate {
 	 */
 	@SneakyThrows
 	public void copyObject(String bucketName, String objectName, String destBucketName) {
-		client.copyObject(bucketName, objectName, destBucketName);
+		client.copyObject(getBucketName(bucketName), objectName, destBucketName);
 	}
 
 	/**
@@ -128,7 +177,7 @@ public class MinIoTemplate {
 	 */
 	@SneakyThrows
 	public void copyObject(String bucketName, String objectName, String destBucketName, String destObjectName) {
-		client.copyObject(bucketName, objectName, destBucketName, destObjectName);
+		client.copyObject(getBucketName(bucketName), objectName, getBucketName(destBucketName), destObjectName);
 	}
 
 	/**
@@ -140,7 +189,7 @@ public class MinIoTemplate {
 	 */
 	@SneakyThrows
 	public ObjectStat statObject(String bucketName, String objectName) {
-		return client.statObject(bucketName, objectName);
+		return client.statObject(getBucketName(bucketName), objectName);
 	}
 
 	/**
@@ -152,7 +201,7 @@ public class MinIoTemplate {
 	 */
 	@SneakyThrows
 	public InputStream getObject(String bucketName, String objectName) {
-		return client.getObject(bucketName, objectName);
+		return client.getObject(getBucketName(bucketName), objectName);
 	}
 
 	/**
@@ -163,7 +212,7 @@ public class MinIoTemplate {
 	 */
 	@SneakyThrows
 	public List<MinIoItem> listObjects(String bucketName) {
-		return buildItems(client.listObjects(bucketName));
+		return buildItems(client.listObjects(getBucketName(bucketName)));
 	}
 
 	/**
@@ -175,7 +224,7 @@ public class MinIoTemplate {
 	 */
 	@SneakyThrows
 	public List<MinIoItem> listObjects(String bucketName, String prefix) {
-		return buildItems(client.listObjects(bucketName, prefix));
+		return buildItems(client.listObjects(getBucketName(bucketName), prefix));
 	}
 
 	/**
@@ -188,7 +237,7 @@ public class MinIoTemplate {
 	 */
 	@SneakyThrows
 	public List<MinIoItem> listObjects(String bucketName, String prefix, boolean recursive) {
-		return buildItems(client.listObjects(bucketName, prefix, recursive));
+		return buildItems(client.listObjects(getBucketName(bucketName), prefix, recursive));
 	}
 
 	/**
@@ -215,7 +264,7 @@ public class MinIoTemplate {
 	 */
 	@SneakyThrows
 	public String getObjectUrl(String bucketName, String objectName) {
-		return client.presignedGetObject(bucketName, objectName);
+		return client.presignedGetObject(getBucketName(bucketName), objectName);
 	}
 
 
@@ -229,7 +278,7 @@ public class MinIoTemplate {
 	 */
 	@SneakyThrows
 	public String getObjectUrl(String bucketName, String objectName, Integer expires) {
-		return client.presignedGetObject(bucketName, objectName, expires);
+		return client.presignedGetObject(getBucketName(bucketName), objectName, expires);
 	}
 
 	/**
@@ -241,7 +290,7 @@ public class MinIoTemplate {
 	 */
 	@SneakyThrows
 	public void putObject(String bucketName, String objectName, InputStream stream) {
-		client.putObject(bucketName, objectName, stream, (long) stream.available(), null, null, "application/octet-stream");
+		client.putObject(getBucketName(bucketName), objectName, stream, (long) stream.available(), null, null, "application/octet-stream");
 	}
 
 	/**
@@ -254,7 +303,7 @@ public class MinIoTemplate {
 	 */
 	@SneakyThrows
 	public void putObject(String bucketName, String objectName, InputStream stream, long size) {
-		client.putObject(bucketName, objectName, stream, size, null, null, "application/octet-stream");
+		client.putObject(getBucketName(bucketName), objectName, stream, size, null, null, "application/octet-stream");
 	}
 
 	/**
@@ -268,7 +317,7 @@ public class MinIoTemplate {
 	 */
 	@SneakyThrows
 	public void putObject(String bucketName, String objectName, InputStream stream, long size, String contextType) {
-		client.putObject(bucketName, objectName, stream, size, null, null, contextType);
+		client.putObject(getBucketName(bucketName), objectName, stream, size, null, null, contextType);
 	}
 
 	/**
@@ -279,7 +328,7 @@ public class MinIoTemplate {
 	 */
 	@SneakyThrows
 	public void removeObject(String bucketName, String objectName) {
-		client.removeObject(bucketName, objectName);
+		client.removeObject(getBucketName(bucketName), objectName);
 	}
 
 	/**
@@ -290,7 +339,7 @@ public class MinIoTemplate {
 	 */
 	@SneakyThrows
 	public void removeObjects(String bucketName, List<String> objectNames) {
-		client.removeObjects(bucketName, objectNames);
+		client.removeObjects(getBucketName(bucketName), objectNames);
 	}
 
 }
