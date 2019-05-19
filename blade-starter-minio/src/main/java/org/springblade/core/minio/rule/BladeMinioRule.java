@@ -14,40 +14,28 @@
  *  this software without specific prior written permission.
  *  Author: Chill 庄骞 (smallchill@163.com)
  */
-package org.springblade.core.minio.model;
+package org.springblade.core.minio.rule;
 
-import io.minio.messages.Item;
-import io.minio.messages.Owner;
-import lombok.Data;
-
-import java.util.Date;
+import lombok.AllArgsConstructor;
+import org.springblade.core.secure.utils.SecureUtil;
+import org.springblade.core.tool.utils.StringPool;
 
 /**
- * MinIoItem
+ * 默认存储桶生成规则
  *
  * @author Chill
  */
-@Data
-public class MinIoItem {
+@AllArgsConstructor
+public class BladeMinioRule implements IMinioRule {
 
-	private String objectName;
-	private Date lastModified;
-	private String etag;
-	private Long size;
-	private String storageClass;
-	private Owner owner;
-	private boolean isDir;
-	private String category;
+	/**
+	 * 租户模式
+	 */
+	private Boolean tenantMode;
 
-	public MinIoItem(Item item) {
-		this.objectName = item.objectName();
-		this.lastModified = item.lastModified();
-		this.etag = item.etag();
-		this.size = (long) item.size();
-		this.storageClass = item.storageClass();
-		this.owner = item.owner();
-		this.isDir = item.isDir();
-		this.category = isDir ? "dir" : "file";
+	@Override
+	public String bucketName(String bucketName) {
+		String prefix = (tenantMode) ? SecureUtil.getTenantCode().concat(StringPool.DASH) : StringPool.EMPTY;
+		return prefix + bucketName;
 	}
-
 }

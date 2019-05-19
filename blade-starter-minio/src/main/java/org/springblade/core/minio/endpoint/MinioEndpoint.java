@@ -20,8 +20,8 @@ import io.minio.ObjectStat;
 import io.minio.messages.Bucket;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
-import org.springblade.core.minio.MinIoTemplate;
-import org.springblade.core.minio.model.MinIoItem;
+import org.springblade.core.minio.MinioTemplate;
+import org.springblade.core.minio.model.MinioItem;
 import org.springblade.core.tool.api.R;
 import org.springblade.core.tool.utils.Func;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -39,10 +39,10 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/minio/endpoint")
-@ConditionalOnProperty(name = "minio.endpoint.enable", havingValue = "true")
-public class MinIoEndpoint {
+@ConditionalOnProperty(name = "minio.enable", havingValue = "true")
+public class MinioEndpoint {
 
-	private MinIoTemplate template;
+	private MinioTemplate template;
 
 	/**
 	 * 获取存储桶
@@ -178,11 +178,11 @@ public class MinIoEndpoint {
 	 * 获取存储桶下的对象集合
 	 *
 	 * @param bucketName 存储桶名称
-	 * @return List<MinIoItem>
+	 * @return List<MinioItem>
 	 */
 	@SneakyThrows
 	@GetMapping("/list-objects/{bucketName}")
-	public R<List<MinIoItem>> listObjects(@PathVariable String bucketName) {
+	public R<List<MinioItem>> listObjects(@PathVariable String bucketName) {
 		return R.data(template.listObjects(bucketName));
 	}
 
@@ -191,11 +191,11 @@ public class MinIoEndpoint {
 	 *
 	 * @param bucketName 存储桶名称
 	 * @param prefix     对象名前缀
-	 * @return List<MinIoItem>
+	 * @return List<MinioItem>
 	 */
 	@SneakyThrows
 	@GetMapping("/list-objects/{bucketName}/{prefix}")
-	public R<List<MinIoItem>> listObjects(@PathVariable String bucketName, @PathVariable String prefix) {
+	public R<List<MinioItem>> listObjects(@PathVariable String bucketName, @PathVariable String prefix) {
 		return R.data(template.listObjects(bucketName, prefix));
 	}
 
@@ -205,11 +205,11 @@ public class MinIoEndpoint {
 	 * @param bucketName 存储桶名称
 	 * @param prefix     对象名前缀
 	 * @param recursive  是否递归
-	 * @return List<MinIoItem>
+	 * @return List<MinioItem>
 	 */
 	@SneakyThrows
 	@GetMapping("/list-objects/{bucketName}/{prefix}/{recursive}")
-	public R<List<MinIoItem>> listObjects(@PathVariable String bucketName, @PathVariable String prefix, @PathVariable boolean recursive) {
+	public R<List<MinioItem>> listObjects(@PathVariable String bucketName, @PathVariable String prefix, @PathVariable boolean recursive) {
 		return R.data(template.listObjects(bucketName, prefix, recursive));
 	}
 

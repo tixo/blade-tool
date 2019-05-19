@@ -23,8 +23,8 @@ import io.minio.messages.Bucket;
 import io.minio.messages.Item;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
-import org.springblade.core.minio.model.MinIoItem;
-import org.springblade.core.minio.rule.IBucketRule;
+import org.springblade.core.minio.model.MinioItem;
+import org.springblade.core.minio.rule.IMinioRule;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -37,7 +37,7 @@ import java.util.Optional;
  * @author Chill
  */
 @AllArgsConstructor
-public class MinIoTemplate {
+public class MinioTemplate {
 
 	/**
 	 * MinIO客户端
@@ -47,7 +47,7 @@ public class MinIoTemplate {
 	/**
 	 * 存储桶命名规则
 	 */
-	private IBucketRule bucketRule;
+	private IMinioRule minIoRule;
 
 	/**
 	 * 根据规则生成存储桶名称规则
@@ -56,7 +56,7 @@ public class MinIoTemplate {
 	 * @return String
 	 */
 	private String getBucketName(String bucketName) {
-		return bucketRule.name(bucketName);
+		return minIoRule.bucketName(bucketName);
 	}
 
 	/**
@@ -211,7 +211,7 @@ public class MinIoTemplate {
 	 * @return
 	 */
 	@SneakyThrows
-	public List<MinIoItem> listObjects(String bucketName) {
+	public List<MinioItem> listObjects(String bucketName) {
 		return buildItems(client.listObjects(getBucketName(bucketName)));
 	}
 
@@ -223,7 +223,7 @@ public class MinIoTemplate {
 	 * @return
 	 */
 	@SneakyThrows
-	public List<MinIoItem> listObjects(String bucketName, String prefix) {
+	public List<MinioItem> listObjects(String bucketName, String prefix) {
 		return buildItems(client.listObjects(getBucketName(bucketName), prefix));
 	}
 
@@ -236,7 +236,7 @@ public class MinIoTemplate {
 	 * @return
 	 */
 	@SneakyThrows
-	public List<MinIoItem> listObjects(String bucketName, String prefix, boolean recursive) {
+	public List<MinioItem> listObjects(String bucketName, String prefix, boolean recursive) {
 		return buildItems(client.listObjects(getBucketName(bucketName), prefix, recursive));
 	}
 
@@ -247,10 +247,10 @@ public class MinIoTemplate {
 	 * @return
 	 */
 	@SneakyThrows
-	private List<MinIoItem> buildItems(Iterable<Result<Item>> results) {
-		List<MinIoItem> items = new ArrayList<>();
+	private List<MinioItem> buildItems(Iterable<Result<Item>> results) {
+		List<MinioItem> items = new ArrayList<>();
 		while (results.iterator().hasNext()) {
-			items.add(new MinIoItem(results.iterator().next().get()));
+			items.add(new MinioItem(results.iterator().next().get()));
 		}
 		return items;
 	}
@@ -290,7 +290,7 @@ public class MinIoTemplate {
 	 */
 	@SneakyThrows
 	public void putObject(String bucketName, String objectName, InputStream stream) {
-		client.putObject(getBucketName(bucketName), objectName, stream, (long) stream.available(), null, null, "application/octet-stream");
+		putObject(getBucketName(bucketName), objectName, stream, (long) stream.available(), "application/octet-stream");
 	}
 
 	/**
@@ -303,7 +303,7 @@ public class MinIoTemplate {
 	 */
 	@SneakyThrows
 	public void putObject(String bucketName, String objectName, InputStream stream, long size) {
-		client.putObject(getBucketName(bucketName), objectName, stream, size, null, null, "application/octet-stream");
+		putObject(getBucketName(bucketName), objectName, stream, size, "application/octet-stream");
 	}
 
 	/**
@@ -317,6 +317,7 @@ public class MinIoTemplate {
 	 */
 	@SneakyThrows
 	public void putObject(String bucketName, String objectName, InputStream stream, long size, String contextType) {
+		makeBucket(bucketName);
 		client.putObject(getBucketName(bucketName), objectName, stream, size, null, null, contextType);
 	}
 

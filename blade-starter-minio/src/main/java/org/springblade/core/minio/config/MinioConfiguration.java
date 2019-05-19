@@ -19,10 +19,10 @@ package org.springblade.core.minio.config;
 import io.minio.MinioClient;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
-import org.springblade.core.minio.MinIoTemplate;
-import org.springblade.core.minio.props.MinIoProperties;
-import org.springblade.core.minio.rule.BladeBucketRule;
-import org.springblade.core.minio.rule.IBucketRule;
+import org.springblade.core.minio.MinioTemplate;
+import org.springblade.core.minio.props.MinioProperties;
+import org.springblade.core.minio.rule.BladeMinioRule;
+import org.springblade.core.minio.rule.IMinioRule;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -37,29 +37,34 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 @AllArgsConstructor
-@EnableConfigurationProperties(MinIoProperties.class)
-@ConditionalOnProperty(value = "minio.endpoint.enable", havingValue = "true")
-public class MinIoConfiguration {
+@EnableConfigurationProperties(MinioProperties.class)
+@ConditionalOnProperty(value = "minio.enable", havingValue = "true")
+public class MinioConfiguration {
 
-	private MinIoProperties minioProperties;
+	private MinioProperties minioProperties;
 
 	@Bean
-	@ConditionalOnMissingBean(IBucketRule.class)
-	public IBucketRule bucketRule() {
-		return new BladeBucketRule(minioProperties.getTenantMode());
+	@ConditionalOnMissingBean(IMinioRule.class)
+	public IMinioRule bucketRule() {
+		return new BladeMinioRule(minioProperties.getTenantMode());
 	}
 
 	@Bean
 	@SneakyThrows
-	@ConditionalOnBean(IBucketRule.class)
-	@ConditionalOnMissingBean(MinIoTemplate.class)
-	public MinIoTemplate minioTemplate(IBucketRule bucketRule) {
-		MinioClient minioClient = new MinioClient(
+	@ConditionalOnMissingBean(MinioClient.class)
+	public MinioClient minioClient() {
+		return new MinioClient(
 			minioProperties.getEndpoint(),
 			minioProperties.getAccessKey(),
 			minioProperties.getSecretKey()
 		);
-		return new MinIoTemplate(minioClient, bucketRule);
+	}
+
+	@Bean
+	@ConditionalOnBean({MinioClient.class, IMinioRule.class})
+	@ConditionalOnMissingBean(MinioTemplate.class)
+	public MinioTemplate minioTemplate(MinioClient minioClient, IMinioRule bucketRule) {
+		return new MinioTemplate(minioClient, bucketRule);
 	}
 
 }

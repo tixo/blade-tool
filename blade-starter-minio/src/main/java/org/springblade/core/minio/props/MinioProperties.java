@@ -26,7 +26,12 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  */
 @Data
 @ConfigurationProperties(prefix = "minio")
-public class MinIoProperties {
+public class MinioProperties {
+
+	/**
+	 * 是否启用
+	 */
+	private Boolean enable;
 
 	/**
 	 * 是否开启租户模式

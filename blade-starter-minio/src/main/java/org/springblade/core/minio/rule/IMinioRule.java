@@ -21,7 +21,7 @@ package org.springblade.core.minio.rule;
  *
  * @author Chill
  */
-public interface IBucketRule {
+public interface IMinioRule {
 
 	/**
 	 * 获取存储桶规则
@@ -29,6 +29,6 @@ public interface IBucketRule {
 	 * @param bucketName 存储桶名称
 	 * @return String
 	 */
-	String name(String bucketName);
+	String bucketName(String bucketName);
 
 }
