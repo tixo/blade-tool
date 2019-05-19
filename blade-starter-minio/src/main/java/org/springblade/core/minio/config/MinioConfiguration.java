@@ -45,7 +45,7 @@ public class MinioConfiguration {
 
 	@Bean
 	@ConditionalOnMissingBean(IMinioRule.class)
-	public IMinioRule bucketRule() {
+	public IMinioRule minioRule() {
 		return new BladeMinioRule(minioProperties.getTenantMode());
 	}
 
@@ -63,8 +63,8 @@ public class MinioConfiguration {
 	@Bean
 	@ConditionalOnBean({MinioClient.class, IMinioRule.class})
 	@ConditionalOnMissingBean(MinioTemplate.class)
-	public MinioTemplate minioTemplate(MinioClient minioClient, IMinioRule bucketRule) {
-		return new MinioTemplate(minioClient, bucketRule);
+	public MinioTemplate minioTemplate(MinioClient minioClient, IMinioRule minioRule) {
+		return new MinioTemplate(minioClient, minioRule);
 	}
 
 }

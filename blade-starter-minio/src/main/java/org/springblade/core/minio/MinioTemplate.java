@@ -47,7 +47,7 @@ public class MinioTemplate {
 	/**
 	 * 存储桶命名规则
 	 */
-	private IMinioRule minIoRule;
+	private IMinioRule minioRule;
 
 	/**
 	 * 根据规则生成存储桶名称规则
@@ -56,7 +56,7 @@ public class MinioTemplate {
 	 * @return String
 	 */
 	private String getBucketName(String bucketName) {
-		return minIoRule.bucketName(bucketName);
+		return minioRule.bucketName(bucketName);
 	}
 
 	/**
