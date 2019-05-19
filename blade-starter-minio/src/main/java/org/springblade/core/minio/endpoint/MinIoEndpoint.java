@@ -46,6 +46,9 @@ public class MinIoEndpoint {
 
 	/**
 	 * 获取存储桶
+	 *
+	 * @param bucketName 存储桶名称
+	 * @return Bucket
 	 */
 	@SneakyThrows
 	@GetMapping("/bucket/{bucketName}")
@@ -55,6 +58,8 @@ public class MinIoEndpoint {
 
 	/**
 	 * 获取存储桶集合
+	 *
+	 * @return List<Bucket>
 	 */
 	@SneakyThrows
 	@GetMapping("/buckets")
@@ -64,6 +69,9 @@ public class MinIoEndpoint {
 
 	/**
 	 * 创建存储桶
+	 *
+	 * @param bucketName 存储桶名称
+	 * @return Bucket
 	 */
 	@SneakyThrows
 	@PostMapping("/make-bucket/{bucketName}")
@@ -74,6 +82,9 @@ public class MinIoEndpoint {
 
 	/**
 	 * 创建存储桶
+	 *
+	 * @param bucketName 存储桶名称
+	 * @return R
 	 */
 	@SneakyThrows
 	@PostMapping("/remove-bucket/{bucketName}")
@@ -86,6 +97,7 @@ public class MinIoEndpoint {
 	 * 获取 存储桶 生命周期
 	 *
 	 * @param bucketName 存储桶名称
+	 * @return String
 	 */
 	@SneakyThrows
 	@GetMapping("/bucket-life-cycle/{bucketName}")
@@ -97,6 +109,7 @@ public class MinIoEndpoint {
 	 * 删除 存储桶 生命周期
 	 *
 	 * @param bucketName 存储桶名称
+	 * @return R
 	 */
 	@SneakyThrows
 	@PostMapping("/delete-bucket-life-cycle/{bucketName}")
@@ -111,6 +124,7 @@ public class MinIoEndpoint {
 	 * @param bucketName     存储桶名称
 	 * @param objectName     存储桶对象名称
 	 * @param destBucketName 目标存储桶名称
+	 * @return R
 	 */
 	@SneakyThrows
 	@PostMapping("/copy-object/{bucketName}/{objectName}/{destBucketName}")
@@ -126,6 +140,7 @@ public class MinIoEndpoint {
 	 * @param objectName     存储桶对象名称
 	 * @param destBucketName 目标存储桶名称
 	 * @param destObjectName 目标存储桶对象名称
+	 * @return R
 	 */
 	@SneakyThrows
 	@PostMapping("/copy-object/{bucketName}/{objectName}/{destBucketName}/{destObjectName}")
@@ -164,7 +179,7 @@ public class MinIoEndpoint {
 	 * 获取存储桶下的对象集合
 	 *
 	 * @param bucketName 存储桶名称
-	 * @return
+	 * @return List<MinIoItem>
 	 */
 	@SneakyThrows
 	@GetMapping("/list-objects/{bucketName}")
@@ -177,7 +192,7 @@ public class MinIoEndpoint {
 	 *
 	 * @param bucketName 存储桶名称
 	 * @param prefix     对象名前缀
-	 * @return
+	 * @return List<MinIoItem>
 	 */
 	@SneakyThrows
 	@GetMapping("/list-objects/{bucketName}/{prefix}")
@@ -191,7 +206,7 @@ public class MinIoEndpoint {
 	 * @param bucketName 存储桶名称
 	 * @param prefix     对象名前缀
 	 * @param recursive  是否递归
-	 * @return
+	 * @return List<MinIoItem>
 	 */
 	@SneakyThrows
 	@GetMapping("/list-objects/{bucketName}/{prefix}/{recursive}")
@@ -233,6 +248,7 @@ public class MinIoEndpoint {
 	 * @param bucketName 存储桶名称
 	 * @param objectName 存储桶对象名称
 	 * @param file       文件
+	 * @return ObjectStat
 	 */
 	@SneakyThrows
 	@PostMapping("/put-object/{bucketName}/{objectName}")
@@ -246,6 +262,7 @@ public class MinIoEndpoint {
 	 *
 	 * @param bucketName 存储桶名称
 	 * @param objectName 存储桶对象名称
+	 * @return R
 	 */
 	@SneakyThrows
 	@PostMapping("/remove-object/{bucketName}/{objectName}")
@@ -259,6 +276,7 @@ public class MinIoEndpoint {
 	 *
 	 * @param bucketName  存储桶名称
 	 * @param objectNames 存储桶对象名称集合
+	 * @return R
 	 */
 	@SneakyThrows
 	@PostMapping("/remove-object/{bucketName}/{objectNames}")
