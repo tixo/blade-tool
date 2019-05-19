@@ -236,9 +236,9 @@ public class MinIoEndpoint {
 	 */
 	@SneakyThrows
 	@PostMapping("/put-object/{bucketName}/{objectName}")
-	public R putObject(@PathVariable String bucketName, @PathVariable String objectName, @RequestParam MultipartFile file) {
+	public R<ObjectStat> putObject(@PathVariable String bucketName, @PathVariable String objectName, @RequestParam MultipartFile file) {
 		template.putObject(bucketName, objectName, file.getInputStream());
-		return R.success("操作成功");
+		return R.data(template.statObject(bucketName, objectName));
 	}
 
 	/**
