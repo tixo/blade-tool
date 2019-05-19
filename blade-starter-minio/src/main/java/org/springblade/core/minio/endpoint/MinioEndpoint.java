@@ -124,27 +124,12 @@ public class MinioEndpoint {
 	 * @param bucketName     存储桶名称
 	 * @param objectName     存储桶对象名称
 	 * @param destBucketName 目标存储桶名称
-	 * @return R
-	 */
-	@SneakyThrows
-	@PostMapping("/copy-object")
-	public R copyObject(@RequestParam String bucketName, @RequestParam String objectName, @RequestParam String destBucketName) {
-		template.copyObject(bucketName, objectName, destBucketName);
-		return R.success("操作成功");
-	}
-
-	/**
-	 * 拷贝文件
-	 *
-	 * @param bucketName     存储桶名称
-	 * @param objectName     存储桶对象名称
-	 * @param destBucketName 目标存储桶名称
 	 * @param destObjectName 目标存储桶对象名称
 	 * @return R
 	 */
 	@SneakyThrows
 	@PostMapping("/copy-object")
-	public R copyObject(@RequestParam String bucketName, @RequestParam String objectName, @RequestParam String destBucketName, @RequestParam String destObjectName) {
+	public R copyObject(@RequestParam String bucketName, @RequestParam String objectName, @RequestParam String destBucketName, String destObjectName) {
 		template.copyObject(bucketName, objectName, destBucketName, destObjectName);
 		return R.success("操作成功");
 	}
@@ -195,23 +180,9 @@ public class MinioEndpoint {
 	 * @return List<MinioItem>
 	 */
 	@SneakyThrows
-	@GetMapping("/list-objects")
+	@GetMapping("/list-objects-by-prefix")
 	public R<List<MinioItem>> listObjects(@RequestParam String bucketName, @RequestParam String prefix) {
 		return R.data(template.listObjects(bucketName, prefix));
-	}
-
-	/**
-	 * 获取存储桶下的对象集合
-	 *
-	 * @param bucketName 存储桶名称
-	 * @param prefix     对象名前缀
-	 * @param recursive  是否递归
-	 * @return List<MinioItem>
-	 */
-	@SneakyThrows
-	@GetMapping("/list-objects")
-	public R<List<MinioItem>> listObjects(@RequestParam String bucketName, @RequestParam String prefix, @RequestParam boolean recursive) {
-		return R.data(template.listObjects(bucketName, prefix, recursive));
 	}
 
 	/**
@@ -225,21 +196,6 @@ public class MinioEndpoint {
 	@GetMapping("/object-url")
 	public R<String> getObjectUrl(@RequestParam String bucketName, @RequestParam String objectName) {
 		return R.data(template.getObjectUrl(bucketName, objectName));
-	}
-
-
-	/**
-	 * 获取文件外链
-	 *
-	 * @param bucketName 存储桶名称
-	 * @param objectName 存储桶对象名称
-	 * @param expires    过期时间
-	 * @return String
-	 */
-	@SneakyThrows
-	@GetMapping("/object-url")
-	public R<String> getObjectUrl(@RequestParam String bucketName, @RequestParam String objectName, @RequestParam Integer expires) {
-		return R.data(template.getObjectUrl(bucketName, objectName, expires));
 	}
 
 	/**
@@ -279,7 +235,7 @@ public class MinioEndpoint {
 	 * @return R
 	 */
 	@SneakyThrows
-	@PostMapping("/remove-object")
+	@PostMapping("/remove-objects")
 	public R removeObjects(@RequestParam String bucketName, @RequestParam String objectNames) {
 		template.removeObjects(bucketName, Func.toStrList(objectNames));
 		return R.success("操作成功");
