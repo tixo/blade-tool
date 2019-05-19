@@ -52,6 +52,7 @@
         <module>blade-starter-swagger</module>
         <module>blade-starter-tenant</module>
         <module>blade-starter-ehcache</module>
+        <module>blade-starter-minio</module>
     </modules>
 
     <dependencyManagement>

@@ -24,7 +24,6 @@ import org.springframework.util.DigestUtils;
 import javax.crypto.Mac;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
-import javax.xml.bind.DatatypeConverter;
 import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -346,7 +345,7 @@ public class DigestUtil extends org.springframework.util.DigestUtils {
 	 * @return decode hex to bytes
 	 */
 	public static byte[] decodeHex(final String hexStr) {
-		return DatatypeConverter.parseHexBinary(hexStr);
+		return DatatypeConverterUtil.parseHexBinary(hexStr);
 	}
 
 	/**
