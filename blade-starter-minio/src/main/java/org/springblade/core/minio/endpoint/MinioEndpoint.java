@@ -51,8 +51,8 @@ public class MinioEndpoint {
 	 * @return Bucket
 	 */
 	@SneakyThrows
-	@GetMapping("/bucket/{bucketName}")
-	public R<Bucket> bucket(@PathVariable String bucketName) {
+	@GetMapping("/bucket")
+	public R<Bucket> bucket(@RequestParam String bucketName) {
 		return R.data(template.getBucket(bucketName));
 	}
 
@@ -74,8 +74,8 @@ public class MinioEndpoint {
 	 * @return Bucket
 	 */
 	@SneakyThrows
-	@PostMapping("/make-bucket/{bucketName}")
-	public R<Bucket> makeBucket(@PathVariable String bucketName) {
+	@PostMapping("/make-bucket")
+	public R<Bucket> makeBucket(@RequestParam String bucketName) {
 		template.makeBucket(bucketName);
 		return R.data(template.getBucket(bucketName));
 	}
@@ -87,8 +87,8 @@ public class MinioEndpoint {
 	 * @return R
 	 */
 	@SneakyThrows
-	@PostMapping("/remove-bucket/{bucketName}")
-	public R removeBucket(@PathVariable String bucketName) {
+	@PostMapping("/remove-bucket")
+	public R removeBucket(@RequestParam String bucketName) {
 		template.removeBucket(bucketName);
 		return R.success("删除成功");
 	}
@@ -100,8 +100,8 @@ public class MinioEndpoint {
 	 * @return String
 	 */
 	@SneakyThrows
-	@GetMapping("/bucket-life-cycle/{bucketName}")
-	public R<String> getBucketLifeCycle(@PathVariable String bucketName) {
+	@GetMapping("/bucket-life-cycle")
+	public R<String> getBucketLifeCycle(@RequestParam String bucketName) {
 		return R.data(template.getBucketLifeCycle(bucketName));
 	}
 
@@ -112,8 +112,8 @@ public class MinioEndpoint {
 	 * @return R
 	 */
 	@SneakyThrows
-	@PostMapping("/delete-bucket-life-cycle/{bucketName}")
-	public R deleteBucketLifeCycle(@PathVariable String bucketName) {
+	@PostMapping("/delete-bucket-life-cycle")
+	public R deleteBucketLifeCycle(@RequestParam String bucketName) {
 		template.deleteBucketLifeCycle(bucketName);
 		return R.success("删除成功");
 	}
@@ -127,8 +127,8 @@ public class MinioEndpoint {
 	 * @return R
 	 */
 	@SneakyThrows
-	@PostMapping("/copy-object/{bucketName}/{objectName}/{destBucketName}")
-	public R copyObject(@PathVariable String bucketName, @PathVariable String objectName, @PathVariable String destBucketName) {
+	@PostMapping("/copy-object")
+	public R copyObject(@RequestParam String bucketName, @RequestParam String objectName, @RequestParam String destBucketName) {
 		template.copyObject(bucketName, objectName, destBucketName);
 		return R.success("操作成功");
 	}
@@ -143,8 +143,8 @@ public class MinioEndpoint {
 	 * @return R
 	 */
 	@SneakyThrows
-	@PostMapping("/copy-object/{bucketName}/{objectName}/{destBucketName}/{destObjectName}")
-	public R copyObject(@PathVariable String bucketName, @PathVariable String objectName, @PathVariable String destBucketName, @PathVariable String destObjectName) {
+	@PostMapping("/copy-object")
+	public R copyObject(@RequestParam String bucketName, @RequestParam String objectName, @RequestParam String destBucketName, @RequestParam String destObjectName) {
 		template.copyObject(bucketName, objectName, destBucketName, destObjectName);
 		return R.success("操作成功");
 	}
@@ -157,8 +157,8 @@ public class MinioEndpoint {
 	 * @return InputStream
 	 */
 	@SneakyThrows
-	@GetMapping("/stat-object/{bucketName}/{objectName}")
-	public R<ObjectStat> statObject(@PathVariable String bucketName, @PathVariable String objectName) {
+	@GetMapping("/stat-object")
+	public R<ObjectStat> statObject(@RequestParam String bucketName, @RequestParam String objectName) {
 		return R.data(template.statObject(bucketName, objectName));
 	}
 
@@ -170,8 +170,8 @@ public class MinioEndpoint {
 	 * @return InputStream
 	 */
 	@SneakyThrows
-	@GetMapping("/get-object/{bucketName}/{objectName}")
-	public InputStream getObject(@PathVariable String bucketName, @PathVariable String objectName) {
+	@GetMapping("/get-object")
+	public InputStream getObject(@RequestParam String bucketName, @RequestParam String objectName) {
 		return template.getObject(bucketName, objectName);
 	}
 
@@ -182,8 +182,8 @@ public class MinioEndpoint {
 	 * @return List<MinioItem>
 	 */
 	@SneakyThrows
-	@GetMapping("/list-objects/{bucketName}")
-	public R<List<MinioItem>> listObjects(@PathVariable String bucketName) {
+	@GetMapping("/list-objects")
+	public R<List<MinioItem>> listObjects(@RequestParam String bucketName) {
 		return R.data(template.listObjects(bucketName));
 	}
 
@@ -195,8 +195,8 @@ public class MinioEndpoint {
 	 * @return List<MinioItem>
 	 */
 	@SneakyThrows
-	@GetMapping("/list-objects/{bucketName}/{prefix}")
-	public R<List<MinioItem>> listObjects(@PathVariable String bucketName, @PathVariable String prefix) {
+	@GetMapping("/list-objects")
+	public R<List<MinioItem>> listObjects(@RequestParam String bucketName, @RequestParam String prefix) {
 		return R.data(template.listObjects(bucketName, prefix));
 	}
 
@@ -209,8 +209,8 @@ public class MinioEndpoint {
 	 * @return List<MinioItem>
 	 */
 	@SneakyThrows
-	@GetMapping("/list-objects/{bucketName}/{prefix}/{recursive}")
-	public R<List<MinioItem>> listObjects(@PathVariable String bucketName, @PathVariable String prefix, @PathVariable boolean recursive) {
+	@GetMapping("/list-objects")
+	public R<List<MinioItem>> listObjects(@RequestParam String bucketName, @RequestParam String prefix, @RequestParam boolean recursive) {
 		return R.data(template.listObjects(bucketName, prefix, recursive));
 	}
 
@@ -222,8 +222,8 @@ public class MinioEndpoint {
 	 * @return String
 	 */
 	@SneakyThrows
-	@GetMapping("/object-url/{bucketName}/{objectName}")
-	public R<String> getObjectUrl(@PathVariable String bucketName, @PathVariable String objectName) {
+	@GetMapping("/object-url")
+	public R<String> getObjectUrl(@RequestParam String bucketName, @RequestParam String objectName) {
 		return R.data(template.getObjectUrl(bucketName, objectName));
 	}
 
@@ -237,8 +237,8 @@ public class MinioEndpoint {
 	 * @return String
 	 */
 	@SneakyThrows
-	@GetMapping("/object-url/{bucketName}/{objectName}/{expires}")
-	public R<String> getObjectUrl(@PathVariable String bucketName, @PathVariable String objectName, @PathVariable Integer expires) {
+	@GetMapping("/object-url")
+	public R<String> getObjectUrl(@RequestParam String bucketName, @RequestParam String objectName, @RequestParam Integer expires) {
 		return R.data(template.getObjectUrl(bucketName, objectName, expires));
 	}
 
@@ -251,8 +251,8 @@ public class MinioEndpoint {
 	 * @return ObjectStat
 	 */
 	@SneakyThrows
-	@PostMapping("/put-object/{bucketName}/{objectName}")
-	public R<ObjectStat> putObject(@PathVariable String bucketName, @PathVariable String objectName, @RequestParam MultipartFile file) {
+	@PostMapping("/put-object")
+	public R<ObjectStat> putObject(@RequestParam String bucketName, @RequestParam String objectName, @RequestParam MultipartFile file) {
 		template.putObject(bucketName, objectName, file.getInputStream());
 		return R.data(template.statObject(bucketName, objectName));
 	}
@@ -265,8 +265,8 @@ public class MinioEndpoint {
 	 * @return R
 	 */
 	@SneakyThrows
-	@PostMapping("/remove-object/{bucketName}/{objectName}")
-	public R removeObject(@PathVariable String bucketName, @PathVariable String objectName) {
+	@PostMapping("/remove-object")
+	public R removeObject(@RequestParam String bucketName, @RequestParam String objectName) {
 		template.removeObject(bucketName, objectName);
 		return R.success("操作成功");
 	}
@@ -279,8 +279,8 @@ public class MinioEndpoint {
 	 * @return R
 	 */
 	@SneakyThrows
-	@PostMapping("/remove-object/{bucketName}/{objectNames}")
-	public R removeObjects(@PathVariable String bucketName, @PathVariable String objectNames) {
+	@PostMapping("/remove-object")
+	public R removeObjects(@RequestParam String bucketName, @RequestParam String objectNames) {
 		template.removeObjects(bucketName, Func.toStrList(objectNames));
 		return R.success("操作成功");
 	}
