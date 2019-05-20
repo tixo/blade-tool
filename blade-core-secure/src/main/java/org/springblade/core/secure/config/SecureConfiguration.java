@@ -19,8 +19,7 @@ package org.springblade.core.secure.config;
 
 import lombok.AllArgsConstructor;
 import org.springblade.core.secure.aspect.AuthAspect;
-import org.springblade.core.secure.interceptor.ClientInterceptor;
-import org.springblade.core.secure.interceptor.SecureInterceptor;
+import org.springblade.core.secure.handler.ISecureHandler;
 import org.springblade.core.secure.props.BladeClientProperties;
 import org.springblade.core.secure.props.BladeSecureProperties;
 import org.springblade.core.secure.provider.ClientDetailsServiceImpl;
@@ -54,12 +53,17 @@ public class SecureConfiguration implements WebMvcConfigurer {
 
 	private final JdbcTemplate jdbcTemplate;
 
+	private final ISecureHandler secureHandler;
+
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
-		clientProperties.getClient().forEach(cs -> registry.addInterceptor(new ClientInterceptor(cs.getClientId())).addPathPatterns(cs.getPathPatterns()));
+		clientProperties.getClient().forEach(
+			cs -> registry.addInterceptor(secureHandler.clientInterceptor(cs.getClientId()))
+				.addPathPatterns(cs.getPathPatterns())
+		);
 
 		if (secureRegistry.isEnable()) {
-			registry.addInterceptor(new SecureInterceptor())
+			registry.addInterceptor(secureHandler.tokenInterceptor())
 				.excludePathPatterns(secureRegistry.getExcludePatterns())
 				.excludePathPatterns(secureRegistry.getDefaultExcludePatterns())
 				.excludePathPatterns(secureProperties.getExcludePatterns());

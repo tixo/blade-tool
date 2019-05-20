@@ -39,7 +39,7 @@ import java.util.Objects;
  */
 @Slf4j
 @AllArgsConstructor
-public class SecureInterceptor extends HandlerInterceptorAdapter {
+public class TokenInterceptor extends HandlerInterceptorAdapter {
 
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {

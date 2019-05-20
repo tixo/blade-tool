@@ -17,6 +17,8 @@
 package org.springblade.core.secure.config;
 
 
+import org.springblade.core.secure.handler.ISecureHandler;
+import org.springblade.core.secure.handler.SecureHandlerHandler;
 import org.springblade.core.secure.registry.SecureRegistry;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -38,6 +40,12 @@ public class RegistryConfiguration {
 	@ConditionalOnMissingBean(SecureRegistry.class)
 	public SecureRegistry secureRegistry() {
 		return new SecureRegistry();
+	}
+
+	@Bean
+	@ConditionalOnMissingBean(ISecureHandler.class)
+	public ISecureHandler secure() {
+		return new SecureHandlerHandler();
 	}
 
 }
