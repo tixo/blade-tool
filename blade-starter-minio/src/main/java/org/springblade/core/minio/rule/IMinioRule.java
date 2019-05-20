@@ -16,6 +16,8 @@
  */
 package org.springblade.core.minio.rule;
 
+import org.springframework.web.multipart.MultipartFile;
+
 /**
  * 生成存储桶命名规则
  *
@@ -30,5 +32,13 @@ public interface IMinioRule {
 	 * @return String
 	 */
 	String bucketName(String bucketName);
+
+	/**
+	 * 获取文件名规则
+	 *
+	 * @param file 文件
+	 * @return String
+	 */
+	String fileName(MultipartFile file);
 
 }

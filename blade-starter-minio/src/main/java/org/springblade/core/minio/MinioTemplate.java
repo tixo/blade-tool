@@ -26,6 +26,7 @@ import lombok.SneakyThrows;
 import org.springblade.core.minio.enums.PolicyType;
 import org.springblade.core.minio.model.MinioItem;
 import org.springblade.core.minio.rule.IMinioRule;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -279,6 +280,29 @@ public class MinioTemplate {
 	@SneakyThrows
 	public String getObjectUrl(String bucketName, String objectName, Integer expires) {
 		return client.presignedGetObject(getBucketName(bucketName), objectName, expires);
+	}
+
+	/**
+	 * 上传文件
+	 *
+	 * @param bucketName 存储桶名称
+	 * @param file       上传文件类
+	 */
+	@SneakyThrows
+	public void putObject(String bucketName, MultipartFile file) {
+		putObject(getBucketName(bucketName), minioRule.fileName(file), file.getInputStream(), (long) file.getInputStream().available(), "application/octet-stream");
+	}
+
+	/**
+	 * 上传文件
+	 *
+	 * @param bucketName 存储桶名称
+	 * @param fileName   上传文件名
+	 * @param file       上传文件类
+	 */
+	@SneakyThrows
+	public void putObject(String bucketName, String fileName, MultipartFile file) {
+		putObject(getBucketName(bucketName), fileName, file.getInputStream(), (long) file.getInputStream().available(), "application/octet-stream");
 	}
 
 	/**
