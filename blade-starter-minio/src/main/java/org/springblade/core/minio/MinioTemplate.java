@@ -23,6 +23,7 @@ import io.minio.messages.Bucket;
 import io.minio.messages.Item;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
+import org.springblade.core.minio.enums.PolicyType;
 import org.springblade.core.minio.model.MinioItem;
 import org.springblade.core.minio.rule.IMinioRule;
 
@@ -150,8 +151,8 @@ public class MinioTemplate {
 	 * @param policy     名称
 	 */
 	@SneakyThrows
-	public void setBucketPolicy(String bucketName, String policy) {
-		client.setBucketPolicy(getBucketName(bucketName), policy);
+	public void setBucketPolicy(String bucketName, PolicyType policy) {
+		client.setBucketPolicy(getBucketName(bucketName), getPolicyType(getBucketName(bucketName), policy));
 	}
 
 	/**
@@ -340,6 +341,79 @@ public class MinioTemplate {
 	@SneakyThrows
 	public void removeObjects(String bucketName, List<String> objectNames) {
 		client.removeObjects(getBucketName(bucketName), objectNames);
+	}
+
+	/**
+	 * 获取存储桶策略
+	 *
+	 * @param bucketName 存储桶名称
+	 * @param policyType 策略枚举
+	 * @return String
+	 */
+	public String getPolicyType(String bucketName, PolicyType policyType) {
+		StringBuilder builder = new StringBuilder();
+		builder.append("{\n");
+		builder.append("    \"Statement\": [\n");
+		builder.append("        {\n");
+		builder.append("            \"Action\": [\n");
+		builder.append("                \"s3:GetBucketLocation\",\n");
+
+		switch (policyType) {
+			case WRITE:
+				builder.append("                \"s3:ListBucketMultipartUploads\"\n");
+				break;
+			case READ_WRITE:
+				builder.append("                \"s3:ListBucket\",\n");
+				builder.append("                \"s3:ListBucketMultipartUploads\"\n");
+				break;
+			default:
+				builder.append("                \"s3:ListBucket\"\n");
+				break;
+		}
+
+		builder.append("            ],\n");
+		builder.append("            \"Effect\": \"Allow\",\n");
+		builder.append("            \"Principal\": \"*\",\n");
+		builder.append("            \"Resource\": \"arn:aws:s3:::");
+		builder.append(bucketName);
+		builder.append("\"\n");
+		builder.append("        },\n");
+		builder.append("        {\n");
+		builder.append("            \"Action\": ");
+
+		switch (policyType) {
+			case WRITE:
+				builder.append("[\n");
+				builder.append("                \"s3:AbortMultipartUpload\",\n");
+				builder.append("                \"s3:DeleteObject\",\n");
+				builder.append("                \"s3:ListMultipartUploadParts\",\n");
+				builder.append("                \"s3:PutObject\"\n");
+				builder.append("            ],\n");
+				break;
+			case READ_WRITE:
+				builder.append("[\n");
+				builder.append("                \"s3:AbortMultipartUpload\",\n");
+				builder.append("                \"s3:DeleteObject\",\n");
+				builder.append("                \"s3:GetObject\",\n");
+				builder.append("                \"s3:ListMultipartUploadParts\",\n");
+				builder.append("                \"s3:PutObject\"\n");
+				builder.append("            ],\n");
+				break;
+			default:
+				builder.append("\"s3:GetObject\",\n");
+				break;
+		}
+
+		builder.append("            \"Effect\": \"Allow\",\n");
+		builder.append("            \"Principal\": \"*\",\n");
+		builder.append("            \"Resource\": \"arn:aws:s3:::");
+		builder.append(bucketName);
+		builder.append("/*\"\n");
+		builder.append("        }\n");
+		builder.append("    ],\n");
+		builder.append("    \"Version\": \"2012-10-17\"\n");
+		builder.append("}\n");
+		return builder.toString();
 	}
 
 }
