@@ -14,19 +14,19 @@
  *  this software without specific prior written permission.
  *  Author: Chill 庄骞 (smallchill@163.com)
  */
-package org.springblade.core.minio.props;
+package org.springblade.core.qiniu.props;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
- * Minio参数配置类
+ * 七牛参数配置类
  *
  * @author Chill
  */
 @Data
-@ConfigurationProperties(prefix = "minio")
-public class MinioProperties {
+@ConfigurationProperties(prefix = "qiniu")
+public class QiniuProperties {
 
 	/**
 	 * 是否启用
@@ -57,5 +57,10 @@ public class MinioProperties {
 	 * 默认的存储桶名称
 	 */
 	private String bucketName = "blade";
+
+	/**
+	 * 重试次数
+	 */
+	private Integer retry = 5;
 
 }

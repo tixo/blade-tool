@@ -53,6 +53,7 @@
         <module>blade-starter-tenant</module>
         <module>blade-starter-ehcache</module>
         <module>blade-starter-minio</module>
+        <module>blade-starter-qiniu</module>
     </modules>
 
     <dependencyManagement>

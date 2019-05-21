@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>blade-starter-minio</artifactId>
+    <artifactId>blade-starter-qiniu</artifactId>
     <name>${project.artifactId}</name>
     <version>${bladex.tool.version}</version>
     <packaging>jar</packaging>
@@ -27,11 +27,11 @@
             <version>${bladex.tool.version}</version>
             <scope>provided</scope>
         </dependency>
-        <!--MinIO-->
+        <!--QiNiu-->
         <dependency>
-            <groupId>io.minio</groupId>
-            <artifactId>minio</artifactId>
-            <version>6.0.7</version>
+            <groupId>com.qiniu</groupId>
+            <artifactId>qiniu-java-sdk</artifactId>
+            <version>7.2.18</version>
         </dependency>
     </dependencies>
 
