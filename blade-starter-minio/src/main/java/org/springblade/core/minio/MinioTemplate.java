@@ -374,6 +374,29 @@ public class MinioTemplate {
 	}
 
 	/**
+	 * 获取文件路径
+	 *
+	 * @param objectName 存储桶对象名称
+	 * @return String
+	 */
+	@SneakyThrows
+	public String getObjectPath(String objectName) {
+		return getBucketName().concat(StringPool.SLASH).concat(objectName);
+	}
+
+	/**
+	 * 获取文件路径
+	 *
+	 * @param bucketName 存储桶名称
+	 * @param objectName 存储桶对象名称
+	 * @return String
+	 */
+	@SneakyThrows
+	public String getObjectPath(String bucketName, String objectName) {
+		return getBucketName(bucketName).concat(StringPool.SLASH).concat(objectName);
+	}
+
+	/**
 	 * 上传文件
 	 *
 	 * @param file 上传文件类
