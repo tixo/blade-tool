@@ -14,53 +14,29 @@
  *  this software without specific prior written permission.
  *  Author: Chill 庄骞 (smallchill@163.com)
  */
-package org.springblade.core.qiniu.props;
-
-import lombok.Data;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+package org.springblade.core.qiniu.rule;
 
 /**
- * 七牛参数配置类
+ * 生成存储桶命名规则
  *
  * @author Chill
  */
-@Data
-@ConfigurationProperties(prefix = "qiniu")
-public class QiniuProperties {
+public interface IQiniuRule {
 
 	/**
-	 * 是否启用
+	 * 获取存储桶规则
+	 *
+	 * @param bucketName 存储桶名称
+	 * @return String
 	 */
-	private Boolean enable;
+	String bucketName(String bucketName);
 
 	/**
-	 * 是否开启租户模式
+	 * 获取文件名规则
+	 *
+	 * @param originalFilename 文件名
+	 * @return String
 	 */
-	private Boolean tenantMode;
-
-	/**
-	 * 对象存储服务的URL
-	 */
-	private String endpoint;
-
-	/**
-	 * Access key就像用户ID，可以唯一标识你的账户
-	 */
-	private String accessKey;
-
-	/**
-	 * Secret key是你账户的密码
-	 */
-	private String secretKey;
-
-	/**
-	 * 默认的存储桶名称
-	 */
-	private String bucketName = "bladex";
-
-	/**
-	 * 重试次数
-	 */
-	private Integer retry = 5;
+	String fileName(String originalFilename);
 
 }

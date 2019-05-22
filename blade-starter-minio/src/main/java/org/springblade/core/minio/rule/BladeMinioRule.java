@@ -21,7 +21,6 @@ import org.springblade.core.secure.utils.SecureUtil;
 import org.springblade.core.tool.utils.FileUtil;
 import org.springblade.core.tool.utils.StringPool;
 import org.springblade.core.tool.utils.StringUtil;
-import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 默认存储桶生成规则
@@ -43,8 +42,8 @@ public class BladeMinioRule implements IMinioRule {
 	}
 
 	@Override
-	public String fileName(MultipartFile file) {
-		return StringUtil.randomUUID() + StringPool.DOT + FileUtil.getFileExtension(file.getOriginalFilename());
+	public String fileName(String originalFilename) {
+		return StringUtil.randomUUID() + StringPool.DOT + FileUtil.getFileExtension(originalFilename);
 	}
 
 }

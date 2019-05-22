@@ -25,7 +25,9 @@ import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import org.springblade.core.minio.enums.PolicyType;
 import org.springblade.core.minio.model.MinioItem;
+import org.springblade.core.minio.props.MinioProperties;
 import org.springblade.core.minio.rule.IMinioRule;
+import org.springblade.core.tool.utils.StringPool;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
@@ -52,6 +54,20 @@ public class MinioTemplate {
 	private IMinioRule minioRule;
 
 	/**
+	 * 配置类
+	 */
+	private MinioProperties minioProperties;
+
+	/**
+	 * 根据规则生成存储桶名称规则
+	 *
+	 * @return String
+	 */
+	private String getBucketName() {
+		return getBucketName(minioProperties.getBucketName());
+	}
+
+	/**
 	 * 根据规则生成存储桶名称规则
 	 *
 	 * @param bucketName 存储桶名称
@@ -70,7 +86,16 @@ public class MinioTemplate {
 	public void makeBucket(String bucketName) {
 		if (!client.bucketExists(getBucketName(bucketName))) {
 			client.makeBucket(getBucketName(bucketName));
+			client.setBucketPolicy(getBucketName(bucketName), getPolicyType(getBucketName(bucketName), PolicyType.READ));
 		}
+	}
+
+	/**
+	 * 获取单个 存储桶
+	 */
+	@SneakyThrows
+	public Bucket getBucket() {
+		return getBucket(getBucketName());
 	}
 
 	/**
@@ -184,6 +209,17 @@ public class MinioTemplate {
 	/**
 	 * 获取文件信息
 	 *
+	 * @param objectName 存储桶对象名称
+	 * @return InputStream
+	 */
+	@SneakyThrows
+	public ObjectStat statObject(String objectName) {
+		return statObject(minioProperties.getBucketName(), objectName);
+	}
+
+	/**
+	 * 获取文件信息
+	 *
 	 * @param bucketName 存储桶名称
 	 * @param objectName 存储桶对象名称
 	 * @return InputStream
@@ -196,6 +232,17 @@ public class MinioTemplate {
 	/**
 	 * 获取文件流
 	 *
+	 * @param objectName 存储桶对象名称
+	 * @return InputStream
+	 */
+	@SneakyThrows
+	public InputStream getObject(String objectName) {
+		return getObject(minioProperties.getBucketName(), objectName);
+	}
+
+	/**
+	 * 获取文件流
+	 *
 	 * @param bucketName 存储桶名称
 	 * @param objectName 存储桶对象名称
 	 * @return InputStream
@@ -203,6 +250,16 @@ public class MinioTemplate {
 	@SneakyThrows
 	public InputStream getObject(String bucketName, String objectName) {
 		return client.getObject(getBucketName(bucketName), objectName);
+	}
+
+	/**
+	 * 获取存储桶下的对象集合
+	 *
+	 * @return List<MinioItem>
+	 */
+	@SneakyThrows
+	public List<MinioItem> listObjects() {
+		return listObjects(minioProperties.getBucketName());
 	}
 
 	/**
@@ -259,6 +316,17 @@ public class MinioTemplate {
 	/**
 	 * 获取文件外链
 	 *
+	 * @param objectName 存储桶对象名称
+	 * @return String
+	 */
+	@SneakyThrows
+	public String getObjectUrl(String objectName) {
+		return getObjectUrl(minioProperties.getBucketName(), objectName);
+	}
+
+	/**
+	 * 获取文件外链
+	 *
 	 * @param bucketName 存储桶名称
 	 * @param objectName 存储桶对象名称
 	 * @return String
@@ -283,14 +351,60 @@ public class MinioTemplate {
 	}
 
 	/**
-	 * 上传文件
+	 * 获取文件地址
 	 *
-	 * @param bucketName 存储桶名称
-	 * @param file       上传文件类
+	 * @param objectName 存储桶对象名称
+	 * @return String
 	 */
 	@SneakyThrows
-	public void putObject(String bucketName, MultipartFile file) {
-		putObject(getBucketName(bucketName), minioRule.fileName(file), file.getInputStream(), (long) file.getInputStream().available(), "application/octet-stream");
+	public String getObjectLink(String objectName) {
+		return minioProperties.getEndpoint().concat(StringPool.SLASH).concat(getBucketName()).concat(StringPool.SLASH).concat(objectName);
+	}
+
+	/**
+	 * 获取文件地址
+	 *
+	 * @param bucketName 存储桶名称
+	 * @param objectName 存储桶对象名称
+	 * @return String
+	 */
+	@SneakyThrows
+	public String getObjectLink(String bucketName, String objectName) {
+		return minioProperties.getEndpoint().concat(StringPool.SLASH).concat(getBucketName(bucketName)).concat(StringPool.SLASH).concat(objectName);
+	}
+
+	/**
+	 * 上传文件
+	 *
+	 * @param file 上传文件类
+	 */
+	@SneakyThrows
+	public void putObject(MultipartFile file) {
+		putObject(minioProperties.getBucketName(), file.getOriginalFilename(), file);
+	}
+
+	/**
+	 * 上传文件,自动生成文件名
+	 *
+	 * @param file 上传文件类
+	 * @return String 文件名
+	 */
+	@SneakyThrows
+	public String putObjectByRule(MultipartFile file) {
+		String fileName = minioRule.fileName(file.getOriginalFilename());
+		putObject(minioProperties.getBucketName(), fileName, file);
+		return fileName;
+	}
+
+	/**
+	 * 上传文件
+	 *
+	 * @param file     上传文件类
+	 * @param fileName 上传文件名
+	 */
+	@SneakyThrows
+	public void putObject(String fileName, MultipartFile file) {
+		putObject(minioProperties.getBucketName(), fileName, file);
 	}
 
 	/**
@@ -302,7 +416,7 @@ public class MinioTemplate {
 	 */
 	@SneakyThrows
 	public void putObject(String bucketName, String fileName, MultipartFile file) {
-		putObject(getBucketName(bucketName), fileName, file.getInputStream(), (long) file.getInputStream().available(), "application/octet-stream");
+		putObject(bucketName, fileName, file.getInputStream(), (long) file.getInputStream().available(), "application/octet-stream");
 	}
 
 	/**
@@ -314,7 +428,7 @@ public class MinioTemplate {
 	 */
 	@SneakyThrows
 	public void putObject(String bucketName, String objectName, InputStream stream) {
-		putObject(getBucketName(bucketName), objectName, stream, (long) stream.available(), "application/octet-stream");
+		putObject(bucketName, objectName, stream, (long) stream.available(), "application/octet-stream");
 	}
 
 	/**
@@ -327,7 +441,7 @@ public class MinioTemplate {
 	 */
 	@SneakyThrows
 	public void putObject(String bucketName, String objectName, InputStream stream, long size) {
-		putObject(getBucketName(bucketName), objectName, stream, size, "application/octet-stream");
+		putObject(bucketName, objectName, stream, size, "application/octet-stream");
 	}
 
 	/**
@@ -348,6 +462,16 @@ public class MinioTemplate {
 	/**
 	 * 删除文件
 	 *
+	 * @param objectName 存储桶对象名称
+	 */
+	@SneakyThrows
+	public void removeObject(String objectName) {
+		removeObject(minioProperties.getBucketName(), objectName);
+	}
+
+	/**
+	 * 删除文件
+	 *
 	 * @param bucketName 存储桶名称
 	 * @param objectName 存储桶对象名称
 	 */
@@ -359,12 +483,32 @@ public class MinioTemplate {
 	/**
 	 * 批量删除文件
 	 *
+	 * @param objectNames 存储桶对象名称集合
+	 */
+	@SneakyThrows
+	public void removeObjects(List<String> objectNames) {
+		removeObjects(minioProperties.getBucketName(), objectNames);
+	}
+
+	/**
+	 * 批量删除文件
+	 *
 	 * @param bucketName  存储桶名称
 	 * @param objectNames 存储桶对象名称集合
 	 */
 	@SneakyThrows
 	public void removeObjects(String bucketName, List<String> objectNames) {
 		client.removeObjects(getBucketName(bucketName), objectNames);
+	}
+
+	/**
+	 * 获取存储桶策略
+	 *
+	 * @param policyType 策略枚举
+	 * @return String
+	 */
+	public String getPolicyType(PolicyType policyType) {
+		return getPolicyType(getBucketName(), policyType);
 	}
 
 	/**

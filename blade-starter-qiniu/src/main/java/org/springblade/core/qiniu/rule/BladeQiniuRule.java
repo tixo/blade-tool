@@ -14,53 +14,36 @@
  *  this software without specific prior written permission.
  *  Author: Chill 庄骞 (smallchill@163.com)
  */
-package org.springblade.core.qiniu.props;
+package org.springblade.core.qiniu.rule;
 
-import lombok.Data;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import lombok.AllArgsConstructor;
+import org.springblade.core.secure.utils.SecureUtil;
+import org.springblade.core.tool.utils.FileUtil;
+import org.springblade.core.tool.utils.StringPool;
+import org.springblade.core.tool.utils.StringUtil;
 
 /**
- * 七牛参数配置类
+ * 默认存储桶生成规则
  *
  * @author Chill
  */
-@Data
-@ConfigurationProperties(prefix = "qiniu")
-public class QiniuProperties {
+@AllArgsConstructor
+public class BladeQiniuRule implements IQiniuRule {
 
 	/**
-	 * 是否启用
-	 */
-	private Boolean enable;
-
-	/**
-	 * 是否开启租户模式
+	 * 租户模式
 	 */
 	private Boolean tenantMode;
 
-	/**
-	 * 对象存储服务的URL
-	 */
-	private String endpoint;
+	@Override
+	public String bucketName(String bucketName) {
+		String prefix = (tenantMode) ? SecureUtil.getTenantCode().concat(StringPool.DASH) : StringPool.EMPTY;
+		return prefix + bucketName;
+	}
 
-	/**
-	 * Access key就像用户ID，可以唯一标识你的账户
-	 */
-	private String accessKey;
-
-	/**
-	 * Secret key是你账户的密码
-	 */
-	private String secretKey;
-
-	/**
-	 * 默认的存储桶名称
-	 */
-	private String bucketName = "bladex";
-
-	/**
-	 * 重试次数
-	 */
-	private Integer retry = 5;
+	@Override
+	public String fileName(String originalFilename) {
+		return StringUtil.randomUUID() + StringPool.DOT + FileUtil.getFileExtension(originalFilename);
+	}
 
 }

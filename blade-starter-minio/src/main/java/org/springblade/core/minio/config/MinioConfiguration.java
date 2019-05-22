@@ -63,8 +63,8 @@ public class MinioConfiguration {
 	@Bean
 	@ConditionalOnBean({MinioClient.class, IMinioRule.class})
 	@ConditionalOnMissingBean(MinioTemplate.class)
-	public MinioTemplate minioTemplate(MinioClient minioClient, IMinioRule minioRule) {
-		return new MinioTemplate(minioClient, minioRule);
+	public MinioTemplate minioTemplate(MinioClient minioClient, IMinioRule minioRule, MinioProperties minioProperties) {
+		return new MinioTemplate(minioClient, minioRule, minioProperties);
 	}
 
 }

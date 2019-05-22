@@ -23,6 +23,8 @@ import com.qiniu.util.Auth;
 import lombok.AllArgsConstructor;
 import org.springblade.core.qiniu.QiniuTemplate;
 import org.springblade.core.qiniu.props.QiniuProperties;
+import org.springblade.core.qiniu.rule.BladeQiniuRule;
+import org.springblade.core.qiniu.rule.IQiniuRule;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -42,6 +44,12 @@ import org.springframework.context.annotation.Configuration;
 public class QiniuConfiguration {
 
 	private QiniuProperties qiniuProperties;
+
+	@Bean
+	@ConditionalOnMissingBean(IQiniuRule.class)
+	public IQiniuRule qiniuRule() {
+		return new BladeQiniuRule(qiniuProperties.getTenantMode());
+	}
 
 	@Bean
 	public com.qiniu.storage.Configuration qiniuConfiguration() {
@@ -67,9 +75,9 @@ public class QiniuConfiguration {
 
 	@Bean
 	@ConditionalOnMissingBean(QiniuTemplate.class)
-	@ConditionalOnBean({Auth.class, UploadManager.class, BucketManager.class})
-	public QiniuTemplate qiniuTemplate(Auth auth, UploadManager uploadManager, BucketManager bucketManager, QiniuProperties qiniuProperties) {
-		return new QiniuTemplate(auth, uploadManager, bucketManager, qiniuProperties);
+	@ConditionalOnBean({Auth.class, UploadManager.class, BucketManager.class, IQiniuRule.class})
+	public QiniuTemplate qiniuTemplate(Auth auth, UploadManager uploadManager, BucketManager bucketManager, QiniuProperties qiniuProperties, IQiniuRule qiniuRule) {
+		return new QiniuTemplate(auth, uploadManager, bucketManager, qiniuProperties, qiniuRule);
 	}
 
 }

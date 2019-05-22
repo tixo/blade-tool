@@ -56,6 +56,6 @@ public class MinioProperties {
 	/**
 	 * 默认的存储桶名称
 	 */
-	private String bucketName = "blade";
+	private String bucketName = "bladex";
 
 }
