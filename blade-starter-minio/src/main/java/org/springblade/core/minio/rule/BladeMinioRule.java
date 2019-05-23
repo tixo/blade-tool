@@ -17,6 +17,7 @@
 package org.springblade.core.minio.rule;
 
 import lombok.AllArgsConstructor;
+import org.springblade.core.oss.rule.OssRule;
 import org.springblade.core.secure.utils.SecureUtil;
 import org.springblade.core.tool.utils.FileUtil;
 import org.springblade.core.tool.utils.StringPool;
@@ -28,7 +29,7 @@ import org.springblade.core.tool.utils.StringUtil;
  * @author Chill
  */
 @AllArgsConstructor
-public class BladeMinioRule implements IMinioRule {
+public class BladeMinioRule implements OssRule {
 
 	/**
 	 * 租户模式

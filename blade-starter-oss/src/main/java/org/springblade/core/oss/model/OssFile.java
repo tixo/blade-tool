@@ -14,29 +14,12 @@
  *  this software without specific prior written permission.
  *  Author: Chill 庄骞 (smallchill@163.com)
  */
-package org.springblade.core.qiniu.rule;
+package org.springblade.core.oss.model;
 
 /**
- * 生成存储桶命名规则
+ * OssFile
  *
  * @author Chill
  */
-public interface IQiniuRule {
-
-	/**
-	 * 获取存储桶规则
-	 *
-	 * @param bucketName 存储桶名称
-	 * @return String
-	 */
-	String bucketName(String bucketName);
-
-	/**
-	 * 获取文件名规则
-	 *
-	 * @param originalFilename 文件名
-	 * @return String
-	 */
-	String fileName(String originalFilename);
-
+public class OssFile {
 }

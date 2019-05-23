@@ -23,6 +23,11 @@
         </dependency>
         <dependency>
             <groupId>org.springblade</groupId>
+            <artifactId>blade-starter-oss</artifactId>
+            <version>${bladex.tool.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springblade</groupId>
             <artifactId>blade-core-auto</artifactId>
             <version>${bladex.tool.version}</version>
             <scope>provided</scope>

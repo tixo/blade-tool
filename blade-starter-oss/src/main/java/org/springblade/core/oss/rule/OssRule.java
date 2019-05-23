@@ -14,14 +14,14 @@
  *  this software without specific prior written permission.
  *  Author: Chill 庄骞 (smallchill@163.com)
  */
-package org.springblade.core.minio.rule;
+package org.springblade.core.oss.rule;
 
 /**
- * 生成存储桶命名规则
+ * Oss通用规则
  *
  * @author Chill
  */
-public interface IMinioRule {
+public interface OssRule {
 
 	/**
 	 * 获取存储桶规则

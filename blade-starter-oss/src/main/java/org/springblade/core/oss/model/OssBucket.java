@@ -14,37 +14,12 @@
  *  this software without specific prior written permission.
  *  Author: Chill 庄骞 (smallchill@163.com)
  */
-package org.springblade.core.qiniu.rule;
-
-import lombok.AllArgsConstructor;
-import org.springblade.core.oss.rule.OssRule;
-import org.springblade.core.secure.utils.SecureUtil;
-import org.springblade.core.tool.utils.FileUtil;
-import org.springblade.core.tool.utils.StringPool;
-import org.springblade.core.tool.utils.StringUtil;
+package org.springblade.core.oss.model;
 
 /**
- * 默认存储桶生成规则
+ * OssBucket
  *
  * @author Chill
  */
-@AllArgsConstructor
-public class BladeQiniuRule implements OssRule {
-
-	/**
-	 * 租户模式
-	 */
-	private Boolean tenantMode;
-
-	@Override
-	public String bucketName(String bucketName) {
-		String prefix = (tenantMode) ? SecureUtil.getTenantCode().concat(StringPool.DASH) : StringPool.EMPTY;
-		return prefix + bucketName;
-	}
-
-	@Override
-	public String fileName(String originalFilename) {
-		return StringUtil.randomUUID() + StringPool.DOT + FileUtil.getFileExtension(originalFilename);
-	}
-
+public class OssBucket {
 }

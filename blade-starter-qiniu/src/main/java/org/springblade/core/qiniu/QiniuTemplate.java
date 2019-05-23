@@ -25,8 +25,8 @@ import com.qiniu.storage.model.FileInfo;
 import com.qiniu.util.Auth;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
+import org.springblade.core.oss.rule.OssRule;
 import org.springblade.core.qiniu.props.QiniuProperties;
-import org.springblade.core.qiniu.rule.IQiniuRule;
 import org.springblade.core.tool.utils.CollectionUtil;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -43,7 +43,7 @@ public class QiniuTemplate {
 	private UploadManager uploadManager;
 	private BucketManager bucketManager;
 	private QiniuProperties qiniuProperties;
-	private IQiniuRule qiniuRule;
+	private OssRule qiniuRule;
 
 
 	/**

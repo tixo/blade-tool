@@ -22,7 +22,7 @@ import lombok.SneakyThrows;
 import org.springblade.core.minio.MinioTemplate;
 import org.springblade.core.minio.props.MinioProperties;
 import org.springblade.core.minio.rule.BladeMinioRule;
-import org.springblade.core.minio.rule.IMinioRule;
+import org.springblade.core.oss.rule.OssRule;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -44,8 +44,8 @@ public class MinioConfiguration {
 	private MinioProperties minioProperties;
 
 	@Bean
-	@ConditionalOnMissingBean(IMinioRule.class)
-	public IMinioRule minioRule() {
+	@ConditionalOnMissingBean(OssRule.class)
+	public OssRule minioRule() {
 		return new BladeMinioRule(minioProperties.getTenantMode());
 	}
 
@@ -61,9 +61,9 @@ public class MinioConfiguration {
 	}
 
 	@Bean
-	@ConditionalOnBean({MinioClient.class, IMinioRule.class})
+	@ConditionalOnBean({MinioClient.class, OssRule.class})
 	@ConditionalOnMissingBean(MinioTemplate.class)
-	public MinioTemplate minioTemplate(MinioClient minioClient, IMinioRule minioRule, MinioProperties minioProperties) {
+	public MinioTemplate minioTemplate(MinioClient minioClient, OssRule minioRule, MinioProperties minioProperties) {
 		return new MinioTemplate(minioClient, minioRule, minioProperties);
 	}
 

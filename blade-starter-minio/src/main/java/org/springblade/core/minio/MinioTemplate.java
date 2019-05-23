@@ -26,7 +26,7 @@ import lombok.SneakyThrows;
 import org.springblade.core.minio.enums.PolicyType;
 import org.springblade.core.minio.model.MinioItem;
 import org.springblade.core.minio.props.MinioProperties;
-import org.springblade.core.minio.rule.IMinioRule;
+import org.springblade.core.oss.rule.OssRule;
 import org.springblade.core.tool.utils.StringPool;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -51,7 +51,7 @@ public class MinioTemplate {
 	/**
 	 * 存储桶命名规则
 	 */
-	private IMinioRule minioRule;
+	private OssRule minioRule;
 
 	/**
 	 * 配置类
@@ -439,7 +439,7 @@ public class MinioTemplate {
 	 */
 	@SneakyThrows
 	public void putObject(String bucketName, String fileName, MultipartFile file) {
-		putObject(bucketName, fileName, file.getInputStream(), (long) file.getInputStream().available(), "application/octet-stream");
+		putObject(bucketName, fileName, file.getInputStream());
 	}
 
 	/**
@@ -451,35 +451,8 @@ public class MinioTemplate {
 	 */
 	@SneakyThrows
 	public void putObject(String bucketName, String objectName, InputStream stream) {
-		putObject(bucketName, objectName, stream, (long) stream.available(), "application/octet-stream");
-	}
-
-	/**
-	 * 上传文件
-	 *
-	 * @param bucketName 存储桶名称
-	 * @param objectName 存储桶对象名称
-	 * @param stream     文件流
-	 * @param size       大小
-	 */
-	@SneakyThrows
-	public void putObject(String bucketName, String objectName, InputStream stream, long size) {
-		putObject(bucketName, objectName, stream, size, "application/octet-stream");
-	}
-
-	/**
-	 * 上传文件
-	 *
-	 * @param bucketName  存储桶名称
-	 * @param objectName  存储桶对象名称
-	 * @param stream      文件流
-	 * @param size        大小
-	 * @param contextType 类型
-	 */
-	@SneakyThrows
-	public void putObject(String bucketName, String objectName, InputStream stream, long size, String contextType) {
 		makeBucket(bucketName);
-		client.putObject(getBucketName(bucketName), objectName, stream, size, null, null, contextType);
+		client.putObject(getBucketName(bucketName), objectName, stream, (long) stream.available(), null, null, "application/octet-stream");
 	}
 
 	/**
