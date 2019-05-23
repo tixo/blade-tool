@@ -20,17 +20,21 @@ import com.qiniu.common.Zone;
 import com.qiniu.http.Response;
 import com.qiniu.storage.BucketManager;
 import com.qiniu.storage.UploadManager;
-import com.qiniu.storage.model.BucketInfo;
 import com.qiniu.storage.model.FileInfo;
 import com.qiniu.util.Auth;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
+import org.springblade.core.oss.OssTemplate;
+import org.springblade.core.oss.model.OssFile;
 import org.springblade.core.oss.rule.OssRule;
 import org.springblade.core.qiniu.props.QiniuProperties;
 import org.springblade.core.tool.utils.CollectionUtil;
+import org.springblade.core.tool.utils.StringPool;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
+import java.util.Date;
+import java.util.List;
 
 /**
  * QiniuTemplate
@@ -38,13 +42,12 @@ import java.io.InputStream;
  * @author Chill
  */
 @AllArgsConstructor
-public class QiniuTemplate {
+public class QiniuTemplate implements OssTemplate {
 	private Auth auth;
 	private UploadManager uploadManager;
 	private BucketManager bucketManager;
 	private QiniuProperties qiniuProperties;
 	private OssRule qiniuRule;
-
 
 	/**
 	 * 根据规则生成存储桶名称规则
@@ -66,31 +69,20 @@ public class QiniuTemplate {
 	}
 
 	/**
-	 * 获取存储桶信息
-	 *
-	 * @return BucketInfo
+	 * 获取上传凭证，普通上传
 	 */
-	@SneakyThrows
-	public BucketInfo getBucket() {
-		return bucketManager.getBucketInfo(getBucketName());
+	public String getUploadToken(String bucketName) {
+		return auth.uploadToken(getBucketName(bucketName));
 	}
 
 	/**
-	 * 获取存储桶信息
-	 *
-	 * @param bucketName 存储桶名
-	 * @return BucketInfo
+	 * 获取上传凭证，覆盖上传
 	 */
-	@SneakyThrows
-	public BucketInfo getBucket(String bucketName) {
-		return bucketManager.getBucketInfo(getBucketName(bucketName));
+	private String getUploadToken(String bucketName, String key) {
+		return auth.uploadToken(getBucketName(bucketName), key);
 	}
 
-	/**
-	 * 创建存储桶
-	 *
-	 * @param bucketName 存储桶名
-	 */
+	@Override
 	@SneakyThrows
 	public void makeBucket(String bucketName) {
 		if (!CollectionUtil.contains(bucketManager.buckets(), getBucketName(bucketName))) {
@@ -98,157 +90,142 @@ public class QiniuTemplate {
 		}
 	}
 
-	/**
-	 * 上传文件
-	 *
-	 * @param file 文件
-	 * @return Response
-	 */
+	@Override
 	@SneakyThrows
-	public Response putObject(MultipartFile file) {
-		return putObject(file, file.getOriginalFilename(), false);
+	public void removeBucket(String bucketName) {
+		bucketManager.deleteBucket(getBucketName(bucketName));
 	}
 
-	/**
-	 * 上传文件,自动生成文件名
-	 *
-	 * @param file 文件
-	 * @return Response
-	 */
+	@Override
 	@SneakyThrows
-	public Response putObjectByRule(MultipartFile file) {
-		return putObject(file, qiniuRule.fileName(file.getOriginalFilename()), false);
+	public boolean bucketExists(String bucketName) {
+		return CollectionUtil.contains(bucketManager.buckets(), getBucketName(bucketName));
 	}
 
-	/**
-	 * 上传文件
-	 *
-	 * @param file 文件
-	 * @param key  文件名
-	 * @return Response
-	 */
+	@Override
 	@SneakyThrows
-	public Response putObject(MultipartFile file, String key) {
-		return putObject(file, key, false);
+	public void copyFile(String bucketName, String fileName, String destBucketName) {
+		bucketManager.copy(getBucketName(bucketName), fileName, getBucketName(destBucketName), fileName);
 	}
 
-	/**
-	 * 上传文件
-	 *
-	 * @param file  文件
-	 * @param key   文件名
-	 * @param cover 是否覆盖
-	 * @return Response
-	 */
+	@Override
 	@SneakyThrows
-	public Response putObject(MultipartFile file, String key, boolean cover) {
-		return putObject(file.getInputStream(), key, cover);
+	public void copyFile(String bucketName, String fileName, String destBucketName, String destFileName) {
+		bucketManager.copy(getBucketName(bucketName), fileName, getBucketName(destBucketName), destFileName);
 	}
 
-	/**
-	 * 上传文件
-	 *
-	 * @param stream 文件流
-	 * @param key    文件名
-	 * @return Response
-	 */
+	@Override
 	@SneakyThrows
-	public Response putObject(InputStream stream, String key) {
-		return putObject(stream, key, false);
+	public OssFile statFile(String fileName) {
+		return statFile(getBucketName(), fileName);
 	}
 
-	/**
-	 * 上传文件
-	 *
-	 * @param stream 文件流
-	 * @param key    文件名
-	 * @param cover  是否覆盖
-	 * @return
-	 */
+	@Override
 	@SneakyThrows
-	public Response putObject(InputStream stream, String key, boolean cover) {
-		makeBucket(getBucketName());
+	public OssFile statFile(String bucketName, String fileName) {
+		FileInfo stat = bucketManager.stat(getBucketName(bucketName), fileName);
+		OssFile ossFile = new OssFile();
+		ossFile.setName(stat.key);
+		ossFile.setHash(stat.hash);
+		ossFile.setLength(stat.fsize);
+		ossFile.setPutTime(new Date(stat.putTime));
+		ossFile.setContentType(stat.mimeType);
+		return ossFile;
+	}
+
+	@Override
+	@SneakyThrows
+	public String getFilePath(String fileName) {
+		return getBucketName().concat(StringPool.SLASH).concat(fileName);
+	}
+
+	@Override
+	@SneakyThrows
+	public String getFilePath(String bucketName, String fileName) {
+		return getBucketName(bucketName).concat(StringPool.SLASH).concat(fileName);
+	}
+
+	@Override
+	@SneakyThrows
+	public String fileLink(String fileName) {
+		return qiniuProperties.getEndpoint().concat(StringPool.SLASH).concat(getBucketName()).concat(StringPool.SLASH).concat(fileName);
+	}
+
+	@Override
+	@SneakyThrows
+	public String fileLink(String bucketName, String fileName) {
+		return qiniuProperties.getEndpoint().concat(StringPool.SLASH).concat(getBucketName(bucketName)).concat(StringPool.SLASH).concat(fileName);
+	}
+
+	@Override
+	@SneakyThrows
+	public void putFile(MultipartFile file) {
+		putFile(qiniuProperties.getBucketName(), file.getOriginalFilename(), file);
+	}
+
+	@Override
+	@SneakyThrows
+	public void putFile(String fileName, MultipartFile file) {
+		putFile(qiniuProperties.getBucketName(), fileName, file);
+	}
+
+	@Override
+	@SneakyThrows
+	public void putFile(String bucketName, String fileName, MultipartFile file) {
+		putFile(bucketName, fileName, file);
+	}
+
+	@Override
+	@SneakyThrows
+	public void putFile(String fileName, InputStream stream) {
+		putFile(qiniuProperties.getBucketName(), fileName, stream);
+	}
+
+	@Override
+	@SneakyThrows
+	public void putFile(String bucketName, String fileName, InputStream stream) {
+		put(bucketName, stream, fileName, false);
+	}
+
+	@SneakyThrows
+	public Response put(String bucketName, InputStream stream, String key, boolean cover) {
+		makeBucket(getBucketName(bucketName));
 		Response response;
 		// 覆盖上传
 		if (cover) {
-			response = uploadManager.put(stream, key, getUploadToken(key), null, null);
+			response = uploadManager.put(stream, key, getUploadToken(bucketName, key), null, null);
 		} else {
-			response = uploadManager.put(stream, key, getUploadToken(), null, null);
+			response = uploadManager.put(stream, key, getUploadToken(bucketName), null, null);
 			int retry = 0;
 			while (response.needRetry() && retry < qiniuProperties.getRetry()) {
-				response = uploadManager.put(stream, key, getUploadToken(), null, null);
+				response = uploadManager.put(stream, key, getUploadToken(bucketName), null, null);
 				retry++;
 			}
 		}
 		return response;
 	}
 
-	/**
-	 * 列举空间文件 v2 接口，返回一个 response 对象。v2 接口可以避免由于大量删除导致的列举超时问题，返回的 response 对象中的 body 可以转换为
-	 * string stream 来处理。
-	 *
-	 * @param prefix    文件名前缀
-	 * @param marker    上一次获取文件列表时返回的 marker
-	 * @param limit     每次迭代的长度限制，推荐值 10000
-	 * @param delimiter 指定目录分隔符，列出所有公共前缀（模拟列出目录效果）。缺省值为空字符串
-	 * @return Response 返回一个 okhttp response 对象
-	 */
+	@Override
 	@SneakyThrows
-	public Response listObject(String prefix, String marker, int limit, String delimiter) {
-		return bucketManager.listV2(getBucketName(), prefix, marker, limit, delimiter);
+	public void removeFile(String fileName) {
+		bucketManager.delete(getBucketName(), fileName);
 	}
 
-	/**
-	 * 列举空间文件 v2 接口，返回一个 response 对象。v2 接口可以避免由于大量删除导致的列举超时问题，返回的 response 对象中的 body 可以转换为
-	 * string stream 来处理。
-	 *
-	 * @param bucketName 空间名
-	 * @param prefix     文件名前缀
-	 * @param marker     上一次获取文件列表时返回的 marker
-	 * @param limit      每次迭代的长度限制，推荐值 10000
-	 * @param delimiter  指定目录分隔符，列出所有公共前缀（模拟列出目录效果）。缺省值为空字符串
-	 * @return Response 返回一个 okhttp response 对象
-	 */
+	@Override
 	@SneakyThrows
-	public Response listObject(String bucketName, String prefix, String marker, int limit, String delimiter) {
-		return bucketManager.listV2(getBucketName(bucketName), prefix, marker, limit, delimiter);
+	public void removeFile(String bucketName, String fileName) {
+		bucketManager.delete(getBucketName(bucketName), fileName);
 	}
 
-
-	/**
-	 * 删除文件
-	 *
-	 * @param key 文件名
-	 * @return Response
-	 */
+	@Override
 	@SneakyThrows
-	public Response delete(String key) {
-		return bucketManager.delete(getBucketName(), key);
+	public void removeFiles(List<String> fileNames) {
+		fileNames.forEach(this::removeFile);
 	}
 
-	/**
-	 * 查看文件信息
-	 *
-	 * @param fileKey 文件名
-	 * @return FileInfo
-	 */
+	@Override
 	@SneakyThrows
-	public FileInfo stat(String fileKey) {
-		return bucketManager.stat(getBucketName(), fileKey);
+	public void removeFiles(String bucketName, List<String> fileNames) {
+		fileNames.forEach(fileName -> removeFile(getBucketName(bucketName), fileName));
 	}
-
-	/**
-	 * 获取上传凭证，普通上传
-	 */
-	public String getUploadToken() {
-		return auth.uploadToken(getBucketName());
-	}
-
-	/**
-	 * 获取上传凭证，覆盖上传
-	 */
-	private String getUploadToken(String key) {
-		return auth.uploadToken(getBucketName(), key);
-	}
-
 }

@@ -17,7 +17,6 @@
 package org.springblade.core.oss;
 
 
-import org.springblade.core.oss.model.OssBucket;
 import org.springblade.core.oss.model.OssFile;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -37,25 +36,6 @@ public interface OssTemplate {
 	 * @param bucketName 存储桶名称
 	 */
 	void makeBucket(String bucketName);
-
-	/**
-	 * 获取单个 存储桶
-	 */
-	OssBucket getBucket();
-
-	/**
-	 * 获取单个 存储桶
-	 *
-	 * @param bucketName 存储桶名称
-	 */
-	OssBucket getBucket(String bucketName);
-
-	/**
-	 * 获取全部 存储桶
-	 *
-	 * @return List<OssBucket>
-	 */
-	List<OssBucket> listBuckets();
 
 	/**
 	 * 删除 存储桶
@@ -87,9 +67,9 @@ public interface OssTemplate {
 	 * @param bucketName     存储桶名称
 	 * @param fileName       存储桶文件名称
 	 * @param destBucketName 目标存储桶名称
-	 * @param destfileName   目标存储桶文件名称
+	 * @param destFileName   目标存储桶文件名称
 	 */
-	void copyFile(String bucketName, String fileName, String destBucketName, String destfileName);
+	void copyFile(String bucketName, String fileName, String destBucketName, String destFileName);
 
 	/**
 	 * 获取文件信息
@@ -107,6 +87,23 @@ public interface OssTemplate {
 	 * @return InputStream
 	 */
 	OssFile statFile(String bucketName, String fileName);
+
+	/**
+	 * 获取文件相对路径
+	 *
+	 * @param fileName 存储桶对象名称
+	 * @return String
+	 */
+	String getFilePath(String fileName);
+
+	/**
+	 * 获取文件相对路径
+	 *
+	 * @param bucketName 存储桶名称
+	 * @param fileName   存储桶对象名称
+	 * @return String
+	 */
+	String getFilePath(String bucketName, String fileName);
 
 	/**
 	 * 获取文件地址
@@ -148,13 +145,6 @@ public interface OssTemplate {
 	 * @param file       上传文件类
 	 */
 	void putFile(String bucketName, String fileName, MultipartFile file);
-
-	/**
-	 * 上传文件
-	 *
-	 * @param stream 文件流
-	 */
-	void putFile(InputStream stream);
 
 	/**
 	 * 上传文件
