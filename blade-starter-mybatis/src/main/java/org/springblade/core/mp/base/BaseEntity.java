@@ -49,6 +49,7 @@ public class BaseEntity implements Serializable {
 	/**
 	 * 创建人
 	 */
+	@JsonSerialize(using = ToStringSerializer.class)
 	@ApiModelProperty(value = "创建人")
 	private Long createUser;
 
@@ -63,6 +64,7 @@ public class BaseEntity implements Serializable {
 	/**
 	 * 更新人
 	 */
+	@JsonSerialize(using = ToStringSerializer.class)
 	@ApiModelProperty(value = "更新人")
 	private Long updateUser;
 

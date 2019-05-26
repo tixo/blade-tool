@@ -26,6 +26,7 @@ import org.springblade.core.minio.props.MinioProperties;
 import org.springblade.core.oss.OssTemplate;
 import org.springblade.core.oss.model.OssFile;
 import org.springblade.core.oss.rule.OssRule;
+import org.springblade.core.tool.utils.Func;
 import org.springblade.core.tool.utils.StringPool;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -117,7 +118,8 @@ public class MinioTemplate implements OssTemplate {
 	public OssFile statFile(String bucketName, String fileName) {
 		ObjectStat stat = client.statObject(getBucketName(bucketName), fileName);
 		OssFile ossFile = new OssFile();
-		ossFile.setName(stat.name());
+		ossFile.setName(Func.isEmpty(stat.name()) ? fileName : stat.name());
+		ossFile.setLink(fileLink(ossFile.getName()));
 		ossFile.setHash(String.valueOf(stat.hashCode()));
 		ossFile.setLength(stat.length());
 		ossFile.setPutTime(stat.createdTime());
@@ -126,12 +128,12 @@ public class MinioTemplate implements OssTemplate {
 	}
 
 	@Override
-	public String getFilePath(String fileName) {
+	public String filePath(String fileName) {
 		return getBucketName().concat(StringPool.SLASH).concat(fileName);
 	}
 
 	@Override
-	public String getFilePath(String bucketName, String fileName) {
+	public String filePath(String bucketName, String fileName) {
 		return getBucketName(bucketName).concat(StringPool.SLASH).concat(fileName);
 	}
 

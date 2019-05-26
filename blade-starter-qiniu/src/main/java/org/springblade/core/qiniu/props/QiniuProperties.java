@@ -58,9 +58,4 @@ public class QiniuProperties {
 	 */
 	private String bucketName = "bladex";
 
-	/**
-	 * 重试次数
-	 */
-	private Integer retry = 5;
-
 }

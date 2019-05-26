@@ -78,6 +78,10 @@ public interface AppConstant {
 	 */
 	String APPLICATION_FLOW_NAME = APPLICATION_NAME_PREFIX + "flow";
 	/**
+	 * 资源模块名称
+	 */
+	String APPLICATION_RESOURCE_NAME = APPLICATION_NAME_PREFIX + "resource";
+	/**
 	 * 测试模块名称
 	 */
 	String APPLICATION_TEST_NAME = APPLICATION_NAME_PREFIX + "test";

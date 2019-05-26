@@ -94,7 +94,7 @@ public interface OssTemplate {
 	 * @param fileName 存储桶对象名称
 	 * @return String
 	 */
-	String getFilePath(String fileName);
+	String filePath(String fileName);
 
 	/**
 	 * 获取文件相对路径
@@ -103,7 +103,7 @@ public interface OssTemplate {
 	 * @param fileName   存储桶对象名称
 	 * @return String
 	 */
-	String getFilePath(String bucketName, String fileName);
+	String filePath(String bucketName, String fileName);
 
 	/**
 	 * 获取文件地址
