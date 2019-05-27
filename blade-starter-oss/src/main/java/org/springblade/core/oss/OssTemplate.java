@@ -17,6 +17,7 @@
 package org.springblade.core.oss;
 
 
+import org.springblade.core.oss.model.BladeFile;
 import org.springblade.core.oss.model.OssFile;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -127,7 +128,7 @@ public interface OssTemplate {
 	 *
 	 * @param file 上传文件类
 	 */
-	void putFile(MultipartFile file);
+	BladeFile putFile(MultipartFile file);
 
 	/**
 	 * 上传文件
@@ -135,7 +136,7 @@ public interface OssTemplate {
 	 * @param file     上传文件类
 	 * @param fileName 上传文件名
 	 */
-	void putFile(String fileName, MultipartFile file);
+	BladeFile putFile(String fileName, MultipartFile file);
 
 	/**
 	 * 上传文件
@@ -144,7 +145,7 @@ public interface OssTemplate {
 	 * @param fileName   上传文件名
 	 * @param file       上传文件类
 	 */
-	void putFile(String bucketName, String fileName, MultipartFile file);
+	BladeFile putFile(String bucketName, String fileName, MultipartFile file);
 
 	/**
 	 * 上传文件
@@ -152,7 +153,7 @@ public interface OssTemplate {
 	 * @param fileName 存储桶对象名称
 	 * @param stream   文件流
 	 */
-	void putFile(String fileName, InputStream stream);
+	BladeFile putFile(String fileName, InputStream stream);
 
 	/**
 	 * 上传文件
@@ -161,7 +162,7 @@ public interface OssTemplate {
 	 * @param fileName   存储桶对象名称
 	 * @param stream     文件流
 	 */
-	void putFile(String bucketName, String fileName, InputStream stream);
+	BladeFile putFile(String bucketName, String fileName, InputStream stream);
 
 	/**
 	 * 删除文件

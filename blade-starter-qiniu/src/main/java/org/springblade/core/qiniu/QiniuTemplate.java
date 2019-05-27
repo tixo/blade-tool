@@ -25,6 +25,7 @@ import com.qiniu.util.Auth;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import org.springblade.core.oss.OssTemplate;
+import org.springblade.core.oss.model.BladeFile;
 import org.springblade.core.oss.model.OssFile;
 import org.springblade.core.oss.props.OssProperties;
 import org.springblade.core.oss.rule.OssRule;
@@ -48,40 +49,7 @@ public class QiniuTemplate implements OssTemplate {
 	private UploadManager uploadManager;
 	private BucketManager bucketManager;
 	private OssProperties ossProperties;
-	private OssRule qiniuRule;
-
-	/**
-	 * 根据规则生成存储桶名称规则
-	 *
-	 * @return String
-	 */
-	private String getBucketName() {
-		return getBucketName(ossProperties.getBucketName());
-	}
-
-	/**
-	 * 根据规则生成存储桶名称规则
-	 *
-	 * @param bucketName 存储桶名称
-	 * @return String
-	 */
-	private String getBucketName(String bucketName) {
-		return qiniuRule.bucketName(bucketName);
-	}
-
-	/**
-	 * 获取上传凭证，普通上传
-	 */
-	public String getUploadToken(String bucketName) {
-		return auth.uploadToken(getBucketName(bucketName));
-	}
-
-	/**
-	 * 获取上传凭证，覆盖上传
-	 */
-	private String getUploadToken(String bucketName, String key) {
-		return auth.uploadToken(getBucketName(bucketName), key);
-	}
+	private OssRule ossRule;
 
 	@Override
 	@SneakyThrows
@@ -162,43 +130,43 @@ public class QiniuTemplate implements OssTemplate {
 
 	@Override
 	@SneakyThrows
-	public void putFile(MultipartFile file) {
-		putFile(ossProperties.getBucketName(), file.getOriginalFilename(), file);
+	public BladeFile putFile(MultipartFile file) {
+		return putFile(ossProperties.getBucketName(), file.getOriginalFilename(), file);
 	}
 
 	@Override
 	@SneakyThrows
-	public void putFile(String fileName, MultipartFile file) {
-		putFile(ossProperties.getBucketName(), fileName, file);
+	public BladeFile putFile(String fileName, MultipartFile file) {
+		return putFile(ossProperties.getBucketName(), fileName, file);
 	}
 
 	@Override
 	@SneakyThrows
-	public void putFile(String bucketName, String fileName, MultipartFile file) {
-		putFile(bucketName, fileName, file);
+	public BladeFile putFile(String bucketName, String fileName, MultipartFile file) {
+		return putFile(bucketName, fileName, file);
 	}
 
 	@Override
 	@SneakyThrows
-	public void putFile(String fileName, InputStream stream) {
-		putFile(ossProperties.getBucketName(), fileName, stream);
+	public BladeFile putFile(String fileName, InputStream stream) {
+		return putFile(ossProperties.getBucketName(), fileName, stream);
 	}
 
 	@Override
 	@SneakyThrows
-	public void putFile(String bucketName, String fileName, InputStream stream) {
-		put(bucketName, stream, fileName, false);
+	public BladeFile putFile(String bucketName, String fileName, InputStream stream) {
+		return put(bucketName, stream, fileName, false);
 	}
 
 	@SneakyThrows
-	public Response put(String bucketName, InputStream stream, String key, boolean cover) {
+	public BladeFile put(String bucketName, InputStream stream, String key, boolean cover) {
 		makeBucket(bucketName);
-		Response response;
+		key = getFileName(key);
 		// 覆盖上传
 		if (cover) {
-			response = uploadManager.put(stream, key, getUploadToken(bucketName, key), null, null);
+			uploadManager.put(stream, key, getUploadToken(bucketName, key), null, null);
 		} else {
-			response = uploadManager.put(stream, key, getUploadToken(bucketName), null, null);
+			Response response = uploadManager.put(stream, key, getUploadToken(bucketName), null, null);
 			int retry = 0;
 			int retryCount = 5;
 			while (response.needRetry() && retry < retryCount) {
@@ -206,7 +174,10 @@ public class QiniuTemplate implements OssTemplate {
 				retry++;
 			}
 		}
-		return response;
+		BladeFile file = new BladeFile();
+		file.setName(key);
+		file.setLink(fileLink(bucketName, key));
+		return file;
 	}
 
 	@Override
@@ -232,4 +203,48 @@ public class QiniuTemplate implements OssTemplate {
 	public void removeFiles(String bucketName, List<String> fileNames) {
 		fileNames.forEach(fileName -> removeFile(getBucketName(bucketName), fileName));
 	}
+
+	/**
+	 * 根据规则生成存储桶名称规则
+	 *
+	 * @return String
+	 */
+	private String getBucketName() {
+		return getBucketName(ossProperties.getBucketName());
+	}
+
+	/**
+	 * 根据规则生成存储桶名称规则
+	 *
+	 * @param bucketName 存储桶名称
+	 * @return String
+	 */
+	private String getBucketName(String bucketName) {
+		return ossRule.bucketName(bucketName);
+	}
+
+	/**
+	 * 根据规则生成文件名称规则
+	 *
+	 * @param originalFilename 原始文件名
+	 * @return string
+	 */
+	private String getFileName(String originalFilename) {
+		return ossRule.fileName(originalFilename);
+	}
+
+	/**
+	 * 获取上传凭证，普通上传
+	 */
+	public String getUploadToken(String bucketName) {
+		return auth.uploadToken(getBucketName(bucketName));
+	}
+
+	/**
+	 * 获取上传凭证，覆盖上传
+	 */
+	private String getUploadToken(String bucketName, String key) {
+		return auth.uploadToken(getBucketName(bucketName), key);
+	}
+
 }

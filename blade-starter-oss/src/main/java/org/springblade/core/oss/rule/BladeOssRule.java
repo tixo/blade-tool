@@ -18,6 +18,7 @@ package org.springblade.core.oss.rule;
 
 import lombok.AllArgsConstructor;
 import org.springblade.core.secure.utils.SecureUtil;
+import org.springblade.core.tool.utils.DateUtil;
 import org.springblade.core.tool.utils.FileUtil;
 import org.springblade.core.tool.utils.StringPool;
 import org.springblade.core.tool.utils.StringUtil;
@@ -43,7 +44,7 @@ public class BladeOssRule implements OssRule {
 
 	@Override
 	public String fileName(String originalFilename) {
-		return StringUtil.randomUUID() + StringPool.DOT + FileUtil.getFileExtension(originalFilename);
+		return "upload" + StringPool.SLASH + DateUtil.today() + StringPool.SLASH + StringUtil.randomUUID() + StringPool.DOT + FileUtil.getFileExtension(originalFilename);
 	}
 
 }

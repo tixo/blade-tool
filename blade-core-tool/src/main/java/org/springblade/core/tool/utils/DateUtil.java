@@ -574,4 +574,13 @@ public class DateUtil {
 		}
 	}
 
+	/**
+	 * 获取今天的日期
+	 *
+	 * @return 时间
+	 */
+	public static String today() {
+		return format(new Date(), "yyyyMMdd");
+	}
+
 }

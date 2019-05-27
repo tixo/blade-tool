@@ -23,6 +23,7 @@ import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import org.springblade.core.minio.enums.PolicyType;
 import org.springblade.core.oss.OssTemplate;
+import org.springblade.core.oss.model.BladeFile;
 import org.springblade.core.oss.model.OssFile;
 import org.springblade.core.oss.props.OssProperties;
 import org.springblade.core.oss.rule.OssRule;
@@ -50,7 +51,7 @@ public class MinioTemplate implements OssTemplate {
 	/**
 	 * 存储桶命名规则
 	 */
-	private OssRule minioRule;
+	private OssRule ossRule;
 
 	/**
 	 * 配置类
@@ -151,33 +152,38 @@ public class MinioTemplate implements OssTemplate {
 
 	@Override
 	@SneakyThrows
-	public void putFile(MultipartFile file) {
-		putFile(ossProperties.getBucketName(), file.getOriginalFilename(), file);
+	public BladeFile putFile(MultipartFile file) {
+		return putFile(ossProperties.getBucketName(), file.getOriginalFilename(), file);
 	}
 
 	@Override
 	@SneakyThrows
-	public void putFile(String fileName, MultipartFile file) {
-		putFile(ossProperties.getBucketName(), fileName, file);
+	public BladeFile putFile(String fileName, MultipartFile file) {
+		return putFile(ossProperties.getBucketName(), fileName, file);
 	}
 
 	@Override
 	@SneakyThrows
-	public void putFile(String bucketName, String fileName, MultipartFile file) {
-		putFile(bucketName, file.getOriginalFilename(), file.getInputStream());
+	public BladeFile putFile(String bucketName, String fileName, MultipartFile file) {
+		return putFile(bucketName, file.getOriginalFilename(), file.getInputStream());
 	}
 
 	@Override
 	@SneakyThrows
-	public void putFile(String fileName, InputStream stream) {
-		putFile(ossProperties.getBucketName(), fileName, stream);
+	public BladeFile putFile(String fileName, InputStream stream) {
+		return putFile(ossProperties.getBucketName(), fileName, stream);
 	}
 
 	@Override
 	@SneakyThrows
-	public void putFile(String bucketName, String fileName, InputStream stream) {
+	public BladeFile putFile(String bucketName, String fileName, InputStream stream) {
 		makeBucket(bucketName);
+		fileName = getFileName(fileName);
 		client.putObject(getBucketName(bucketName), fileName, stream, (long) stream.available(), null, null, "application/octet-stream");
+		BladeFile file = new BladeFile();
+		file.setName(fileName);
+		file.setLink(fileLink(bucketName, fileName));
+		return file;
 	}
 
 	@Override
@@ -221,7 +227,17 @@ public class MinioTemplate implements OssTemplate {
 	 * @return String
 	 */
 	private String getBucketName(String bucketName) {
-		return minioRule.bucketName(bucketName);
+		return ossRule.bucketName(bucketName);
+	}
+
+	/**
+	 * 根据规则生成文件名称规则
+	 *
+	 * @param originalFilename 原始文件名
+	 * @return string
+	 */
+	private String getFileName(String originalFilename) {
+		return ossRule.fileName(originalFilename);
 	}
 
 	/**

@@ -16,7 +16,6 @@
  */
 package org.springblade.core.cache.utils;
 
-import lombok.SneakyThrows;
 import org.springblade.core.tool.utils.Func;
 import org.springblade.core.tool.utils.SpringUtil;
 import org.springframework.cache.Cache;
@@ -89,7 +88,6 @@ public class CacheUtil {
 	 * @return
 	 */
 	@Nullable
-	@SneakyThrows
 	public static <T> T get(String cacheName, String keyPrefix, Object key, Callable<T> valueLoader) {
 		if (Func.hasEmpty(cacheName, keyPrefix, key)) {
 			return null;
