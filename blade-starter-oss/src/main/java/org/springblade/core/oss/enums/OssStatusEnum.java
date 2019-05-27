@@ -14,48 +14,33 @@
  *  this software without specific prior written permission.
  *  Author: Chill 庄骞 (smallchill@163.com)
  */
-package org.springblade.core.minio.props;
+package org.springblade.core.oss.enums;
 
-import lombok.Data;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 /**
- * Minio参数配置类
+ * Oss类型枚举
  *
  * @author Chill
  */
-@Data
-@ConfigurationProperties(prefix = "minio")
-public class MinioProperties {
+@Getter
+@AllArgsConstructor
+public enum OssStatusEnum {
 
 	/**
-	 * 是否启用
+	 * 关闭
 	 */
-	private Boolean enable;
+	DISABLE(1),
+	/**
+	 * 启用
+	 */
+	ENABLE(2),
+	;
 
 	/**
-	 * 是否开启租户模式
+	 * 类型编号
 	 */
-	private Boolean tenantMode;
-
-	/**
-	 * 对象存储服务的URL
-	 */
-	private String endpoint;
-
-	/**
-	 * Access key就像用户ID，可以唯一标识你的账户
-	 */
-	private String accessKey;
-
-	/**
-	 * Secret key是你账户的密码
-	 */
-	private String secretKey;
-
-	/**
-	 * 默认的存储桶名称
-	 */
-	private String bucketName = "bladex";
+	final int num;
 
 }

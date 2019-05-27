@@ -14,37 +14,36 @@
  *  this software without specific prior written permission.
  *  Author: Chill 庄骞 (smallchill@163.com)
  */
-package org.springblade.core.minio.rule;
+package org.springblade.core.oss.config;
 
 import lombok.AllArgsConstructor;
+import org.springblade.core.oss.props.OssProperties;
+import org.springblade.core.oss.rule.BladeOssRule;
 import org.springblade.core.oss.rule.OssRule;
-import org.springblade.core.secure.utils.SecureUtil;
-import org.springblade.core.tool.utils.FileUtil;
-import org.springblade.core.tool.utils.StringPool;
-import org.springblade.core.tool.utils.StringUtil;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 /**
- * 默认存储桶生成规则
+ * Oss配置类
  *
  * @author Chill
  */
+@Configuration
 @AllArgsConstructor
-public class BladeMinioRule implements OssRule {
+@EnableConfigurationProperties(OssProperties.class)
+@ConditionalOnProperty(value = "oss.enable", havingValue = "true")
+public class OssConfiguration {
 
-	/**
-	 * 租户模式
-	 */
-	private Boolean tenantMode;
+	private OssProperties ossProperties;
 
-	@Override
-	public String bucketName(String bucketName) {
-		String prefix = (tenantMode) ? SecureUtil.getTenantCode().concat(StringPool.DASH) : StringPool.EMPTY;
-		return prefix + bucketName;
-	}
-
-	@Override
-	public String fileName(String originalFilename) {
-		return StringUtil.randomUUID() + StringPool.DOT + FileUtil.getFileExtension(originalFilename);
+	@Bean
+	@ConditionalOnMissingBean(OssRule.class)
+	public OssRule ossRule() {
+		return new BladeOssRule(ossProperties.getTenantMode());
 	}
 
 }

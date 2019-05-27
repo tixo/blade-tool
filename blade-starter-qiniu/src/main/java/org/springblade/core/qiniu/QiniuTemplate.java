@@ -26,8 +26,8 @@ import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import org.springblade.core.oss.OssTemplate;
 import org.springblade.core.oss.model.OssFile;
+import org.springblade.core.oss.props.OssProperties;
 import org.springblade.core.oss.rule.OssRule;
-import org.springblade.core.qiniu.props.QiniuProperties;
 import org.springblade.core.tool.utils.CollectionUtil;
 import org.springblade.core.tool.utils.Func;
 import org.springblade.core.tool.utils.StringPool;
@@ -47,7 +47,7 @@ public class QiniuTemplate implements OssTemplate {
 	private Auth auth;
 	private UploadManager uploadManager;
 	private BucketManager bucketManager;
-	private QiniuProperties qiniuProperties;
+	private OssProperties ossProperties;
 	private OssRule qiniuRule;
 
 	/**
@@ -56,7 +56,7 @@ public class QiniuTemplate implements OssTemplate {
 	 * @return String
 	 */
 	private String getBucketName() {
-		return getBucketName(qiniuProperties.getBucketName());
+		return getBucketName(ossProperties.getBucketName());
 	}
 
 	/**
@@ -118,7 +118,7 @@ public class QiniuTemplate implements OssTemplate {
 	@Override
 	@SneakyThrows
 	public OssFile statFile(String fileName) {
-		return statFile(qiniuProperties.getBucketName(), fileName);
+		return statFile(ossProperties.getBucketName(), fileName);
 	}
 
 	@Override
@@ -151,25 +151,25 @@ public class QiniuTemplate implements OssTemplate {
 	@Override
 	@SneakyThrows
 	public String fileLink(String fileName) {
-		return qiniuProperties.getEndpoint().concat(StringPool.SLASH).concat(fileName);
+		return ossProperties.getEndpoint().concat(StringPool.SLASH).concat(fileName);
 	}
 
 	@Override
 	@SneakyThrows
 	public String fileLink(String bucketName, String fileName) {
-		return qiniuProperties.getEndpoint().concat(StringPool.SLASH).concat(fileName);
+		return ossProperties.getEndpoint().concat(StringPool.SLASH).concat(fileName);
 	}
 
 	@Override
 	@SneakyThrows
 	public void putFile(MultipartFile file) {
-		putFile(qiniuProperties.getBucketName(), file.getOriginalFilename(), file);
+		putFile(ossProperties.getBucketName(), file.getOriginalFilename(), file);
 	}
 
 	@Override
 	@SneakyThrows
 	public void putFile(String fileName, MultipartFile file) {
-		putFile(qiniuProperties.getBucketName(), fileName, file);
+		putFile(ossProperties.getBucketName(), fileName, file);
 	}
 
 	@Override
@@ -181,7 +181,7 @@ public class QiniuTemplate implements OssTemplate {
 	@Override
 	@SneakyThrows
 	public void putFile(String fileName, InputStream stream) {
-		putFile(qiniuProperties.getBucketName(), fileName, stream);
+		putFile(ossProperties.getBucketName(), fileName, stream);
 	}
 
 	@Override

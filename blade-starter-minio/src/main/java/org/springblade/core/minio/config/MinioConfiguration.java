@@ -20,13 +20,14 @@ import io.minio.MinioClient;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import org.springblade.core.minio.MinioTemplate;
-import org.springblade.core.minio.props.MinioProperties;
-import org.springblade.core.minio.rule.BladeMinioRule;
+import org.springblade.core.oss.config.OssConfiguration;
+import org.springblade.core.oss.props.OssProperties;
+import org.springblade.core.oss.rule.BladeOssRule;
 import org.springblade.core.oss.rule.OssRule;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -37,16 +38,16 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 @AllArgsConstructor
-@EnableConfigurationProperties(MinioProperties.class)
-@ConditionalOnProperty(value = "minio.enable", havingValue = "true")
+@AutoConfigureAfter({OssConfiguration.class})
+@ConditionalOnProperty(value = "oss.name", havingValue = "minio")
 public class MinioConfiguration {
 
-	private MinioProperties minioProperties;
+	private OssProperties ossProperties;
 
 	@Bean
 	@ConditionalOnMissingBean(OssRule.class)
-	public OssRule minioRule() {
-		return new BladeMinioRule(minioProperties.getTenantMode());
+	public OssRule ossRule() {
+		return new BladeOssRule(ossProperties.getTenantMode());
 	}
 
 	@Bean
@@ -54,17 +55,17 @@ public class MinioConfiguration {
 	@ConditionalOnMissingBean(MinioClient.class)
 	public MinioClient minioClient() {
 		return new MinioClient(
-			minioProperties.getEndpoint(),
-			minioProperties.getAccessKey(),
-			minioProperties.getSecretKey()
+			ossProperties.getEndpoint(),
+			ossProperties.getAccessKey(),
+			ossProperties.getSecretKey()
 		);
 	}
 
 	@Bean
 	@ConditionalOnBean({MinioClient.class, OssRule.class})
 	@ConditionalOnMissingBean(MinioTemplate.class)
-	public MinioTemplate minioTemplate(MinioClient minioClient, OssRule minioRule, MinioProperties minioProperties) {
-		return new MinioTemplate(minioClient, minioRule, minioProperties);
+	public MinioTemplate minioTemplate(MinioClient minioClient, OssRule ossRule) {
+		return new MinioTemplate(minioClient, ossRule, ossProperties);
 	}
 
 }

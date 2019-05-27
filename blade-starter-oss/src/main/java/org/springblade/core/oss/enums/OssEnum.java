@@ -14,48 +14,32 @@
  *  this software without specific prior written permission.
  *  Author: Chill 庄骞 (smallchill@163.com)
  */
-package org.springblade.core.qiniu.props;
+package org.springblade.core.oss.enums;
 
-import lombok.Data;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 /**
- * 七牛参数配置类
+ * Oss枚举类
  *
  * @author Chill
  */
-@Data
-@ConfigurationProperties(prefix = "qiniu")
-public class QiniuProperties {
+@Getter
+@AllArgsConstructor
+public enum OssEnum {
 
 	/**
-	 * 是否启用
+	 * minio
 	 */
-	private Boolean enable;
+	MINIO("minio", 1),
 
 	/**
-	 * 是否开启租户模式
+	 * qiniu
 	 */
-	private Boolean tenantMode;
+	QINIU("qiniu", 2),
+	;
 
-	/**
-	 * 对象存储服务的URL
-	 */
-	private String endpoint;
-
-	/**
-	 * Access key就像用户ID，可以唯一标识你的账户
-	 */
-	private String accessKey;
-
-	/**
-	 * Secret key是你账户的密码
-	 */
-	private String secretKey;
-
-	/**
-	 * 默认的存储桶名称
-	 */
-	private String bucketName = "bladex";
+	final String name;
+	final int category;
 
 }

@@ -22,9 +22,9 @@ import io.minio.messages.Bucket;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import org.springblade.core.minio.enums.PolicyType;
-import org.springblade.core.minio.props.MinioProperties;
 import org.springblade.core.oss.OssTemplate;
 import org.springblade.core.oss.model.OssFile;
+import org.springblade.core.oss.props.OssProperties;
 import org.springblade.core.oss.rule.OssRule;
 import org.springblade.core.tool.utils.Func;
 import org.springblade.core.tool.utils.StringPool;
@@ -55,7 +55,7 @@ public class MinioTemplate implements OssTemplate {
 	/**
 	 * 配置类
 	 */
-	private MinioProperties minioProperties;
+	private OssProperties ossProperties;
 
 
 	@Override
@@ -110,7 +110,7 @@ public class MinioTemplate implements OssTemplate {
 	@Override
 	@SneakyThrows
 	public OssFile statFile(String fileName) {
-		return statFile(minioProperties.getBucketName(), fileName);
+		return statFile(ossProperties.getBucketName(), fileName);
 	}
 
 	@Override
@@ -140,25 +140,25 @@ public class MinioTemplate implements OssTemplate {
 	@Override
 	@SneakyThrows
 	public String fileLink(String fileName) {
-		return minioProperties.getEndpoint().concat(StringPool.SLASH).concat(getBucketName()).concat(StringPool.SLASH).concat(fileName);
+		return ossProperties.getEndpoint().concat(StringPool.SLASH).concat(getBucketName()).concat(StringPool.SLASH).concat(fileName);
 	}
 
 	@Override
 	@SneakyThrows
 	public String fileLink(String bucketName, String fileName) {
-		return minioProperties.getEndpoint().concat(StringPool.SLASH).concat(getBucketName(bucketName)).concat(StringPool.SLASH).concat(fileName);
+		return ossProperties.getEndpoint().concat(StringPool.SLASH).concat(getBucketName(bucketName)).concat(StringPool.SLASH).concat(fileName);
 	}
 
 	@Override
 	@SneakyThrows
 	public void putFile(MultipartFile file) {
-		putFile(minioProperties.getBucketName(), file.getOriginalFilename(), file);
+		putFile(ossProperties.getBucketName(), file.getOriginalFilename(), file);
 	}
 
 	@Override
 	@SneakyThrows
 	public void putFile(String fileName, MultipartFile file) {
-		putFile(minioProperties.getBucketName(), fileName, file);
+		putFile(ossProperties.getBucketName(), fileName, file);
 	}
 
 	@Override
@@ -170,7 +170,7 @@ public class MinioTemplate implements OssTemplate {
 	@Override
 	@SneakyThrows
 	public void putFile(String fileName, InputStream stream) {
-		putFile(minioProperties.getBucketName(), fileName, stream);
+		putFile(ossProperties.getBucketName(), fileName, stream);
 	}
 
 	@Override
@@ -183,7 +183,7 @@ public class MinioTemplate implements OssTemplate {
 	@Override
 	@SneakyThrows
 	public void removeFile(String fileName) {
-		removeFile(minioProperties.getBucketName(), fileName);
+		removeFile(ossProperties.getBucketName(), fileName);
 	}
 
 	@Override
@@ -195,7 +195,7 @@ public class MinioTemplate implements OssTemplate {
 	@Override
 	@SneakyThrows
 	public void removeFiles(List<String> fileNames) {
-		removeFiles(minioProperties.getBucketName(), fileNames);
+		removeFiles(ossProperties.getBucketName(), fileNames);
 
 	}
 
@@ -211,7 +211,7 @@ public class MinioTemplate implements OssTemplate {
 	 * @return String
 	 */
 	private String getBucketName() {
-		return getBucketName(minioProperties.getBucketName());
+		return getBucketName(ossProperties.getBucketName());
 	}
 
 	/**

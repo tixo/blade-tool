@@ -91,7 +91,7 @@ public class CacheUtil {
 	@Nullable
 	@SneakyThrows
 	public static <T> T get(String cacheName, String keyPrefix, Object key, Callable<T> valueLoader) {
-		if (Func.hasEmpty(cacheName, keyPrefix, key, valueLoader.call())) {
+		if (Func.hasEmpty(cacheName, keyPrefix, key)) {
 			return null;
 		}
 		return getCache(cacheName).get(keyPrefix.concat(String.valueOf(key)), valueLoader);
