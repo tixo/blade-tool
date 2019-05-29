@@ -33,7 +33,7 @@ import org.springframework.lang.Nullable;
  * @author Erik Kringen
  */
 @SuppressWarnings("unchecked")
-class BladeHystrixTargeter implements Targeter {
+public class BladeHystrixTargeter implements Targeter {
 
 	@Override
 	public <T> T target(FeignClientFactoryBean factory, Feign.Builder feign, FeignContext context,

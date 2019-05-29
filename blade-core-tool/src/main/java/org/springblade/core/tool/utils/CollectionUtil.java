@@ -106,4 +106,23 @@ public class CollectionUtil extends CollectionUtils {
 		return Arrays.stream(es).collect(Collectors.toList());
 	}
 
+	/**
+	 * Iterable 转换为List集合
+	 * @param elements Iterable
+	 * @param <E> 泛型
+	 * @return 集合
+	 */
+	public static <E> List<E> toList(Iterable<E> elements) {
+		Objects.requireNonNull(elements, "elements es is null.");
+		if (elements instanceof Collection) {
+			return new ArrayList((Collection) elements);
+		}
+		Iterator<E> iterator = elements.iterator();
+		List<E> list = new ArrayList<>();
+		while (iterator.hasNext()) {
+			list.add(iterator.next());
+		}
+		return list;
+	}
+
 }

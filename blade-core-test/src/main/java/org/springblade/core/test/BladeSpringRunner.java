@@ -27,12 +27,9 @@ import org.springblade.core.launch.service.LauncherService;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.util.ObjectUtils;
 
-import java.lang.reflect.Field;
-import java.util.Map;
-import java.util.Properties;
-import java.util.ServiceLoader;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 设置启动参数
@@ -41,18 +38,18 @@ import java.util.ServiceLoader;
  */
 public class BladeSpringRunner extends SpringJUnit4ClassRunner {
 
-	public BladeSpringRunner(Class<?> clazz) throws InitializationError, NoSuchFieldException, IllegalAccessException {
+	public BladeSpringRunner(Class<?> clazz) throws InitializationError {
 		super(clazz);
 		setUpTestClass(clazz);
 	}
 
-	private void setUpTestClass(Class<?> clazz) throws NoSuchFieldException, IllegalAccessException {
-		BladeBootTest aispBootTest = AnnotationUtils.getAnnotation(clazz, BladeBootTest.class);
-		if (aispBootTest == null) {
+	private void setUpTestClass(Class<?> clazz) {
+		BladeBootTest bladeBootTest = AnnotationUtils.getAnnotation(clazz, BladeBootTest.class);
+		if (bladeBootTest == null) {
 			throw new BladeBootTestException(String.format("%s must be @BladeBootTest .", clazz));
 		}
-		String appName = aispBootTest.appName();
-		String profile = aispBootTest.profile();
+		String appName = bladeBootTest.appName();
+		String profile = bladeBootTest.profile();
 		boolean isLocalDev = BladeApplication.isLocalDev();
 		Properties props = System.getProperties();
 		props.setProperty("blade.env", profile);
@@ -70,24 +67,15 @@ public class BladeSpringRunner extends SpringJUnit4ClassRunner {
 		props.setProperty("spring.cloud.nacos.config.file-extension", NacosConstant.NACOS_CONFIG_FORMAT);
 		props.setProperty("spring.cloud.sentinel.transport.dashboard", SentinelConstant.SENTINEL_ADDR);
 		props.setProperty("spring.main.allow-bean-definition-overriding", "true");
+		// 加载自定义组件
+		if (bladeBootTest.enableLoader()) {
+			SpringApplicationBuilder builder = new SpringApplicationBuilder(clazz);
+			List<LauncherService> launcherList = new ArrayList<>();
+			ServiceLoader.load(LauncherService.class).forEach(launcherList::add);
+			launcherList.stream().sorted(Comparator.comparing(LauncherService::getOrder)).collect(Collectors.toList())
+				.forEach(launcherService -> launcherService.launcher(builder, appName, profile, isLocalDev));
+		}
 		System.err.println(String.format("---[junit.test]:[%s]---启动中，读取到的环境变量:[%s]", appName, profile));
-
-		// 是否加载自定义组件
-		if (!aispBootTest.enableLoader()) {
-			return;
-		}
-		ServiceLoader<LauncherService> loader = ServiceLoader.load(LauncherService.class);
-		SpringApplicationBuilder builder = new SpringApplicationBuilder(clazz);
-		// 启动组件
-		loader.forEach(launcherService -> launcherService.launcher(builder, appName, profile, isLocalDev));
-		// 反射出 builder 中的 props，兼容用户扩展
-		Field field = SpringApplicationBuilder.class.getDeclaredField("defaultProperties");
-		field.setAccessible(true);
-		@SuppressWarnings("unchecked")
-		Map<String, Object> defaultProperties = (Map<String, Object>) field.get(builder);
-		if (!ObjectUtils.isEmpty(defaultProperties)) {
-			props.putAll(defaultProperties);
-		}
 	}
 
 }
