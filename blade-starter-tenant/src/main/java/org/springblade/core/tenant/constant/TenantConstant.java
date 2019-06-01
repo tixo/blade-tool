@@ -19,13 +19,13 @@ package org.springblade.core.tenant.constant;
 /**
  * 租户常量.
  *
- * @author zhuangqian
+ * @author Chill
  */
 public interface TenantConstant {
 
 	/**
-	 * 默认租户编号
+	 * 默认租户ID
 	 */
-	String DEFAULT_TENANT_CODE = "000000";
+	String DEFAULT_TENANT_ID = "000000";
 
 }

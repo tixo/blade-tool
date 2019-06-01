@@ -94,7 +94,7 @@ public class BladeCodeGenerator {
 	/**
 	 * 租户字段
 	 */
-	private String tenantColumn = "tenant_code";
+	private String tenantColumn = "tenant_id";
 	/**
 	 * 是否启用swagger
 	 */

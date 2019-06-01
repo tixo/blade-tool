@@ -32,7 +32,7 @@ import java.lang.reflect.Method;
 import java.util.Objects;
 
 /**
- * blade fullBack 代理处理
+ * blade fallBack 代理处理
  *
  * @author L.cm
  */

@@ -38,7 +38,7 @@ public class BladeOssRule implements OssRule {
 
 	@Override
 	public String bucketName(String bucketName) {
-		String prefix = (tenantMode) ? SecureUtil.getTenantCode().concat(StringPool.DASH) : StringPool.EMPTY;
+		String prefix = (tenantMode) ? SecureUtil.getTenantId().concat(StringPool.DASH) : StringPool.EMPTY;
 		return prefix + bucketName;
 	}
 
