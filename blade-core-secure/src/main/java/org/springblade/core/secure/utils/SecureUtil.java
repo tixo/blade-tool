@@ -244,7 +244,7 @@ public class SecureUtil {
 	/**
 	 * 获取客户端id
 	 *
-	 * @return tenantId
+	 * @return clientId
 	 */
 	public static String getClientId() {
 		BladeUser user = getUser();
@@ -255,7 +255,7 @@ public class SecureUtil {
 	 * 获取客户端id
 	 *
 	 * @param request request
-	 * @return tenantId
+	 * @return clientId
 	 */
 	public static String getClientId(HttpServletRequest request) {
 		BladeUser user = getUser(request);
