@@ -19,7 +19,7 @@ package org.springblade.develop.constant;
 /**
  * 系统常量.
  *
- * @author zhuangqian
+ * @author Chill
  */
 public interface DevelopConstant {
 	/**

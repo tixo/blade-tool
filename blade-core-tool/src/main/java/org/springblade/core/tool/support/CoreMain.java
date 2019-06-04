@@ -19,7 +19,7 @@ package org.springblade.core.tool.support;
 /**
  * Created by Blade.
  *
- * @author zhuangqian
+ * @author Chill
  */
 public class CoreMain {
 
