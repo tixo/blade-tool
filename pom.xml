@@ -55,7 +55,7 @@
         <module>blade-starter-ehcache</module>
         <module>blade-starter-minio</module>
         <module>blade-starter-qiniu</module>
-        <module>blade-starter-oss</module>
+        <module>blade-core-oss</module>
     </modules>
 
     <dependencyManagement>

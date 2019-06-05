@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>blade-starter-oss</artifactId>
+    <artifactId>blade-core-oss</artifactId>
     <name>${project.artifactId}</name>
     <version>${bladex.tool.version}</version>
     <packaging>jar</packaging>
