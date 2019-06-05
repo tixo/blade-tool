@@ -39,6 +39,7 @@
         <module>blade-core-cloud</module>
         <module>blade-core-launch</module>
         <module>blade-core-log4j2</module>
+        <module>blade-core-oss</module>
         <module>blade-core-secure</module>
         <module>blade-core-test</module>
         <module>blade-core-tool</module>
@@ -55,7 +56,6 @@
         <module>blade-starter-ehcache</module>
         <module>blade-starter-minio</module>
         <module>blade-starter-qiniu</module>
-        <module>blade-core-oss</module>
     </modules>
 
     <dependencyManagement>
