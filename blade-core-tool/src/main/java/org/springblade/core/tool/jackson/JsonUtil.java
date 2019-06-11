@@ -19,10 +19,7 @@ package org.springblade.core.tool.jackson;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springblade.core.tool.utils.DateUtil;
 import org.springblade.core.tool.utils.Exceptions;
@@ -280,6 +277,60 @@ public class JsonUtil {
 		} catch (IOException e) {
 			throw Exceptions.unchecked(e);
 		}
+	}
+
+
+	/**
+	 * 范型readValue json ==> Pager&lt;MyBean&gt;: readValue(json, Pager.class,
+	 * MyBean.class)<br>
+	 * json ==> List<Set<Integer>>: readValue(json, List.class, Integer.class)<br>
+	 */
+	public static <T> T readValue(String json, Class<?> parametrized, Class<?> parametersFor,
+								  Class<?>... parameterClasses) {
+		if (StringUtil.isBlank(json)) {
+			return null;
+		}
+
+		JavaType type;
+		if (parameterClasses == null || parameterClasses.length == 0) {
+			type = getInstance().getTypeFactory().constructParametrizedType(parametrized, parametrized, parametersFor);
+		} else {
+			type = getInstance().getTypeFactory().constructParametrizedType(parametrized, parametersFor, parameterClasses);
+		}
+
+		try {
+			return getInstance().readValue(json, type);
+		} catch (IOException e) {
+			throw new IllegalStateException(e);
+		}
+	}
+
+	@SuppressWarnings("rawtypes")
+	public static <T> T readMap(String content, Class<? extends Map> mapClass, Class<?> keyClass, Class<?> valueClass) {
+		if (StringUtil.isBlank(content)) {
+			return null;
+		}
+		try {
+			return getInstance().readValue(content, getInstance().getTypeFactory().constructMapType(mapClass, keyClass, valueClass));
+		} catch (IOException e) {
+			throw new IllegalStateException(e);
+		}
+	}
+
+	public static <T> List<T> readList(String content, Class<?> collectionClass, Class<T> elementClass) {
+		if (StringUtil.isBlank(content)) {
+			return null;
+		}
+		try {
+			return getInstance().readValue(content, getInstance().getTypeFactory()
+				.constructCollectionLikeType(collectionClass == null ? List.class : collectionClass, elementClass));
+		} catch (IOException e) {
+			throw new IllegalStateException(e);
+		}
+	}
+
+	public static <T> List<T> readList(String content, Class<T> elementClass) {
+		return readList(content, null, elementClass);
 	}
 
 	public static ObjectMapper getInstance() {
