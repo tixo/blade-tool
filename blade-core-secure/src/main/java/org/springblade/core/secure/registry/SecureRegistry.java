@@ -37,8 +37,7 @@ public class SecureRegistry {
 	private final List<String> excludePatterns = new ArrayList<>();
 
 	public SecureRegistry() {
-		this.defaultExcludePatterns.add("/client/user-info");
-		this.defaultExcludePatterns.add("/client/role-aliases");
+		this.defaultExcludePatterns.add("/client/**");
 		this.defaultExcludePatterns.add("/client/allow/**");
 		this.defaultExcludePatterns.add("/actuator/health/**");
 		this.defaultExcludePatterns.add("/v2/api-docs/**");
