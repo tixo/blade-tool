@@ -25,6 +25,7 @@ import org.springblade.core.log.constant.EventConstant;
 import org.springblade.core.log.feign.ILogClient;
 import org.springblade.core.log.model.LogApi;
 import org.springblade.core.secure.utils.SecureUtil;
+import org.springblade.core.tool.utils.DateUtil;
 import org.springblade.core.tool.utils.UrlUtil;
 import org.springblade.core.tool.utils.WebUtil;
 import org.springframework.context.event.EventListener;
@@ -32,7 +33,6 @@ import org.springframework.core.annotation.Order;
 import org.springframework.scheduling.annotation.Async;
 
 import javax.servlet.http.HttpServletRequest;
-import java.time.LocalDateTime;
 import java.util.Map;
 
 
@@ -67,7 +67,7 @@ public class ApiLogListener {
 		logApi.setMethod(request.getMethod());
 		logApi.setParams(WebUtil.getRequestParamString(request));
 		logApi.setCreateBy(SecureUtil.getUserAccount(request));
-		logApi.setCreateTime(LocalDateTime.now());
+		logApi.setCreateTime(DateUtil.now());
 		logService.saveApiLog(logApi);
 	}
 

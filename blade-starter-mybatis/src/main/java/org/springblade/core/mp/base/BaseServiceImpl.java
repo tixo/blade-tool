@@ -23,12 +23,13 @@ import org.springblade.core.secure.BladeUser;
 import org.springblade.core.secure.utils.SecureUtil;
 import org.springblade.core.tool.constant.BladeConstant;
 import org.springblade.core.tool.utils.BeanUtil;
+import org.springblade.core.tool.utils.DateUtil;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotEmpty;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -52,7 +53,7 @@ public class BaseServiceImpl<M extends BaseMapper<T>, T extends BaseEntity> exte
 	@Override
 	public boolean save(T entity) {
 		BladeUser user = SecureUtil.getUser();
-		LocalDateTime now = LocalDateTime.now();
+		Date now = DateUtil.now();
 		entity.setCreateUser(user.getUserId());
 		entity.setCreateTime(now);
 		entity.setUpdateUser(user.getUserId());
@@ -66,7 +67,7 @@ public class BaseServiceImpl<M extends BaseMapper<T>, T extends BaseEntity> exte
 	public boolean updateById(T entity) {
 		BladeUser user = SecureUtil.getUser();
 		entity.setUpdateUser(user.getUserId());
-		entity.setUpdateTime(LocalDateTime.now());
+		entity.setUpdateTime(DateUtil.now());
 		return super.updateById(entity);
 	}
 
@@ -75,7 +76,7 @@ public class BaseServiceImpl<M extends BaseMapper<T>, T extends BaseEntity> exte
 		BladeUser user = SecureUtil.getUser();
 		T entity = BeanUtil.newInstance(modelClass);
 		entity.setUpdateUser(user.getUserId());
-		entity.setUpdateTime(LocalDateTime.now());
+		entity.setUpdateTime(DateUtil.now());
 		return super.update(entity, Wrappers.<T>update().lambda().in(T::getId, ids)) && super.removeByIds(ids);
 	}
 

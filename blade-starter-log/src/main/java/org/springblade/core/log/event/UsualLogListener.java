@@ -25,6 +25,7 @@ import org.springblade.core.log.constant.EventConstant;
 import org.springblade.core.log.feign.ILogClient;
 import org.springblade.core.log.model.LogUsual;
 import org.springblade.core.secure.utils.SecureUtil;
+import org.springblade.core.tool.utils.DateUtil;
 import org.springblade.core.tool.utils.UrlUtil;
 import org.springblade.core.tool.utils.WebUtil;
 import org.springframework.context.event.EventListener;
@@ -32,7 +33,6 @@ import org.springframework.core.annotation.Order;
 import org.springframework.scheduling.annotation.Async;
 
 import javax.servlet.http.HttpServletRequest;
-import java.time.LocalDateTime;
 import java.util.Map;
 
 /**
@@ -64,7 +64,7 @@ public class UsualLogListener {
 		logUsual.setEnv(bladeProperties.getEnv());
 		logUsual.setServerIp(serverInfo.getIpWithPort());
 		logUsual.setCreateBy(SecureUtil.getUserAccount(request));
-		logUsual.setCreateTime(LocalDateTime.now());
+		logUsual.setCreateTime(DateUtil.now());
 		logService.saveUsualLog(logUsual);
 	}
 

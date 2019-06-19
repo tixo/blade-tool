@@ -28,7 +28,7 @@ import org.springblade.core.tool.utils.DateUtil;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * 实体类
@@ -100,7 +100,7 @@ public class LogUsual implements Serializable {
 	 */
 	@DateTimeFormat(pattern = DateUtil.PATTERN_DATETIME)
 	@JsonFormat(pattern = DateUtil.PATTERN_DATETIME)
-	private LocalDateTime createTime;
+	private Date createTime;
 
 
 }

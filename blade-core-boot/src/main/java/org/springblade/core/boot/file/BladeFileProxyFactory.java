@@ -24,7 +24,6 @@ import org.springblade.core.tool.utils.StringPool;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.util.Date;
 
 /**
  * 文件代理类
@@ -82,7 +81,7 @@ public class BladeFileProxyFactory implements IFileProxy {
 	public static String getFileDir(String dir, String saveDir) {
 		StringBuilder newFileDir = new StringBuilder();
 		newFileDir.append(saveDir)
-			.append(File.separator).append(dir).append(File.separator).append(DateUtil.format(new Date(), "yyyyMMdd"))
+			.append(File.separator).append(dir).append(File.separator).append(DateUtil.format(DateUtil.now(), "yyyyMMdd"))
 			.append(File.separator);
 		return newFileDir.toString();
 	}

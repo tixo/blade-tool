@@ -29,7 +29,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.Nullable;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * 服务 异常
@@ -120,5 +120,5 @@ public class LogError implements Serializable {
 	 */
 	@DateTimeFormat(pattern = DateUtil.PATTERN_DATETIME)
 	@JsonFormat(pattern = DateUtil.PATTERN_DATETIME)
-	private LocalDateTime createTime;
+	private Date createTime;
 }

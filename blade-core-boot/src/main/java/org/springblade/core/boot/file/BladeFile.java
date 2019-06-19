@@ -22,7 +22,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Date;
 
 /**
  * 上传文件封装
@@ -73,8 +72,8 @@ public class BladeFile {
 		this.file = file;
 		this.fileName = file.getName();
 		this.originalFileName = file.getOriginalFilename();
-		this.uploadPath = BladeFileUtil.formatUrl(File.separator + SystemConstant.me().getUploadRealPath() + File.separator + dir + File.separator + DateUtil.format(new Date(), "yyyyMMdd") + File.separator + this.originalFileName);
-		this.uploadVirtualPath = BladeFileUtil.formatUrl(SystemConstant.me().getUploadCtxPath().replace(SystemConstant.me().getContextPath(), "") + File.separator + dir + File.separator + DateUtil.format(new Date(), "yyyyMMdd") + File.separator + this.originalFileName);
+		this.uploadPath = BladeFileUtil.formatUrl(File.separator + SystemConstant.me().getUploadRealPath() + File.separator + dir + File.separator + DateUtil.format(DateUtil.now(), "yyyyMMdd") + File.separator + this.originalFileName);
+		this.uploadVirtualPath = BladeFileUtil.formatUrl(SystemConstant.me().getUploadCtxPath().replace(SystemConstant.me().getContextPath(), "") + File.separator + dir + File.separator + DateUtil.format(DateUtil.now(), "yyyyMMdd") + File.separator + this.originalFileName);
 	}
 
 	public BladeFile(MultipartFile file, String dir, String uploadPath, String uploadVirtualPath) {
