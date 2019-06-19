@@ -17,6 +17,7 @@
 package org.springblade.develop.support;
 
 import com.baomidou.mybatisplus.annotation.DbType;
+import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.generator.AutoGenerator;
@@ -195,6 +196,11 @@ public class BladeCodeGenerator {
 			@Override
 			public String outputFile(TableInfo tableInfo) {
 				map.put("entityKey", (tableInfo.getEntityName().toLowerCase()));
+				map.put("menuId", IdWorker.getId());
+				map.put("addMenuId", IdWorker.getId());
+				map.put("editMenuId", IdWorker.getId());
+				map.put("removeMenuId", IdWorker.getId());
+				map.put("viewMenuId", IdWorker.getId());
 				return getOutputDir() + "/" + "/sql/" + tableInfo.getEntityName().toLowerCase() + ".menu.mysql";
 			}
 		});
