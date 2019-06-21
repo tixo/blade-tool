@@ -90,7 +90,7 @@ public class SwaggerAutoConfiguration {
 			.build()
 			.securitySchemes(Collections.singletonList(securitySchema()))
 			.securityContexts(Collections.singletonList(securityContext()))
-			.securityContexts(Lists.newArrayList(securityContext())).securitySchemes(Lists.<SecurityScheme>newArrayList(bearerToken(), bladeAuth()))
+			.securityContexts(Lists.newArrayList(securityContext())).securitySchemes(Lists.<SecurityScheme>newArrayList(clientInfo(), bladeAuth()))
 			.pathMapping("/");
 	}
 
@@ -159,7 +159,7 @@ public class SwaggerAutoConfiguration {
 		};
 	}
 
-	private ApiKey bearerToken() {
+	private ApiKey clientInfo() {
 		return new ApiKey("BearerToken", "Authorization", "header");
 	}
 
