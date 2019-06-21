@@ -24,6 +24,7 @@ import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
+import com.google.common.collect.Lists;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -89,6 +90,7 @@ public class SwaggerAutoConfiguration {
 			.build()
 			.securitySchemes(Collections.singletonList(securitySchema()))
 			.securityContexts(Collections.singletonList(securityContext()))
+			.securityContexts(Lists.newArrayList(securityContext())).securitySchemes(Lists.<SecurityScheme>newArrayList(bearerToken(), bladeAuth()))
 			.pathMapping("/");
 	}
 
@@ -155,6 +157,14 @@ public class SwaggerAutoConfiguration {
 			}
 			return false;
 		};
+	}
+
+	private ApiKey bearerToken() {
+		return new ApiKey("BearerToken", "Authorization", "header");
+	}
+
+	private ApiKey bladeAuth() {
+		return new ApiKey("blade-auth", "blade-auth", "header");
 	}
 
 	private static Optional<? extends Class<?>> declaringClass(RequestHandler input) {
