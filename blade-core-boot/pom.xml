@@ -48,6 +48,11 @@
             <artifactId>blade-starter-log</artifactId>
             <version>${bladex.tool.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.springblade</groupId>
+            <artifactId>blade-starter-datascope</artifactId>
+            <version>${bladex.tool.version}</version>
+        </dependency>
         <!--MyBatis-->
         <dependency>
             <groupId>org.springblade</groupId>

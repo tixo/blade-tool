@@ -24,11 +24,11 @@
         <protostuff.version>1.6.0</protostuff.version>
         <disruptor.version>3.4.2</disruptor.version>
         <mysql.connector.version>8.0.16</mysql.connector.version>
-        <spring.boot.admin.version>2.1.4</spring.boot.admin.version>
+        <spring.boot.admin.version>2.1.5</spring.boot.admin.version>
 
         <alibaba.cloud.version>0.9.0.RELEASE</alibaba.cloud.version>
 
-        <spring.boot.version>2.1.5.RELEASE</spring.boot.version>
+        <spring.boot.version>2.1.6.RELEASE</spring.boot.version>
         <spring.cloud.version>Greenwich.SR1</spring.cloud.version>
         <spring.platform.version>Cairo-SR8</spring.platform.version>
     </properties>
@@ -56,6 +56,7 @@
         <module>blade-starter-ehcache</module>
         <module>blade-starter-minio</module>
         <module>blade-starter-qiniu</module>
+        <module>blade-starter-datascope</module>
     </modules>
 
     <dependencyManagement>

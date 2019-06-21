@@ -14,35 +14,27 @@
  *  this software without specific prior written permission.
  *  Author: Chill 庄骞 (smallchill@163.com)
  */
-package org.springblade.core.launch.constant;
+package org.springblade.core.datascope.rule;
+
+import org.apache.ibatis.plugin.Invocation;
+import org.springblade.core.datascope.model.DataScope;
+import org.springblade.core.secure.BladeUser;
 
 /**
- * Token配置常量.
+ * 数据权限规则
  *
  * @author Chill
  */
-public interface TokenConstant {
+public interface DataScopeRule {
 
-	String SIGN_KEY = "BladeX";
-	String AVATAR = "avatar";
-	String HEADER = "Blade-Auth";
-	String BEARER = "bearer";
-	String ACCESS_TOKEN = "access_token";
-	String REFRESH_TOKEN = "refresh_token";
-	String TOKEN_TYPE = "token_type";
-	String EXPIRES_IN = "expires_in";
-	String ACCOUNT = "account";
-	String USER_NAME = "user_name";
-	String NICK_NAME = "nick_name";
-	String USER_ID = "user_id";
-	String DEPT_ID = "dept_id";
-	String ROLE_ID = "role_id";
-	String ROLE_NAME = "role_name";
-	String TENANT_ID = "tenant_id";
-	String CLIENT_ID = "client_id";
-	String LICENSE = "license";
-	String LICENSE_NAME = "powered by bladex";
-	String DEFAULT_AVATAR = "https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png";
-	Integer AUTH_LENGTH = 7;
+	/**
+	 * 获取过滤sql
+	 *
+	 * @param invocation 过滤器信息
+	 * @param dataScope  数据权限类
+	 * @param bladeUser  当前用户信息
+	 * @return sql
+	 */
+	String whereSql(Invocation invocation, DataScope dataScope, BladeUser bladeUser);
 
 }

@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>blade-core-oss</artifactId>
+    <artifactId>blade-starter-datascope</artifactId>
     <name>${project.artifactId}</name>
     <version>${bladex.tool.version}</version>
     <packaging>jar</packaging>
@@ -17,7 +17,12 @@
     <dependencies>
         <dependency>
             <groupId>org.springblade</groupId>
-            <artifactId>blade-core-secure</artifactId>
+            <artifactId>blade-starter-cache</artifactId>
+            <version>${bladex.tool.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springblade</groupId>
+            <artifactId>blade-starter-mybatis</artifactId>
             <version>${bladex.tool.version}</version>
         </dependency>
         <dependency>

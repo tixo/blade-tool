@@ -14,40 +14,35 @@
  *  this software without specific prior written permission.
  *  Author: Chill 庄骞 (smallchill@163.com)
  */
-package org.springblade.core.boot.config;
+package org.springblade.core.datascope.config;
 
-import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
-import com.baomidou.mybatisplus.extension.plugins.PerformanceInterceptor;
-import org.mybatis.spring.annotation.MapperScan;
-import org.springblade.core.launch.constant.AppConstant;
+import org.springblade.core.datascope.interceptor.DataScopeInterceptor;
+import org.springblade.core.datascope.rule.BladeDataScopeRule;
+import org.springblade.core.datascope.rule.DataScopeRule;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 
 /**
- * mybatis-plus 配置
+ * 数据权限配置类
  *
  * @author Chill
  */
 @Configuration
-@MapperScan("org.springblade.**.mapper.**")
-public class MybatisPlusConfiguration {
+public class DataScopeConfiguration {
 
 	@Bean
-	@ConditionalOnMissingBean(PaginationInterceptor.class)
-	public PaginationInterceptor paginationInterceptor() {
-		return new PaginationInterceptor();
+	@ConditionalOnMissingBean(DataScopeRule.class)
+	public DataScopeRule dataScopeRule() {
+		return new BladeDataScopeRule();
 	}
 
-	/**
-	 * SQL执行效率插件
-	 */
 	@Bean
-	@Profile({AppConstant.DEV_CODE, AppConstant.TEST_CODE})
-	public PerformanceInterceptor performanceInterceptor() {
-		return new PerformanceInterceptor();
+	@ConditionalOnBean(DataScopeRule.class)
+	@ConditionalOnMissingBean(DataScopeInterceptor.class)
+	public DataScopeInterceptor interceptor(DataScopeRule dataScopeRule) {
+		return new DataScopeInterceptor(dataScopeRule);
 	}
 
 }
-

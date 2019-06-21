@@ -92,7 +92,12 @@ public class CacheUtil {
 		if (Func.hasEmpty(cacheName, keyPrefix, key)) {
 			return null;
 		}
-		return getCache(cacheName).get(keyPrefix.concat(String.valueOf(key)), valueLoader);
+		try {
+			return getCache(cacheName).get(keyPrefix.concat(String.valueOf(key)), valueLoader);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			return null;
+		}
 	}
 
 	/**
