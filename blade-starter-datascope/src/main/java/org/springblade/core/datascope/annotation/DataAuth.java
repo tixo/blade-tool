@@ -16,6 +16,8 @@
  */
 package org.springblade.core.datascope.annotation;
 
+import org.springblade.core.datascope.enums.DataScopeEnum;
+
 import java.lang.annotation.*;
 
 /**
@@ -32,22 +34,22 @@ public @interface DataAuth {
 	/**
 	 * 资源编号
 	 */
-	String resourceCode() default "";
+	String code() default "";
 
 	/**
 	 * 数据权限对应字段
 	 */
-	String scopeColumn() default "dept_id";
+	String column() default "dept_id";
 
 	/**
 	 * 数据权限规则
 	 */
-	int scopeType() default 1;
+	DataScopeEnum type() default DataScopeEnum.ALL;
 
 	/**
 	 * 数据权限规则值域
 	 */
-	String scopeValue() default "";
+	String value() default "";
 
 }
 

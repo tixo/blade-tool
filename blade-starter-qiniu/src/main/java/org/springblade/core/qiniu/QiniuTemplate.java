@@ -94,7 +94,6 @@ public class QiniuTemplate implements OssTemplate {
 	public OssFile statFile(String bucketName, String fileName) {
 		FileInfo stat = bucketManager.stat(getBucketName(bucketName), fileName);
 		OssFile ossFile = new OssFile();
-		ossFile.setName(stat.key);
 		ossFile.setName(Func.isEmpty(stat.key) ? fileName : stat.key);
 		ossFile.setLink(fileLink(ossFile.getName()));
 		ossFile.setHash(stat.hash);

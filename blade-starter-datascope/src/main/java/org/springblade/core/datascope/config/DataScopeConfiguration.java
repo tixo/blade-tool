@@ -16,6 +16,7 @@
  */
 package org.springblade.core.datascope.config;
 
+import lombok.AllArgsConstructor;
 import org.springblade.core.datascope.interceptor.DataScopeInterceptor;
 import org.springblade.core.datascope.rule.BladeDataScopeRule;
 import org.springblade.core.datascope.rule.DataScopeRule;
@@ -23,6 +24,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 /**
  * 数据权限配置类
@@ -30,12 +32,15 @@ import org.springframework.context.annotation.Configuration;
  * @author Chill
  */
 @Configuration
+@AllArgsConstructor
 public class DataScopeConfiguration {
+
+	private JdbcTemplate jdbcTemplate;
 
 	@Bean
 	@ConditionalOnMissingBean(DataScopeRule.class)
 	public DataScopeRule dataScopeRule() {
-		return new BladeDataScopeRule();
+		return new BladeDataScopeRule(jdbcTemplate);
 	}
 
 	@Bean

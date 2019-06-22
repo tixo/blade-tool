@@ -31,10 +31,11 @@ public interface DataScopeRule {
 	 * 获取过滤sql
 	 *
 	 * @param invocation 过滤器信息
+	 * @param mapperId   数据查询类
 	 * @param dataScope  数据权限类
 	 * @param bladeUser  当前用户信息
 	 * @return sql
 	 */
-	String whereSql(Invocation invocation, DataScope dataScope, BladeUser bladeUser);
+	String whereSql(Invocation invocation, String mapperId, DataScope dataScope, BladeUser bladeUser);
 
 }

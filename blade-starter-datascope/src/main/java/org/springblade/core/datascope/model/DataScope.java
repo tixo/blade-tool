@@ -17,7 +17,7 @@
 package org.springblade.core.datascope.model;
 
 import lombok.Data;
-import org.springblade.core.datascope.enums.DataScopeTypeEnum;
+import org.springblade.core.datascope.enums.DataScopeEnum;
 
 /**
  * 数据权限实体类
@@ -29,18 +29,18 @@ public class DataScope {
 	/**
 	 * 资源编号
 	 */
-	private String resourceCode;
+	private String code;
 	/**
 	 * 数据权限字段
 	 */
-	private String scopeColumn = "dept_id";
+	private String column = "dept_id";
 	/**
 	 * 数据权限规则
 	 */
-	private Integer scopeType = DataScopeTypeEnum.ALL.getType();
+	private Integer type = DataScopeEnum.ALL.getType();
 	/**
 	 * 数据权限规则值
 	 */
-	private String scopeValue;
+	private String value;
 
 }

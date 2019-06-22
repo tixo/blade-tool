@@ -159,16 +159,16 @@ public class SwaggerAutoConfiguration {
 		};
 	}
 
+	private static Optional<? extends Class<?>> declaringClass(RequestHandler input) {
+		return Optional.fromNullable(input.declaringClass());
+	}
+
 	private ApiKey clientInfo() {
-		return new ApiKey("BearerToken", "Authorization", "header");
+		return new ApiKey("ClientInfo", "Authorization", "header");
 	}
 
 	private ApiKey bladeAuth() {
-		return new ApiKey("blade-auth", "blade-auth", "header");
-	}
-
-	private static Optional<? extends Class<?>> declaringClass(RequestHandler input) {
-		return Optional.fromNullable(input.declaringClass());
+		return new ApiKey("BladeAuth", "Blade-Auth", "header");
 	}
 
 }

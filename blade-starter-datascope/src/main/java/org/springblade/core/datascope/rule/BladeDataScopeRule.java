@@ -16,25 +16,21 @@
  */
 package org.springblade.core.datascope.rule;
 
+import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.plugin.Invocation;
 import org.springblade.core.cache.utils.CacheUtil;
-import org.springblade.core.datascope.enums.DataScopeTypeEnum;
-import org.springblade.core.datascope.exception.DataScopeException;
+import org.springblade.core.datascope.constant.DataScopeConstant;
+import org.springblade.core.datascope.enums.DataScopeEnum;
 import org.springblade.core.datascope.model.DataScope;
-import org.springblade.core.mp.db.Db;
-import org.springblade.core.mp.db.Record;
 import org.springblade.core.secure.BladeUser;
-import org.springblade.core.tool.utils.BeanUtil;
-import org.springblade.core.tool.utils.Func;
-import org.springblade.core.tool.utils.PlaceholderUtil;
-import org.springblade.core.tool.utils.StringUtil;
+import org.springblade.core.tool.utils.*;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
 
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 import static org.springblade.core.cache.constant.CacheConstant.SYS_CACHE;
 
@@ -43,25 +39,27 @@ import static org.springblade.core.cache.constant.CacheConstant.SYS_CACHE;
  *
  * @author Chill
  */
+@RequiredArgsConstructor
 public class BladeDataScopeRule implements DataScopeRule {
 
 	private static final String SCOPE_CACHE_CODE = "scope:code:";
-	private static final String DEPT_CACHE_ID = "dept:ancestors:id:";
+	private static final String SCOPE_CACHE_CLASS = "scope:class:";
+	private static final String DEPT_CACHE_ANCESTORS = "dept:ancestors:";
+
+	private final JdbcTemplate jdbcTemplate;
 
 	@Override
-	public String whereSql(Invocation invocation, DataScope dataScope, BladeUser bladeUser) {
-		//判断用户数据是否存在
-		if (bladeUser == null) {
-			throw new DataScopeException("failed to obtain user information, data Scope settings failed.");
-		}
+	public String whereSql(Invocation invocation, String mapperId, DataScope dataScope, BladeUser bladeUser) {
 
-		//开启数据库链接
-		Connection connection = (Connection) invocation.getArgs()[0];
-		Db db = Db.create(connection);
+		//数据权限资源编号
+		String code = dataScope.getCode();
 
-		//判断是否需要从数据库获取
-		if (StringUtil.isNotBlank(dataScope.getResourceCode())) {
-			dataScope = getDataScope(db, dataScope);
+		//根据mapperId从数据库中获取对应模型
+		dataScope = getDataScopeByMapper(mapperId, bladeUser.getRoleId());
+
+		//判断是否需要从数据库根据资源编号获取
+		if (dataScope == null && StringUtil.isNotBlank(code)) {
+			dataScope = getDataScopeByCode(code);
 			//未从数据库找到对应数据则放行
 			if (dataScope == null) {
 				return null;
@@ -69,63 +67,78 @@ public class BladeDataScopeRule implements DataScopeRule {
 		}
 
 		//判断数据权限类型并组装对应Sql
-		Integer scopeRule = Objects.requireNonNull(dataScope).getScopeType();
-		DataScopeTypeEnum scopeTypeEnum = DataScopeTypeEnum.of(scopeRule);
+		Integer scopeRule = Objects.requireNonNull(dataScope).getType();
+		DataScopeEnum scopeTypeEnum = DataScopeEnum.of(scopeRule);
 		List<Long> ids = new ArrayList<>();
-		if (DataScopeTypeEnum.ALL == scopeTypeEnum) {
+		if (DataScopeEnum.ALL == scopeTypeEnum) {
 			return null;
-		} else if (DataScopeTypeEnum.CUSTOM == scopeTypeEnum) {
-			return PlaceholderUtil.getDefaultResolver().resolveByMap(dataScope.getScopeValue(), BeanUtil.toMap(bladeUser));
-		} else if (DataScopeTypeEnum.OWN_LEVEL == scopeTypeEnum) {
+		} else if (DataScopeEnum.CUSTOM == scopeTypeEnum) {
+			return PlaceholderUtil.getDefaultResolver().resolveByMap(dataScope.getValue(), BeanUtil.toMap(bladeUser));
+		} else if (DataScopeEnum.OWN == scopeTypeEnum) {
 			ids.add(bladeUser.getUserId());
-		} else if (DataScopeTypeEnum.OWN_DEPT_LEVEL == scopeTypeEnum) {
+		} else if (DataScopeEnum.OWN_DEPT == scopeTypeEnum) {
 			ids.addAll(Func.toLongList(bladeUser.getDeptId()));
-		} else if (DataScopeTypeEnum.OWN_DEPT_CHILD_LEVEL == scopeTypeEnum) {
+		} else if (DataScopeEnum.OWN_DEPT_CHILD == scopeTypeEnum) {
 			List<Long> deptIds = Func.toLongList(bladeUser.getDeptId());
 			ids.addAll(deptIds);
 			deptIds.forEach(deptId -> {
-				List<Long> deptIdList = getDeptAncestors(db, deptId);
+				List<Long> deptIdList = getDeptAncestors(deptId);
 				ids.addAll(deptIdList);
 			});
 		}
-		return StringUtil.format(" where scope.{} in ({}) ", dataScope.getScopeColumn(), StringUtil.join(ids));
+		return StringUtil.format(" where scope.{} in ({}) ", dataScope.getColumn(), StringUtil.join(ids));
 	}
-
 
 	/**
 	 * 获取数据权限
 	 *
-	 * @param db        db工具栏
-	 * @param dataScope 数据权限实体类
+	 * @param mapperId 数据权限mapperId
+	 * @param roleId   用户角色集合
 	 * @return DataScope
 	 */
-	private DataScope getDataScope(Db db, DataScope dataScope) {
-		return CacheUtil.get(SYS_CACHE, SCOPE_CACHE_CODE, dataScope.getResourceCode(), () -> {
-			Record record = db.selectOne("select * from blade_data_scope where resource_code = ?", dataScope.getResourceCode());
-			dataScope.setScopeColumn(record.getStr("scope_column"));
-			dataScope.setScopeType(record.getInt("scope_type"));
-			dataScope.setScopeValue(record.getStr("scope_value"));
-			return dataScope;
-		});
+	private DataScope getDataScopeByMapper(String mapperId, String roleId) {
+		List<Object> args = new ArrayList<>(Collections.singletonList(mapperId));
+		List<Long> roleIds = Func.toLongList(roleId);
+		args.addAll(roleIds);
+		return CacheUtil.get(SYS_CACHE, SCOPE_CACHE_CLASS, mapperId + StringPool.COLON + roleId, () -> {
+				List<DataScope> list = jdbcTemplate.query(DataScopeConstant.dataByMapper(roleIds.size()), args.toArray(), new BeanPropertyRowMapper<>(DataScope.class));
+				if (CollectionUtil.isEmpty(list)) {
+					return null;
+				} else {
+					return list.iterator().next();
+				}
+			}
+		);
+	}
+
+	/**
+	 * 获取数据权限
+	 *
+	 * @param code 数据权限资源编号
+	 * @return DataScope
+	 */
+	private DataScope getDataScopeByCode(String code) {
+		return CacheUtil.get(SYS_CACHE, SCOPE_CACHE_CODE, code, () -> {
+				List<DataScope> list = jdbcTemplate.query(DataScopeConstant.DATA_BY_CODE, new Object[]{code}, new BeanPropertyRowMapper<>(DataScope.class));
+				if (CollectionUtil.isEmpty(list)) {
+					return null;
+				} else {
+					return list.iterator().next();
+				}
+			}
+		);
 	}
 
 	/**
 	 * 获取部门子级
 	 *
-	 * @param db     db工具类
 	 * @param deptId 部门id
 	 * @return deptIds
 	 */
-	private List<Long> getDeptAncestors(Db db, Long deptId) {
-		return CacheUtil.get(SYS_CACHE, DEPT_CACHE_ID, deptId, () -> {
-			try {
-				return db.select("select id from blade_dept where ancestors like concat('%', ?, '%')", deptId).stream()
-					.map(record -> record.getLong("id"))
-					.collect(Collectors.toList());
-			} catch (SQLException e) {
-				return new ArrayList<>();
-			}
-		});
+	private List<Long> getDeptAncestors(Long deptId) {
+		return CacheUtil.get(SYS_CACHE, DEPT_CACHE_ANCESTORS, deptId,
+			() -> jdbcTemplate.queryForList(DataScopeConstant.DATA_BY_DEPT, new Object[]{deptId}, Long.class)
+		);
 	}
 
 }

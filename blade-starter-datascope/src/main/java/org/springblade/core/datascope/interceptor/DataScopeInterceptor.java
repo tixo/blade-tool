@@ -17,8 +17,9 @@
 package org.springblade.core.datascope.interceptor;
 
 import com.baomidou.mybatisplus.core.toolkit.PluginUtils;
+import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.extension.handlers.AbstractSqlParserHandler;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.executor.statement.StatementHandler;
 import org.apache.ibatis.mapping.BoundSql;
@@ -31,35 +32,46 @@ import org.apache.ibatis.reflection.SystemMetaObject;
 import org.springblade.core.datascope.annotation.DataAuth;
 import org.springblade.core.datascope.model.DataScope;
 import org.springblade.core.datascope.rule.DataScopeRule;
+import org.springblade.core.secure.BladeUser;
 import org.springblade.core.secure.utils.SecureUtil;
-import org.springblade.core.tool.utils.StringPool;
+import org.springblade.core.tool.utils.ClassUtil;
+import org.springblade.core.tool.utils.SpringUtil;
 import org.springblade.core.tool.utils.StringUtil;
 
 import java.lang.reflect.Method;
 import java.sql.Connection;
-import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 
 /**
  * mybatis 数据权限拦截器
  *
- * @author lengleng, L.cm, Chill
+ * @author L.cm, Chill
  */
 @Slf4j
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Intercepts({@Signature(type = StatementHandler.class, method = "prepare", args = {Connection.class, Integer.class})})
 public class DataScopeInterceptor extends AbstractSqlParserHandler implements Interceptor {
 
-	private DataScopeRule dataScopeRule;
+	private ConcurrentMap<String, DataAuth> dataAuthMap = new ConcurrentHashMap<>(8);
+
+	private final DataScopeRule dataScopeRule;
 
 	@Override
 	public Object intercept(Invocation invocation) throws Throwable {
+		//未取到用户则放行
+		BladeUser bladeUser = SecureUtil.getUser();
+		if (bladeUser == null) {
+			return invocation.proceed();
+		}
+
 		StatementHandler statementHandler = PluginUtils.realTarget(invocation.getTarget());
 		MetaObject metaObject = SystemMetaObject.forObject(statementHandler);
 		this.sqlParser(metaObject);
 
-		// 非SELECT操作放行
+		//非SELECT操作放行
 		MappedStatement mappedStatement = (MappedStatement) metaObject.getValue("delegate.mappedStatement");
 		if (SqlCommandType.SELECT != mappedStatement.getSqlCommandType()
 			|| StatementType.CALLABLE == mappedStatement.getStatementType()) {
@@ -68,27 +80,23 @@ public class DataScopeInterceptor extends AbstractSqlParserHandler implements In
 
 		BoundSql boundSql = (BoundSql) metaObject.getValue("delegate.boundSql");
 		String originalSql = boundSql.getSql();
-		Object parameterObject = boundSql.getParameterObject();
 
-		//查找参数中包含DataScope类型的参数
-		DataScope dataScope = findDataScopeObject(parameterObject);
 		//查找注解中包含DataAuth类型的参数
 		DataAuth dataAuth = findDataAuthAnnotation(mappedStatement);
-		//都为空则放行
-		if (dataScope == null && dataAuth == null) {
-			return invocation.proceed();
-		}
-		//若注解不为空,优先注解配置
+
+		//创建数据权限模型
+		DataScope dataScope = new DataScope();
+
+		//若注解不为空,则配置注解项
 		if (dataAuth != null) {
-			dataScope = new DataScope();
-			dataScope.setResourceCode(dataAuth.resourceCode());
-			dataScope.setScopeColumn(dataAuth.scopeColumn());
-			dataScope.setScopeType(dataAuth.scopeType());
-			dataScope.setScopeValue(dataAuth.scopeValue());
+			dataScope.setCode(dataAuth.code());
+			dataScope.setColumn(dataAuth.column());
+			dataScope.setType(dataAuth.type().getType());
+			dataScope.setValue(dataAuth.value());
 		}
 
 		//获取数据权限规则对应的筛选Sql
-		String whereSql = dataScopeRule.whereSql(invocation, dataScope, SecureUtil.getUser());
+		String whereSql = dataScopeRule.whereSql(invocation, mappedStatement.getId(), dataScope, bladeUser);
 		if (StringUtil.isBlank(whereSql)) {
 			return invocation.proceed();
 		} else {
@@ -123,47 +131,28 @@ public class DataScopeInterceptor extends AbstractSqlParserHandler implements In
 	}
 
 	/**
-	 * 查找参数是否包括DataScope对象
-	 *
-	 * @param parameterObj 参数列表
-	 * @return DataScope
-	 */
-	private DataScope findDataScopeObject(Object parameterObj) {
-		if (parameterObj instanceof DataScope) {
-			return (DataScope) parameterObj;
-		} else if (parameterObj instanceof Map) {
-			for (Object val : ((Map<?, ?>) parameterObj).values()) {
-				if (val instanceof DataScope) {
-					return (DataScope) val;
-				}
-			}
-		}
-		return null;
-	}
-
-	/**
 	 * 获取数据权限注解信息
 	 *
 	 * @param mappedStatement mappedStatement
 	 * @return DataAuth
 	 */
 	private DataAuth findDataAuthAnnotation(MappedStatement mappedStatement) {
-		DataAuth dataAuth = null;
-		try {
-			String id = mappedStatement.getId();
-			String className = id.substring(0, id.lastIndexOf(StringPool.DOT));
-			String methodName = id.substring(id.lastIndexOf(StringPool.DOT) + 1);
-			final Class<?> cls = Class.forName(className);
-			final Method[] method = cls.getMethods();
-			for (Method me : method) {
-				if (me.getName().equals(methodName) && me.isAnnotationPresent(DataAuth.class)) {
-					dataAuth = me.getAnnotation(DataAuth.class);
+		String id = mappedStatement.getId();
+		return dataAuthMap.computeIfAbsent(id, (key) -> {
+			String className = key.substring(0, key.lastIndexOf(StringPool.DOT));
+			String mapperBean = StringUtil.firstCharToLower(ClassUtil.getShortName(className));
+			Object mapper = SpringUtil.getBean(mapperBean);
+			String methodName = key.substring(key.lastIndexOf(StringPool.DOT) + 1);
+			Class<?>[] interfaces = ClassUtil.getAllInterfaces(mapper);
+			for (Class<?> mapperInterface : interfaces) {
+				for (Method method : mapperInterface.getDeclaredMethods()) {
+					if (methodName.equals(method.getName()) && method.isAnnotationPresent(DataAuth.class)) {
+						return method.getAnnotation(DataAuth.class);
+					}
 				}
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return dataAuth;
+			return null;
+		});
 	}
 
 }

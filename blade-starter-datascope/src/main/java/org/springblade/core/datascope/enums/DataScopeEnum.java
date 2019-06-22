@@ -28,26 +28,26 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum DataScopeTypeEnum {
+public enum DataScopeEnum {
 	/**
-	 * 查询全部数据
+	 * 全部数据
 	 */
 	ALL(1, "全部"),
 
 	/**
 	 * 本人可见
 	 */
-	OWN_LEVEL(2, "本人可见"),
+	OWN(2, "本人可见"),
 
 	/**
 	 * 所在机构可见
 	 */
-	OWN_DEPT_LEVEL(3, "所在机构可见"),
+	OWN_DEPT(3, "所在机构可见"),
 
 	/**
 	 * 所在机构及子级可见
 	 */
-	OWN_DEPT_CHILD_LEVEL(4, "所在机构及子级可见"),
+	OWN_DEPT_CHILD(4, "所在机构及子级可见"),
 
 	/**
 	 * 自定义
@@ -63,12 +63,12 @@ public enum DataScopeTypeEnum {
 	 */
 	private final String description;
 
-	public static DataScopeTypeEnum of(Integer dataScopeType) {
+	public static DataScopeEnum of(Integer dataScopeType) {
 		if (dataScopeType == null) {
 			return null;
 		}
-		DataScopeTypeEnum[] values = DataScopeTypeEnum.values();
-		for (DataScopeTypeEnum scopeTypeEnum : values) {
+		DataScopeEnum[] values = DataScopeEnum.values();
+		for (DataScopeEnum scopeTypeEnum : values) {
 			if (scopeTypeEnum.type == dataScopeType) {
 				return scopeTypeEnum;
 			}
