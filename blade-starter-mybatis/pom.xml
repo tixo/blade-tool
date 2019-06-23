@@ -27,11 +27,11 @@
             <artifactId>mybatis-spring</artifactId>
             <version>2.0.0</version>
         </dependency>
-        <dependency>
+        <!--<dependency>
             <groupId>org.mybatis</groupId>
             <artifactId>mybatis</artifactId>
             <version>3.5.1</version>
-        </dependency>
+        </dependency>-->
         <!--Blade-->
         <dependency>
             <groupId>org.springblade</groupId>
