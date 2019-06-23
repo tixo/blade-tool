@@ -67,9 +67,9 @@ public class $!{entity} implements Serializable {
 	/**
 	* $!{field.comment}
 	*/
-  #if($!{swagger2})
+	#if($!{swagger2})
 	@ApiModelProperty(value = "$!{field.comment}")
-  #end
+	#end
 #end
 #if($!{field.keyFlag})
 ## 主键

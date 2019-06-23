@@ -60,10 +60,11 @@ public class BladeDataScopeRule implements DataScopeRule {
 		//判断是否需要从数据库根据资源编号获取
 		if (dataScope == null && StringUtil.isNotBlank(code)) {
 			dataScope = getDataScopeByCode(code);
-			//未从数据库找到对应数据则放行
-			if (dataScope == null) {
-				return null;
-			}
+		}
+
+		//未从数据库找到对应数据则放行
+		if (dataScope == null) {
+			return null;
 		}
 
 		//判断数据权限类型并组装对应Sql
