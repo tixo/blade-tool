@@ -54,6 +54,13 @@ public class BaseEntity implements Serializable {
 	private Long createUser;
 
 	/**
+	 * 创建部门
+	 */
+	@JsonSerialize(using = ToStringSerializer.class)
+	@ApiModelProperty(value = "创建部门")
+	private Long createDept;
+
+	/**
 	 * 创建时间
 	 */
 	@DateTimeFormat(pattern = DateUtil.PATTERN_DATETIME)

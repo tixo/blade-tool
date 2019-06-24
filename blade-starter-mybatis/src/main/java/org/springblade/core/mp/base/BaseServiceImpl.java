@@ -24,6 +24,7 @@ import org.springblade.core.secure.utils.SecureUtil;
 import org.springblade.core.tool.constant.BladeConstant;
 import org.springblade.core.tool.utils.BeanUtil;
 import org.springblade.core.tool.utils.DateUtil;
+import org.springblade.core.tool.utils.Func;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotEmpty;
@@ -53,8 +54,10 @@ public class BaseServiceImpl<M extends BaseMapper<T>, T extends BaseEntity> exte
 	@Override
 	public boolean save(T entity) {
 		BladeUser user = SecureUtil.getUser();
+		assert user != null;
 		Date now = DateUtil.now();
 		entity.setCreateUser(user.getUserId());
+		entity.setCreateDept(Func.toLongList(user.getDeptId()).iterator().next());
 		entity.setCreateTime(now);
 		entity.setUpdateUser(user.getUserId());
 		entity.setUpdateTime(now);
@@ -66,6 +69,7 @@ public class BaseServiceImpl<M extends BaseMapper<T>, T extends BaseEntity> exte
 	@Override
 	public boolean updateById(T entity) {
 		BladeUser user = SecureUtil.getUser();
+		assert user != null;
 		entity.setUpdateUser(user.getUserId());
 		entity.setUpdateTime(DateUtil.now());
 		return super.updateById(entity);
@@ -74,6 +78,7 @@ public class BaseServiceImpl<M extends BaseMapper<T>, T extends BaseEntity> exte
 	@Override
 	public boolean deleteLogic(@NotEmpty List<Long> ids) {
 		BladeUser user = SecureUtil.getUser();
+		assert user != null;
 		T entity = BeanUtil.newInstance(modelClass);
 		entity.setUpdateUser(user.getUserId());
 		entity.setUpdateTime(DateUtil.now());

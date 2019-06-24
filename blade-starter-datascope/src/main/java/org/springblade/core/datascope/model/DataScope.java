@@ -17,6 +17,7 @@
 package org.springblade.core.datascope.model;
 
 import lombok.Data;
+import org.springblade.core.datascope.constant.DataScopeConstant;
 import org.springblade.core.datascope.enums.DataScopeEnum;
 
 /**
@@ -33,7 +34,7 @@ public class DataScope {
 	/**
 	 * 数据权限字段
 	 */
-	private String column = "dept_id";
+	private String column = DataScopeConstant.DEFAULT_COLUMN;
 	/**
 	 * 数据权限规则
 	 */

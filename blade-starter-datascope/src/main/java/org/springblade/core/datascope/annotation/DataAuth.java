@@ -16,6 +16,7 @@
  */
 package org.springblade.core.datascope.annotation;
 
+import org.springblade.core.datascope.constant.DataScopeConstant;
 import org.springblade.core.datascope.enums.DataScopeEnum;
 
 import java.lang.annotation.*;
@@ -39,7 +40,7 @@ public @interface DataAuth {
 	/**
 	 * 数据权限对应字段
 	 */
-	String column() default "dept_id";
+	String column() default DataScopeConstant.DEFAULT_COLUMN;
 
 	/**
 	 * 数据权限规则

@@ -25,6 +25,8 @@ import org.springblade.core.tool.utils.StringUtil;
  */
 public interface DataScopeConstant {
 
+	String DEFAULT_COLUMN = "create_dept";
+
 	/**
 	 * 获取部门数据
 	 */

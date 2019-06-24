@@ -32,7 +32,7 @@ import java.util.List;
 public class DataScopeProperties {
 
 	/**
-	 * mapper方法匹配值
+	 * mapper方法匹配关键字
 	 */
 	private List<String> mapperKey = Arrays.asList("page", "Page", "list", "List");
 
