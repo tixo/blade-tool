@@ -28,7 +28,7 @@ public interface DataScopeConstant {
 	/**
 	 * 获取部门数据
 	 */
-	String DATA_BY_DEPT = "select id from blade_dept where ancestors like concat('%1', ?, '1%')";
+	String DATA_BY_DEPT = "select id from blade_dept where ancestors like concat('%', ?, '%')";
 
 	/**
 	 * 根据resourceCode获取数据权限配置

@@ -101,15 +101,15 @@ public class BladeDataScopeRule implements DataScopeRule {
 		List<Object> args = new ArrayList<>(Collections.singletonList(mapperId));
 		List<Long> roleIds = Func.toLongList(roleId);
 		args.addAll(roleIds);
-		return CacheUtil.get(SYS_CACHE, SCOPE_CACHE_CLASS, mapperId + StringPool.COLON + roleId, () -> {
-				List<DataScope> list = jdbcTemplate.query(DataScopeConstant.dataByMapper(roleIds.size()), args.toArray(), new BeanPropertyRowMapper<>(DataScope.class));
-				if (CollectionUtil.isEmpty(list)) {
-					return null;
-				} else {
-					return list.iterator().next();
-				}
+		DataScope dataScope = CacheUtil.get(SYS_CACHE, SCOPE_CACHE_CLASS, mapperId + StringPool.COLON + roleId, DataScope.class);
+		if (dataScope == null) {
+			List<DataScope> list = jdbcTemplate.query(DataScopeConstant.dataByMapper(roleIds.size()), args.toArray(), new BeanPropertyRowMapper<>(DataScope.class));
+			if (CollectionUtil.isNotEmpty(list)) {
+				dataScope = list.iterator().next();
 			}
-		);
+			CacheUtil.put(SYS_CACHE, SCOPE_CACHE_CLASS, mapperId + StringPool.COLON + roleId, dataScope);
+		}
+		return dataScope;
 	}
 
 	/**
@@ -119,15 +119,15 @@ public class BladeDataScopeRule implements DataScopeRule {
 	 * @return DataScope
 	 */
 	private DataScope getDataScopeByCode(String code) {
-		return CacheUtil.get(SYS_CACHE, SCOPE_CACHE_CODE, code, () -> {
-				List<DataScope> list = jdbcTemplate.query(DataScopeConstant.DATA_BY_CODE, new Object[]{code}, new BeanPropertyRowMapper<>(DataScope.class));
-				if (CollectionUtil.isEmpty(list)) {
-					return null;
-				} else {
-					return list.iterator().next();
-				}
+		DataScope dataScope = CacheUtil.get(SYS_CACHE, SCOPE_CACHE_CODE, code, DataScope.class);
+		if (dataScope == null) {
+			List<DataScope> list = jdbcTemplate.query(DataScopeConstant.DATA_BY_CODE, new Object[]{code}, new BeanPropertyRowMapper<>(DataScope.class));
+			if (CollectionUtil.isNotEmpty(list)) {
+				dataScope = list.iterator().next();
 			}
-		);
+			CacheUtil.put(SYS_CACHE, SCOPE_CACHE_CODE, code, dataScope);
+		}
+		return dataScope;
 	}
 
 	/**
@@ -137,9 +137,12 @@ public class BladeDataScopeRule implements DataScopeRule {
 	 * @return deptIds
 	 */
 	private List<Long> getDeptAncestors(Long deptId) {
-		return CacheUtil.get(SYS_CACHE, DEPT_CACHE_ANCESTORS, deptId,
-			() -> jdbcTemplate.queryForList(DataScopeConstant.DATA_BY_DEPT, new Object[]{deptId}, Long.class)
-		);
+		List ancestors = CacheUtil.get(SYS_CACHE, DEPT_CACHE_ANCESTORS, deptId, List.class);
+		if (CollectionUtil.isEmpty(ancestors)) {
+			ancestors = jdbcTemplate.queryForList(DataScopeConstant.DATA_BY_DEPT, new Object[]{deptId}, Long.class);
+			CacheUtil.put(SYS_CACHE, DEPT_CACHE_ANCESTORS, deptId, ancestors);
+		}
+		return ancestors;
 	}
 
 }
