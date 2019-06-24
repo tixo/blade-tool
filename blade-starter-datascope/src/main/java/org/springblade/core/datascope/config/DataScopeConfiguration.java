@@ -18,10 +18,12 @@ package org.springblade.core.datascope.config;
 
 import lombok.AllArgsConstructor;
 import org.springblade.core.datascope.interceptor.DataScopeInterceptor;
+import org.springblade.core.datascope.props.DataScopeProperties;
 import org.springblade.core.datascope.rule.BladeDataScopeRule;
 import org.springblade.core.datascope.rule.DataScopeRule;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -33,6 +35,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
  */
 @Configuration
 @AllArgsConstructor
+@EnableConfigurationProperties(DataScopeProperties.class)
 public class DataScopeConfiguration {
 
 	private JdbcTemplate jdbcTemplate;
@@ -46,8 +49,8 @@ public class DataScopeConfiguration {
 	@Bean
 	@ConditionalOnBean(DataScopeRule.class)
 	@ConditionalOnMissingBean(DataScopeInterceptor.class)
-	public DataScopeInterceptor interceptor(DataScopeRule dataScopeRule) {
-		return new DataScopeInterceptor(dataScopeRule);
+	public DataScopeInterceptor interceptor(DataScopeRule dataScopeRule, DataScopeProperties dataScopeProperties) {
+		return new DataScopeInterceptor(dataScopeRule, dataScopeProperties);
 	}
 
 }

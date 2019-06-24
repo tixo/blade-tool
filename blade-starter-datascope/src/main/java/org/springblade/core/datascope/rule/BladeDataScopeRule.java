@@ -55,17 +55,15 @@ public class BladeDataScopeRule implements DataScopeRule {
 		String code = dataScope.getCode();
 
 		//根据mapperId从数据库中获取对应模型
-		dataScope = getDataScopeByMapper(mapperId, bladeUser.getRoleId());
+		DataScope dataScopeDb = getDataScopeByMapper(mapperId, bladeUser.getRoleId());
 
-		//判断是否需要从数据库根据资源编号获取
-		if (dataScope == null && StringUtil.isNotBlank(code)) {
-			dataScope = getDataScopeByCode(code);
+		//mapperId配置未取到则从数据库中根据资源编号获取
+		if (dataScopeDb == null && StringUtil.isNotBlank(code)) {
+			dataScopeDb = getDataScopeByCode(code);
 		}
 
-		//未从数据库找到对应数据则放行
-		if (dataScope == null) {
-			return null;
-		}
+		//未从数据库找到对应配置则采用默认
+		dataScope = (dataScopeDb != null) ? dataScopeDb : dataScope;
 
 		//判断数据权限类型并组装对应Sql
 		Integer scopeRule = Objects.requireNonNull(dataScope).getType();

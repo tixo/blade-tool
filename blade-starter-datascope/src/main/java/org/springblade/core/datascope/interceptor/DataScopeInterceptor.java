@@ -31,6 +31,7 @@ import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.reflection.SystemMetaObject;
 import org.springblade.core.datascope.annotation.DataAuth;
 import org.springblade.core.datascope.model.DataScope;
+import org.springblade.core.datascope.props.DataScopeProperties;
 import org.springblade.core.datascope.rule.DataScopeRule;
 import org.springblade.core.secure.BladeUser;
 import org.springblade.core.secure.utils.SecureUtil;
@@ -58,6 +59,7 @@ public class DataScopeInterceptor extends AbstractSqlParserHandler implements In
 	private ConcurrentMap<String, DataAuth> dataAuthMap = new ConcurrentHashMap<>(8);
 
 	private final DataScopeRule dataScopeRule;
+	private final DataScopeProperties dataScopeProperties;
 
 	@Override
 	public Object intercept(Invocation invocation) throws Throwable {
@@ -84,6 +86,13 @@ public class DataScopeInterceptor extends AbstractSqlParserHandler implements In
 		//查找注解中包含DataAuth类型的参数
 		DataAuth dataAuth = findDataAuthAnnotation(mappedStatement);
 
+		//注解为空并且数据权限方法名未匹配到,则放行
+		String mapperId = mappedStatement.getId();
+		String methodName = mapperId.substring(mapperId.lastIndexOf(StringPool.DOT) + 1);
+		if (dataAuth == null && dataScopeProperties.getMapperKey().stream().noneMatch(methodName::contains)) {
+			return invocation.proceed();
+		}
+
 		//创建数据权限模型
 		DataScope dataScope = new DataScope();
 
@@ -96,7 +105,7 @@ public class DataScopeInterceptor extends AbstractSqlParserHandler implements In
 		}
 
 		//获取数据权限规则对应的筛选Sql
-		String whereSql = dataScopeRule.whereSql(invocation, mappedStatement.getId(), dataScope, bladeUser);
+		String whereSql = dataScopeRule.whereSql(invocation, mapperId, dataScope, bladeUser);
 		if (StringUtil.isBlank(whereSql)) {
 			return invocation.proceed();
 		} else {
