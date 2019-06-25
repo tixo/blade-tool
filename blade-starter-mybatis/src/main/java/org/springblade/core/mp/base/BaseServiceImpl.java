@@ -61,7 +61,9 @@ public class BaseServiceImpl<M extends BaseMapper<T>, T extends BaseEntity> exte
 		entity.setCreateTime(now);
 		entity.setUpdateUser(user.getUserId());
 		entity.setUpdateTime(now);
-		entity.setStatus(BladeConstant.DB_STATUS_NORMAL);
+		if (entity.getStatus() == null) {
+			entity.setStatus(BladeConstant.DB_STATUS_NORMAL);
+		}
 		entity.setIsDeleted(BladeConstant.DB_NOT_DELETED);
 		return super.save(entity);
 	}
