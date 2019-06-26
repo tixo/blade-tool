@@ -18,6 +18,7 @@ package org.springblade.core.mp.support;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springblade.core.tool.utils.Func;
+import org.springblade.core.tool.utils.StringPool;
 import org.springblade.core.tool.utils.StringUtil;
 
 import java.util.Map;
@@ -28,6 +29,8 @@ import java.util.Map;
  * @author Chill
  */
 public class SqlKeyword {
+	private final static String SQL_REGEX = "'|%|--|insert|delete|update|select|count|group|union|create|drop|truncate|alter|grant|execute|exec|xp_cmdshell|call|declare|sql";
+
 	private static final String EQUAL = "_equal";
 	private static final String NOT_EQUAL = "_notequal";
 	private static final String LIKE = "_like";
@@ -92,5 +95,17 @@ public class SqlKeyword {
 		return StringUtil.humpToUnderline(StringUtil.removeSuffix(column, keyword));
 	}
 
+	/**
+	 * 把SQL关键字替换为空字符串
+	 *
+	 * @param param 关键字
+	 * @return string
+	 */
+	public static String filter(String param) {
+		if (param == null) {
+			return null;
+		}
+		return param.replaceAll("(?i)" + SQL_REGEX, StringPool.EMPTY);
+	}
 
 }

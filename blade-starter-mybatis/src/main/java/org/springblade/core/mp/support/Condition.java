@@ -39,8 +39,8 @@ public class Condition {
 	 */
 	public static <T> IPage<T> getPage(Query query) {
 		Page<T> page = new Page<>(Func.toInt(query.getCurrent(), 1), Func.toInt(query.getSize(), 10));
-		page.setAsc(Func.toStrArray(query.getAscs()));
-		page.setDesc(Func.toStrArray(query.getDescs()));
+		page.setAsc(Func.toStrArray(SqlKeyword.filter(query.getAscs())));
+		page.setDesc(Func.toStrArray(SqlKeyword.filter(query.getDescs())));
 		return page;
 	}
 
