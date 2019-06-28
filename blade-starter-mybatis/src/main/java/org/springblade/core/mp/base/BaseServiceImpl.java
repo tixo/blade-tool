@@ -54,12 +54,13 @@ public class BaseServiceImpl<M extends BaseMapper<T>, T extends BaseEntity> exte
 	@Override
 	public boolean save(T entity) {
 		BladeUser user = SecureUtil.getUser();
-		assert user != null;
+		if (user != null) {
+			entity.setCreateUser(user.getUserId());
+			entity.setCreateDept(Func.toLongList(user.getDeptId()).iterator().next());
+			entity.setUpdateUser(user.getUserId());
+		}
 		Date now = DateUtil.now();
-		entity.setCreateUser(user.getUserId());
-		entity.setCreateDept(Func.toLongList(user.getDeptId()).iterator().next());
 		entity.setCreateTime(now);
-		entity.setUpdateUser(user.getUserId());
 		entity.setUpdateTime(now);
 		if (entity.getStatus() == null) {
 			entity.setStatus(BladeConstant.DB_STATUS_NORMAL);
@@ -71,8 +72,9 @@ public class BaseServiceImpl<M extends BaseMapper<T>, T extends BaseEntity> exte
 	@Override
 	public boolean updateById(T entity) {
 		BladeUser user = SecureUtil.getUser();
-		assert user != null;
-		entity.setUpdateUser(user.getUserId());
+		if (user != null) {
+			entity.setUpdateUser(user.getUserId());
+		}
 		entity.setUpdateTime(DateUtil.now());
 		return super.updateById(entity);
 	}
@@ -80,9 +82,10 @@ public class BaseServiceImpl<M extends BaseMapper<T>, T extends BaseEntity> exte
 	@Override
 	public boolean deleteLogic(@NotEmpty List<Long> ids) {
 		BladeUser user = SecureUtil.getUser();
-		assert user != null;
 		T entity = BeanUtil.newInstance(modelClass);
-		entity.setUpdateUser(user.getUserId());
+		if (user != null) {
+			entity.setUpdateUser(user.getUserId());
+		}
 		entity.setUpdateTime(DateUtil.now());
 		return super.update(entity, Wrappers.<T>update().lambda().in(T::getId, ids)) && super.removeByIds(ids);
 	}
