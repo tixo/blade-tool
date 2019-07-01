@@ -16,7 +16,6 @@
  */
 package org.springblade.core.boot.config;
 
-import com.baomidou.mybatisplus.extension.injector.LogicSqlInjector;
 import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.PerformanceInterceptor;
 import org.mybatis.spring.annotation.MapperScan;
@@ -39,11 +38,6 @@ public class MybatisPlusConfiguration {
 	@ConditionalOnMissingBean(PaginationInterceptor.class)
 	public PaginationInterceptor paginationInterceptor() {
 		return new PaginationInterceptor();
-	}
-
-	@Bean
-	public LogicSqlInjector logicSqlInjector() {
-		return new LogicSqlInjector();
 	}
 
 	/**
