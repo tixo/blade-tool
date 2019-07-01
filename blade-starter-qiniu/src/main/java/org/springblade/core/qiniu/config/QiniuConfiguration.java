@@ -55,7 +55,7 @@ public class QiniuConfiguration {
 	}
 
 	@Bean
-	public com.qiniu.storage.Configuration qiniuConfiguration() {
+	public com.qiniu.storage.Configuration qnConfiguration() {
 		return new com.qiniu.storage.Configuration(Zone.zone0());
 	}
 
