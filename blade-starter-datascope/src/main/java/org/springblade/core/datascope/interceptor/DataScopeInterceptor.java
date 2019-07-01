@@ -88,8 +88,12 @@ public class DataScopeInterceptor extends AbstractSqlParserHandler implements In
 
 		//注解为空并且数据权限方法名未匹配到,则放行
 		String mapperId = mappedStatement.getId();
+		String className = mapperId.substring(0, mapperId.lastIndexOf(StringPool.DOT));
+		String mapperName = ClassUtil.getShortName(className);
 		String methodName = mapperId.substring(mapperId.lastIndexOf(StringPool.DOT) + 1);
-		if (dataAuth == null && dataScopeProperties.getMapperKey().stream().noneMatch(methodName::contains)) {
+		boolean mapperSkip = dataScopeProperties.getMapperKey().stream().noneMatch(methodName::contains)
+			|| dataScopeProperties.getMapperExclude().stream().anyMatch(mapperName::contains);
+		if (dataAuth == null && mapperSkip) {
 			return invocation.proceed();
 		}
 
