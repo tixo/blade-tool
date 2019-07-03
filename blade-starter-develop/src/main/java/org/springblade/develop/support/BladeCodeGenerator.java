@@ -91,7 +91,7 @@ public class BladeCodeGenerator {
 	/**
 	 * 基础业务字段
 	 */
-	private String[] superEntityColumns = {"id", "create_time", "create_user", "update_time", "update_user", "status", "is_deleted"};
+	private String[] superEntityColumns = {"id", "create_time", "create_user", "create_dept", "update_time", "update_user", "status", "is_deleted"};
 	/**
 	 * 租户字段
 	 */
