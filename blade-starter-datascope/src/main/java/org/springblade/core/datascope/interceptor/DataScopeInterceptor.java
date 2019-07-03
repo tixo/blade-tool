@@ -30,7 +30,7 @@ import org.apache.ibatis.plugin.*;
 import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.reflection.SystemMetaObject;
 import org.springblade.core.datascope.annotation.DataAuth;
-import org.springblade.core.datascope.model.DataScope;
+import org.springblade.core.datascope.model.DataScopeModel;
 import org.springblade.core.datascope.props.DataScopeProperties;
 import org.springblade.core.datascope.rule.DataScopeRule;
 import org.springblade.core.secure.BladeUser;
@@ -98,23 +98,23 @@ public class DataScopeInterceptor extends AbstractSqlParserHandler implements In
 		}
 
 		//创建数据权限模型
-		DataScope dataScope = new DataScope();
+		DataScopeModel dataScope = new DataScopeModel();
 
 		//若注解不为空,则配置注解项
 		if (dataAuth != null) {
 			dataScope.setCode(dataAuth.code());
 			dataScope.setColumn(dataAuth.column());
 			dataScope.setType(dataAuth.type().getType());
+			dataScope.setField(dataAuth.field());
 			dataScope.setValue(dataAuth.value());
 		}
 
 		//获取数据权限规则对应的筛选Sql
-		String whereSql = dataScopeRule.whereSql(invocation, mapperId, dataScope, bladeUser);
-		if (StringUtil.isBlank(whereSql)) {
+		String sqlCondition = dataScopeRule.sqlCondition(invocation, mapperId, dataScope, bladeUser, originalSql);
+		if (StringUtil.isBlank(sqlCondition)) {
 			return invocation.proceed();
 		} else {
-			String newOriginalSql = "select * from (" + originalSql + ") scope " + whereSql;
-			metaObject.setValue("delegate.boundSql.sql", newOriginalSql);
+			metaObject.setValue("delegate.boundSql.sql", sqlCondition);
 			return invocation.proceed();
 		}
 	}

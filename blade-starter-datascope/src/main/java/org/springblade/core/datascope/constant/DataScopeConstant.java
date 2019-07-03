@@ -35,7 +35,7 @@ public interface DataScopeConstant {
 	/**
 	 * 根据resourceCode获取数据权限配置
 	 */
-	String DATA_BY_CODE = "select resource_code as code, scope_column as 'column', scope_type as type, scope_value as value from blade_data_scope where resource_code = ?";
+	String DATA_BY_CODE = "select resource_code as code, scope_column as 'column', scope_field as 'field', scope_type as type, scope_value as value from blade_data_scope where resource_code = ?";
 
 	/**
 	 * 根据mapperId获取数据权限配置
@@ -44,7 +44,7 @@ public interface DataScopeConstant {
 	 * @return String
 	 */
 	static String dataByMapper(int size) {
-		return "select resource_code as code, scope_column as 'column', scope_type as type, scope_value as value from blade_data_scope where scope_class = ? and id in (select scope_id from blade_role_scope where role_id in (" + buildHolder(size) + "))";
+		return "select resource_code as code, scope_column as 'column', scope_field as 'field', scope_type as type, scope_value as value from blade_data_scope where scope_class = ? and id in (select scope_id from blade_role_scope where role_id in (" + buildHolder(size) + "))";
 	}
 
 	/**

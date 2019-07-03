@@ -48,6 +48,11 @@ public @interface DataAuth {
 	DataScopeEnum type() default DataScopeEnum.ALL;
 
 	/**
+	 * 可见字段
+	 */
+	String field() default "*";
+
+	/**
 	 * 数据权限规则值域
 	 */
 	String value() default "";

@@ -17,7 +17,7 @@
 package org.springblade.core.datascope.rule;
 
 import org.apache.ibatis.plugin.Invocation;
-import org.springblade.core.datascope.model.DataScope;
+import org.springblade.core.datascope.model.DataScopeModel;
 import org.springblade.core.secure.BladeUser;
 
 /**
@@ -30,12 +30,13 @@ public interface DataScopeRule {
 	/**
 	 * 获取过滤sql
 	 *
-	 * @param invocation 过滤器信息
-	 * @param mapperId   数据查询类
-	 * @param dataScope  数据权限类
-	 * @param bladeUser  当前用户信息
+	 * @param invocation  过滤器信息
+	 * @param mapperId    数据查询类
+	 * @param dataScope   数据权限类
+	 * @param bladeUser   当前用户信息
+	 * @param originalSql 原始Sql
 	 * @return sql
 	 */
-	String whereSql(Invocation invocation, String mapperId, DataScope dataScope, BladeUser bladeUser);
+	String sqlCondition(Invocation invocation, String mapperId, DataScopeModel dataScope, BladeUser bladeUser, String originalSql);
 
 }

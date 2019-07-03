@@ -26,7 +26,7 @@ import org.springblade.core.datascope.enums.DataScopeEnum;
  * @author Chill
  */
 @Data
-public class DataScope {
+public class DataScopeModel {
 	/**
 	 * 资源编号
 	 */
@@ -39,6 +39,10 @@ public class DataScope {
 	 * 数据权限规则
 	 */
 	private Integer type = DataScopeEnum.ALL.getType();
+	/**
+	 * 可见字段
+	 */
+	private String field;
 	/**
 	 * 数据权限规则值
 	 */
