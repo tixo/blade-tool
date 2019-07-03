@@ -44,13 +44,13 @@ public class Query {
 	private Integer size;
 
 	/**
-	 * 排序的字段名
+	 * 正排序规则
 	 */
 	@ApiModelProperty(hidden = true)
 	private String ascs;
 
 	/**
-	 * 排序方式
+	 * 倒排序规则
 	 */
 	@ApiModelProperty(hidden = true)
 	private String descs;

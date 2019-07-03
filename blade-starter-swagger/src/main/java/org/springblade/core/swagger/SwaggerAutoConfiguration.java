@@ -20,8 +20,6 @@ package org.springblade.core.swagger;
 
 
 import com.github.xiaoymin.swaggerbootstrapui.annotations.EnableSwaggerBootstrapUI;
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.google.common.collect.Lists;
@@ -30,7 +28,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-import springfox.documentation.RequestHandler;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.service.*;
@@ -65,6 +62,7 @@ public class SwaggerAutoConfiguration {
 	}
 
 	@Bean
+	@ConditionalOnMissingBean
 	public Docket api(SwaggerProperties swaggerProperties) {
 		// base-path处理
 		if (swaggerProperties.getBasePath().size() == 0) {
@@ -85,7 +83,7 @@ public class SwaggerAutoConfiguration {
 		return new Docket(DocumentationType.SWAGGER_2)
 			.host(swaggerProperties.getHost())
 			.apiInfo(apiInfo(swaggerProperties)).select()
-			.apis(basePackages(swaggerProperties.getBasePackages()))
+			.apis(SwaggerUtil.basePackages(swaggerProperties.getBasePackages()))
 			.paths(Predicates.and(Predicates.not(Predicates.or(excludePath)), Predicates.or(basePath)))
 			.build()
 			.securitySchemes(Collections.singletonList(securitySchema()))
@@ -140,27 +138,6 @@ public class SwaggerAutoConfiguration {
 			.contact(new Contact(swaggerProperties.getContact().getName(), swaggerProperties.getContact().getUrl(), swaggerProperties.getContact().getEmail()))
 			.version(swaggerProperties.getVersion())
 			.build();
-	}
-
-	public static Predicate<RequestHandler> basePackages(final List<String> basePackages) {
-		return input -> declaringClass(input).transform(handlerPackage(basePackages)).or(true);
-	}
-
-	private static Function<Class<?>, Boolean> handlerPackage(final List<String> basePackages) {
-		return input -> {
-			// 循环判断匹配
-			for (String strPackage : basePackages) {
-				boolean isMatch = input.getPackage().getName().startsWith(strPackage);
-				if (isMatch) {
-					return true;
-				}
-			}
-			return false;
-		};
-	}
-
-	private static Optional<? extends Class<?>> declaringClass(RequestHandler input) {
-		return Optional.fromNullable(input.declaringClass());
 	}
 
 	private ApiKey clientInfo() {
