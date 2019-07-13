@@ -44,7 +44,7 @@ public interface DataScopeConstant {
 	 * @return String
 	 */
 	static String dataByMapper(int size) {
-		return "select resource_code as code, scope_column as 'column', scope_field as 'field', scope_type as type, scope_value as value from blade_scope_data where scope_class = ? and id in (select scope_id from blade_role_scope where role_id in (" + buildHolder(size) + "))";
+		return "select resource_code as code, scope_column as 'column', scope_field as 'field', scope_type as type, scope_value as value from blade_scope_data where scope_class = ? and id in (select scope_id from blade_role_scope where scope_category = 1 and role_id in (" + buildHolder(size) + "))";
 	}
 
 	/**
