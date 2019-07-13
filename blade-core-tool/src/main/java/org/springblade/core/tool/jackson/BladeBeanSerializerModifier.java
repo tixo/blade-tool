@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.ser.BeanPropertyWriter;
 import com.fasterxml.jackson.databind.ser.BeanSerializerModifier;
 import org.springblade.core.tool.utils.StringPool;
+import org.springblade.core.tool.utils.StringUtil;
 
 import java.io.IOException;
 import java.time.OffsetDateTime;
@@ -74,7 +75,7 @@ public class BladeBeanSerializerModifier extends BeanSerializerModifier {
 		JsonSerializer<Object> NUMBER_JSON_SERIALIZER = new JsonSerializer<Object>() {
 			@Override
 			public void serialize(Object value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
-				gen.writeNumber(0);
+				gen.writeNumber(StringUtil.INDEX_NOT_FOUND);
 			}
 		};
 
