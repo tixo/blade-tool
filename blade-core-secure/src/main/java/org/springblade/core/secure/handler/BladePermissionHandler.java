@@ -48,11 +48,12 @@ public class BladePermissionHandler implements IPermissionHandler {
 	@Override
 	public boolean permissionAll() {
 		HttpServletRequest request = WebUtil.getRequest();
-		if (request == null) {
+		BladeUser user = SecureUtil.getUser();
+		if (request == null || user == null) {
 			return false;
 		}
 		String uri = request.getRequestURI();
-		List<String> paths = permissionCodes(StringPool.EMPTY);
+		List<String> paths = permissionCodes(StringPool.EMPTY, user.getRoleId());
 		if (paths == null || paths.size() == 0) {
 			return false;
 		}
@@ -61,7 +62,12 @@ public class BladePermissionHandler implements IPermissionHandler {
 
 	@Override
 	public boolean hasPermission(String permission) {
-		List<String> codes = permissionCodes(permission);
+		HttpServletRequest request = WebUtil.getRequest();
+		BladeUser user = SecureUtil.getUser();
+		if (request == null || user == null) {
+			return false;
+		}
+		List<String> codes = permissionCodes(permission, user.getRoleId());
 		return codes != null && codes.size() != 0;
 	}
 
@@ -71,23 +77,19 @@ public class BladePermissionHandler implements IPermissionHandler {
 	 * @param permission 权限编号
 	 * @return permissions
 	 */
-	private List<String> permissionCodes(String permission) {
-		BladeUser user = SecureUtil.getUser();
-		if (user == null) {
-			return null;
-		}
+	private List<String> permissionCodes(String permission, String roleId) {
 		String permissionPrefix = StringUtil.isBlank(permission) ? StringPool.EMPTY : permission + StringPool.COLON;
-		List<String> permissions = CacheUtil.get(SYS_CACHE, SCOPE_CACHE_CODE, permissionPrefix + user.getRoleId(), List.class);
+		List<String> permissions = CacheUtil.get(SYS_CACHE, SCOPE_CACHE_CODE, permissionPrefix + roleId, List.class);
 		if (permissions == null) {
 			List<Object> args = new ArrayList<>();
 			if (StringUtil.isNotBlank(permission)) {
 				args.add(permission);
 			}
-			List<Long> roleIds = Func.toLongList(user.getRoleId());
+			List<Long> roleIds = Func.toLongList(roleId);
 			args.addAll(roleIds);
 			String sql = StringUtil.isBlank(permission) ? PermissionConstant.permissionAllStatement(roleIds.size()) : PermissionConstant.permissionStatement(roleIds.size());
 			permissions = jdbcTemplate.queryForList(sql, args.toArray(), String.class);
-			CacheUtil.put(SYS_CACHE, SCOPE_CACHE_CODE, user.getRoleId(), permissions);
+			CacheUtil.put(SYS_CACHE, SCOPE_CACHE_CODE, permissionPrefix + roleId, permissions);
 		}
 		return permissions;
 	}
