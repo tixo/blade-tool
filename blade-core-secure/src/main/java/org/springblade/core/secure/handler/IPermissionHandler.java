@@ -14,29 +14,28 @@
  *  this software without specific prior written permission.
  *  Author: Chill 庄骞 (smallchill@163.com)
  */
-package org.springblade.core.secure.annotation;
-
-import java.lang.annotation.*;
+package org.springblade.core.secure.handler;
 
 /**
- * 权限注解 用于检查权限 规定访问权限
+ * 权限校验通用接口
  *
- * @example @PreAuth("#userVO.id<10")
- * @example @PreAuth("hasRole(#test, #test1)")
- * @example @PreAuth("hasPermission(#test) and @PreAuth.hasPermission(#test)")
  * @author Chill
  */
-@Target({ElementType.METHOD, ElementType.TYPE})
-@Retention(RetentionPolicy.RUNTIME)
-@Inherited
-@Documented
-public @interface PreAuth {
+public interface IPermissionHandler {
 
 	/**
-	 * Spring el
-	 * 文档地址：https://docs.spring.io/spring/docs/5.1.6.RELEASE/spring-framework-reference/core.html#expressions
+	 * 判断角色是否具有接口权限
+	 *
+	 * @return {boolean}
 	 */
-	String value();
+	boolean permissionAll();
+
+	/**
+	 * 判断角色是否具有接口权限
+	 *
+	 * @param permission 权限编号
+	 * @return {boolean}
+	 */
+	boolean hasPermission(String permission);
 
 }
-

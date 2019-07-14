@@ -17,10 +17,12 @@
 package org.springblade.core.secure.auth;
 
 import org.springblade.core.secure.BladeUser;
+import org.springblade.core.secure.handler.IPermissionHandler;
 import org.springblade.core.secure.utils.SecureUtil;
 import org.springblade.core.tool.constant.RoleConstant;
 import org.springblade.core.tool.utils.CollectionUtil;
 import org.springblade.core.tool.utils.Func;
+import org.springblade.core.tool.utils.SpringUtil;
 import org.springblade.core.tool.utils.StringUtil;
 
 /**
@@ -29,6 +31,34 @@ import org.springblade.core.tool.utils.StringUtil;
  * @author Chill
  */
 public class AuthFun {
+
+	/**
+	 * 权限校验处理器
+	 */
+	private static IPermissionHandler permissionHandler;
+
+	static {
+		permissionHandler = SpringUtil.getBean(IPermissionHandler.class);
+	}
+
+	/**
+	 * 判断角色是否具有接口权限
+	 *
+	 * @return {boolean}
+	 */
+	public boolean permissionAll() {
+		return permissionHandler.permissionAll();
+	}
+
+	/**
+	 * 判断角色是否具有接口权限
+	 *
+	 * @param permission 权限编号
+	 * @return {boolean}
+	 */
+	public boolean hasPermission(String permission) {
+		return permissionHandler.hasPermission(permission);
+	}
 
 	/**
 	 * 放行所有请求

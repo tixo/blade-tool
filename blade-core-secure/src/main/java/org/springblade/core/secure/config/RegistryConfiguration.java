@@ -17,6 +17,9 @@
 package org.springblade.core.secure.config;
 
 
+import lombok.AllArgsConstructor;
+import org.springblade.core.secure.handler.BladePermissionHandler;
+import org.springblade.core.secure.handler.IPermissionHandler;
 import org.springblade.core.secure.handler.ISecureHandler;
 import org.springblade.core.secure.handler.SecureHandlerHandler;
 import org.springblade.core.secure.registry.SecureRegistry;
@@ -25,6 +28,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 /**
  * secure注册默认配置
@@ -33,8 +37,11 @@ import org.springframework.core.annotation.Order;
  */
 @Order
 @Configuration
+@AllArgsConstructor
 @AutoConfigureBefore(SecureConfiguration.class)
 public class RegistryConfiguration {
+
+	private JdbcTemplate jdbcTemplate;
 
 	@Bean
 	@ConditionalOnMissingBean(SecureRegistry.class)
@@ -44,8 +51,14 @@ public class RegistryConfiguration {
 
 	@Bean
 	@ConditionalOnMissingBean(ISecureHandler.class)
-	public ISecureHandler secure() {
+	public ISecureHandler secureHandler() {
 		return new SecureHandlerHandler();
+	}
+
+	@Bean
+	@ConditionalOnMissingBean(IPermissionHandler.class)
+	public IPermissionHandler permissionHandler() {
+		return new BladePermissionHandler(jdbcTemplate);
 	}
 
 }
