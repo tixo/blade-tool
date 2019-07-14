@@ -14,42 +14,29 @@
  *  this software without specific prior written permission.
  *  Author: Chill 庄骞 (smallchill@163.com)
  */
-package org.springblade.core.datascope.rule;
+package org.springblade.core.datascope.handler;
 
+import org.apache.ibatis.plugin.Invocation;
 import org.springblade.core.datascope.model.DataScopeModel;
-
-import java.util.List;
+import org.springblade.core.secure.BladeUser;
 
 /**
- * 获取数据权限模型统一接口
+ * 数据权限规则
  *
  * @author Chill
  */
-public interface ScopeModelRule {
+public interface DataScopeHandler {
 
 	/**
-	 * 获取数据权限
+	 * 获取过滤sql
 	 *
-	 * @param mapperId 数据权限mapperId
-	 * @param roleId   用户角色集合
-	 * @return DataScopeModel
+	 * @param invocation  过滤器信息
+	 * @param mapperId    数据查询类
+	 * @param dataScope   数据权限类
+	 * @param bladeUser   当前用户信息
+	 * @param originalSql 原始Sql
+	 * @return sql
 	 */
-	DataScopeModel getDataScopeByMapper(String mapperId, String roleId);
-
-	/**
-	 * 获取数据权限
-	 *
-	 * @param code 数据权限资源编号
-	 * @return DataScopeModel
-	 */
-	DataScopeModel getDataScopeByCode(String code);
-
-	/**
-	 * 获取部门子级
-	 *
-	 * @param deptId 部门id
-	 * @return deptIds
-	 */
-	List<Long> getDeptAncestors(Long deptId);
+	String sqlCondition(Invocation invocation, String mapperId, DataScopeModel dataScope, BladeUser bladeUser, String originalSql);
 
 }

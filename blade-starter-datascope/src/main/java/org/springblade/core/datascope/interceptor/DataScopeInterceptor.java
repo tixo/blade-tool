@@ -32,7 +32,7 @@ import org.apache.ibatis.reflection.SystemMetaObject;
 import org.springblade.core.datascope.annotation.DataAuth;
 import org.springblade.core.datascope.model.DataScopeModel;
 import org.springblade.core.datascope.props.DataScopeProperties;
-import org.springblade.core.datascope.rule.DataScopeRule;
+import org.springblade.core.datascope.handler.DataScopeHandler;
 import org.springblade.core.secure.BladeUser;
 import org.springblade.core.secure.utils.SecureUtil;
 import org.springblade.core.tool.utils.ClassUtil;
@@ -58,7 +58,7 @@ public class DataScopeInterceptor extends AbstractSqlParserHandler implements In
 
 	private ConcurrentMap<String, DataAuth> dataAuthMap = new ConcurrentHashMap<>(8);
 
-	private final DataScopeRule dataScopeRule;
+	private final DataScopeHandler dataScopeHandler;
 	private final DataScopeProperties dataScopeProperties;
 
 	@Override
@@ -110,7 +110,7 @@ public class DataScopeInterceptor extends AbstractSqlParserHandler implements In
 		}
 
 		//获取数据权限规则对应的筛选Sql
-		String sqlCondition = dataScopeRule.sqlCondition(invocation, mapperId, dataScope, bladeUser, originalSql);
+		String sqlCondition = dataScopeHandler.sqlCondition(invocation, mapperId, dataScope, bladeUser, originalSql);
 		if (StringUtil.isBlank(sqlCondition)) {
 			return invocation.proceed();
 		} else {

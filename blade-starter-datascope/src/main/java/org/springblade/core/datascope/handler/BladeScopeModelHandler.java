@@ -14,7 +14,7 @@
  *  this software without specific prior written permission.
  *  Author: Chill 庄骞 (smallchill@163.com)
  */
-package org.springblade.core.datascope.rule;
+package org.springblade.core.datascope.handler;
 
 import lombok.RequiredArgsConstructor;
 import org.springblade.core.cache.utils.CacheUtil;
@@ -33,12 +33,12 @@ import java.util.List;
 import static org.springblade.core.cache.constant.CacheConstant.SYS_CACHE;
 
 /**
- * BladeScopeModelRule
+ * BladeScopeModelHandler
  *
  * @author Chill
  */
 @RequiredArgsConstructor
-public class BladeScopeModelRule implements ScopeModelRule {
+public class BladeScopeModelHandler implements ScopeModelHandler {
 
 	private static final String SCOPE_CACHE_CODE = "dataScope:code:";
 	private static final String SCOPE_CACHE_CLASS = "dataScope:class:";

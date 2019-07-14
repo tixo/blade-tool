@@ -19,19 +19,20 @@ package org.springblade.core.secure.handler;
 import lombok.AllArgsConstructor;
 import org.springblade.core.cache.utils.CacheUtil;
 import org.springblade.core.secure.BladeUser;
-import org.springblade.core.secure.constant.PermissionConstant;
 import org.springblade.core.secure.utils.SecureUtil;
 import org.springblade.core.tool.utils.Func;
 import org.springblade.core.tool.utils.StringPool;
-import org.springblade.core.tool.utils.StringUtil;
 import org.springblade.core.tool.utils.WebUtil;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static org.springblade.core.cache.constant.CacheConstant.SYS_CACHE;
+import static org.springblade.core.secure.constant.PermissionConstant.permissionAllStatement;
+import static org.springblade.core.secure.constant.PermissionConstant.permissionStatement;
 
 /**
  * 默认授权校验类
@@ -53,7 +54,7 @@ public class BladePermissionHandler implements IPermissionHandler {
 			return false;
 		}
 		String uri = request.getRequestURI();
-		List<String> paths = permissionCodes(StringPool.EMPTY, user.getRoleId());
+		List<String> paths = permissionPath(user.getRoleId());
 		if (paths == null || paths.size() == 0) {
 			return false;
 		}
@@ -67,29 +68,41 @@ public class BladePermissionHandler implements IPermissionHandler {
 		if (request == null || user == null) {
 			return false;
 		}
-		List<String> codes = permissionCodes(permission, user.getRoleId());
+		List<String> codes = permissionCode(permission, user.getRoleId());
 		return codes != null && codes.size() != 0;
+	}
+
+	/**
+	 * 获取接口权限地址
+	 *
+	 * @param roleId 角色id
+	 * @return permissions
+	 */
+	private List<String> permissionPath(String roleId) {
+		List<String> permissions = CacheUtil.get(SYS_CACHE, SCOPE_CACHE_CODE, roleId, List.class);
+		if (permissions == null) {
+			List<Long> roleIds = Func.toLongList(roleId);
+			permissions = jdbcTemplate.queryForList(permissionAllStatement(roleIds.size()), roleIds.toArray(), String.class);
+			CacheUtil.put(SYS_CACHE, SCOPE_CACHE_CODE, roleId, permissions);
+		}
+		return permissions;
 	}
 
 	/**
 	 * 获取接口权限信息
 	 *
 	 * @param permission 权限编号
+	 * @param roleId     角色id
 	 * @return permissions
 	 */
-	private List<String> permissionCodes(String permission, String roleId) {
-		String permissionPrefix = StringUtil.isBlank(permission) ? StringPool.EMPTY : permission + StringPool.COLON;
-		List<String> permissions = CacheUtil.get(SYS_CACHE, SCOPE_CACHE_CODE, permissionPrefix + roleId, List.class);
+	private List<String> permissionCode(String permission, String roleId) {
+		List<String> permissions = CacheUtil.get(SYS_CACHE, SCOPE_CACHE_CODE, permission + StringPool.COLON + roleId, List.class);
 		if (permissions == null) {
-			List<Object> args = new ArrayList<>();
-			if (StringUtil.isNotBlank(permission)) {
-				args.add(permission);
-			}
+			List<Object> args = new ArrayList<>(Collections.singletonList(permission));
 			List<Long> roleIds = Func.toLongList(roleId);
 			args.addAll(roleIds);
-			String sql = StringUtil.isBlank(permission) ? PermissionConstant.permissionAllStatement(roleIds.size()) : PermissionConstant.permissionStatement(roleIds.size());
-			permissions = jdbcTemplate.queryForList(sql, args.toArray(), String.class);
-			CacheUtil.put(SYS_CACHE, SCOPE_CACHE_CODE, permissionPrefix + roleId, permissions);
+			permissions = jdbcTemplate.queryForList(permissionStatement(roleIds.size()), args.toArray(), String.class);
+			CacheUtil.put(SYS_CACHE, SCOPE_CACHE_CODE, permission + StringPool.COLON + roleId, permissions);
 		}
 		return permissions;
 	}

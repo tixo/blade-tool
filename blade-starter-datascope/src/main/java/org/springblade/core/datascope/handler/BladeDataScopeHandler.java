@@ -14,7 +14,7 @@
  *  this software without specific prior written permission.
  *  Author: Chill 庄骞 (smallchill@163.com)
  */
-package org.springblade.core.datascope.rule;
+package org.springblade.core.datascope.handler;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.plugin.Invocation;
@@ -36,9 +36,9 @@ import java.util.Objects;
  * @author Chill
  */
 @RequiredArgsConstructor
-public class BladeDataScopeRule implements DataScopeRule {
+public class BladeDataScopeHandler implements DataScopeHandler {
 
-	private final ScopeModelRule scopeModelRule;
+	private final ScopeModelHandler scopeModelHandler;
 
 	@Override
 	public String sqlCondition(Invocation invocation, String mapperId, DataScopeModel dataScope, BladeUser bladeUser, String originalSql) {
@@ -47,11 +47,11 @@ public class BladeDataScopeRule implements DataScopeRule {
 		String code = dataScope.getCode();
 
 		//根据mapperId从数据库中获取对应模型
-		DataScopeModel dataScopeDb = scopeModelRule.getDataScopeByMapper(mapperId, bladeUser.getRoleId());
+		DataScopeModel dataScopeDb = scopeModelHandler.getDataScopeByMapper(mapperId, bladeUser.getRoleId());
 
 		//mapperId配置未取到则从数据库中根据资源编号获取
 		if (dataScopeDb == null && StringUtil.isNotBlank(code)) {
-			dataScopeDb = scopeModelRule.getDataScopeByCode(code);
+			dataScopeDb = scopeModelHandler.getDataScopeByCode(code);
 		}
 
 		//未从数据库找到对应配置则采用默认
@@ -74,7 +74,7 @@ public class BladeDataScopeRule implements DataScopeRule {
 			List<Long> deptIds = Func.toLongList(bladeUser.getDeptId());
 			ids.addAll(deptIds);
 			deptIds.forEach(deptId -> {
-				List<Long> deptIdList = scopeModelRule.getDeptAncestors(deptId);
+				List<Long> deptIdList = scopeModelHandler.getDeptAncestors(deptId);
 				ids.addAll(deptIdList);
 			});
 		}

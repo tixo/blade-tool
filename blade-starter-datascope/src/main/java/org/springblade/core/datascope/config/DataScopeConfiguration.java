@@ -19,10 +19,10 @@ package org.springblade.core.datascope.config;
 import lombok.AllArgsConstructor;
 import org.springblade.core.datascope.interceptor.DataScopeInterceptor;
 import org.springblade.core.datascope.props.DataScopeProperties;
-import org.springblade.core.datascope.rule.BladeDataScopeRule;
-import org.springblade.core.datascope.rule.BladeScopeModelRule;
-import org.springblade.core.datascope.rule.DataScopeRule;
-import org.springblade.core.datascope.rule.ScopeModelRule;
+import org.springblade.core.datascope.handler.BladeDataScopeHandler;
+import org.springblade.core.datascope.handler.BladeScopeModelHandler;
+import org.springblade.core.datascope.handler.DataScopeHandler;
+import org.springblade.core.datascope.handler.ScopeModelHandler;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -43,23 +43,23 @@ public class DataScopeConfiguration {
 	private JdbcTemplate jdbcTemplate;
 
 	@Bean
-	@ConditionalOnMissingBean(ScopeModelRule.class)
-	public ScopeModelRule scopeModelRule() {
-		return new BladeScopeModelRule(jdbcTemplate);
+	@ConditionalOnMissingBean(ScopeModelHandler.class)
+	public ScopeModelHandler scopeModelHandler() {
+		return new BladeScopeModelHandler(jdbcTemplate);
 	}
 
 	@Bean
-	@ConditionalOnBean(ScopeModelRule.class)
-	@ConditionalOnMissingBean(DataScopeRule.class)
-	public DataScopeRule dataScopeRule(ScopeModelRule scopeModelRule) {
-		return new BladeDataScopeRule(scopeModelRule);
+	@ConditionalOnBean(ScopeModelHandler.class)
+	@ConditionalOnMissingBean(DataScopeHandler.class)
+	public DataScopeHandler dataScopeHandler(ScopeModelHandler scopeModelHandler) {
+		return new BladeDataScopeHandler(scopeModelHandler);
 	}
 
 	@Bean
-	@ConditionalOnBean(DataScopeRule.class)
+	@ConditionalOnBean(DataScopeHandler.class)
 	@ConditionalOnMissingBean(DataScopeInterceptor.class)
-	public DataScopeInterceptor interceptor(DataScopeRule dataScopeRule, DataScopeProperties dataScopeProperties) {
-		return new DataScopeInterceptor(dataScopeRule, dataScopeProperties);
+	public DataScopeInterceptor interceptor(DataScopeHandler dataScopeHandler, DataScopeProperties dataScopeProperties) {
+		return new DataScopeInterceptor(dataScopeHandler, dataScopeProperties);
 	}
 
 }
