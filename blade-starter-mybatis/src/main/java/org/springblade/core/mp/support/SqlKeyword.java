@@ -35,11 +35,15 @@ public class SqlKeyword {
 	private static final String NOT_EQUAL = "_notequal";
 	private static final String LIKE = "_like";
 	private static final String NOT_LIKE = "_notlike";
+	private static final String GE = "_ge";
+	private static final String LE = "_le";
 	private static final String GT = "_gt";
 	private static final String LT = "_lt";
+	private static final String DATE_GE = "_datege";
 	private static final String DATE_GT = "_dategt";
 	private static final String DATE_EQUAL = "_dateequal";
 	private static final String DATE_LT = "_datelt";
+	private static final String DATE_LE = "_datele";
 	private static final String IS_NULL = "_null";
 	private static final String NOT_NULL = "_notnull";
 	private static final String IGNORE = "_ignore";
@@ -64,14 +68,22 @@ public class SqlKeyword {
 				qw.ne(getColumn(k, NOT_EQUAL), v);
 			} else if (k.endsWith(NOT_LIKE)) {
 				qw.notLike(getColumn(k, NOT_LIKE), v);
+			} else if (k.endsWith(GE)) {
+				qw.ge(getColumn(k, GE), v);
+			} else if (k.endsWith(LE)) {
+				qw.le(getColumn(k, LE), v);
 			} else if (k.endsWith(GT)) {
 				qw.gt(getColumn(k, GT), v);
 			} else if (k.endsWith(LT)) {
 				qw.lt(getColumn(k, LT), v);
+			}  else if (k.endsWith(DATE_GE)) {
+				qw.ge(getColumn(k, DATE_GE), v);
 			} else if (k.endsWith(DATE_GT)) {
 				qw.gt(getColumn(k, DATE_GT), v);
 			} else if (k.endsWith(DATE_EQUAL)) {
 				qw.eq(getColumn(k, DATE_EQUAL), v);
+			} else if (k.endsWith(DATE_LE)) {
+				qw.le(getColumn(k, DATE_LE), v);
 			} else if (k.endsWith(DATE_LT)) {
 				qw.lt(getColumn(k, DATE_LT), v);
 			} else if (k.endsWith(IS_NULL)) {
