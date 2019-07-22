@@ -22,6 +22,7 @@ import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import springfox.documentation.RequestHandler;
+import springfox.documentation.service.ApiKey;
 
 import java.util.List;
 
@@ -56,6 +57,15 @@ public class SwaggerUtil {
 
 	private static Optional<? extends Class<?>> declaringClass(RequestHandler input) {
 		return Optional.fromNullable(input.declaringClass());
+	}
+
+
+	public static ApiKey clientInfo() {
+		return new ApiKey("ClientInfo", "Authorization", "header");
+	}
+
+	public static ApiKey bladeAuth() {
+		return new ApiKey("BladeAuth", "Blade-Auth", "header");
 	}
 
 }

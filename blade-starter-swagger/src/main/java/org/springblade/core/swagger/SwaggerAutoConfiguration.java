@@ -88,7 +88,7 @@ public class SwaggerAutoConfiguration {
 			.build()
 			.securitySchemes(Collections.singletonList(securitySchema()))
 			.securityContexts(Collections.singletonList(securityContext()))
-			.securityContexts(Lists.newArrayList(securityContext())).securitySchemes(Lists.<SecurityScheme>newArrayList(clientInfo(), bladeAuth()))
+			.securityContexts(Lists.newArrayList(securityContext())).securitySchemes(Lists.<SecurityScheme>newArrayList(SwaggerUtil.clientInfo(), SwaggerUtil.bladeAuth()))
 			.pathMapping("/");
 	}
 
@@ -138,14 +138,6 @@ public class SwaggerAutoConfiguration {
 			.contact(new Contact(swaggerProperties.getContact().getName(), swaggerProperties.getContact().getUrl(), swaggerProperties.getContact().getEmail()))
 			.version(swaggerProperties.getVersion())
 			.build();
-	}
-
-	private ApiKey clientInfo() {
-		return new ApiKey("ClientInfo", "Authorization", "header");
-	}
-
-	private ApiKey bladeAuth() {
-		return new ApiKey("BladeAuth", "Blade-Auth", "header");
 	}
 
 }
