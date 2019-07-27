@@ -30,22 +30,22 @@ public class DataScopeModel {
 	/**
 	 * 资源编号
 	 */
-	private String code;
+	private String resourceCode;
 	/**
 	 * 数据权限字段
 	 */
-	private String column = DataScopeConstant.DEFAULT_COLUMN;
+	private String scopeColumn = DataScopeConstant.DEFAULT_COLUMN;
 	/**
 	 * 数据权限规则
 	 */
-	private Integer type = DataScopeEnum.ALL.getType();
+	private Integer scopeType = DataScopeEnum.ALL.getType();
 	/**
 	 * 可见字段
 	 */
-	private String field;
+	private String scopeField;
 	/**
 	 * 数据权限规则值
 	 */
-	private String value;
+	private String scopeValue;
 
 }

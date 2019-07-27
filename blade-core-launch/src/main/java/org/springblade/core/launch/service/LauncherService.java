@@ -43,7 +43,7 @@ public interface LauncherService extends Ordered, Comparable<LauncherService> {
 	 */
 	@Override
 	default int getOrder() {
-		return Ordered.HIGHEST_PRECEDENCE;
+		return 0;
 	}
 
 	/**

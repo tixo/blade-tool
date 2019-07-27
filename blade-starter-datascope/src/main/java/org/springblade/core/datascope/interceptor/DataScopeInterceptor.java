@@ -102,11 +102,11 @@ public class DataScopeInterceptor extends AbstractSqlParserHandler implements In
 
 		//若注解不为空,则配置注解项
 		if (dataAuth != null) {
-			dataScope.setCode(dataAuth.code());
-			dataScope.setColumn(dataAuth.column());
-			dataScope.setType(dataAuth.type().getType());
-			dataScope.setField(dataAuth.field());
-			dataScope.setValue(dataAuth.value());
+			dataScope.setResourceCode(dataAuth.code());
+			dataScope.setScopeColumn(dataAuth.column());
+			dataScope.setScopeType(dataAuth.type().getType());
+			dataScope.setScopeField(dataAuth.field());
+			dataScope.setScopeValue(dataAuth.value());
 		}
 
 		//获取数据权限规则对应的筛选Sql

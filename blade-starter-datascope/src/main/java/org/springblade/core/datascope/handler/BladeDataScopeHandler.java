@@ -44,7 +44,7 @@ public class BladeDataScopeHandler implements DataScopeHandler {
 	public String sqlCondition(Invocation invocation, String mapperId, DataScopeModel dataScope, BladeUser bladeUser, String originalSql) {
 
 		//数据权限资源编号
-		String code = dataScope.getCode();
+		String code = dataScope.getResourceCode();
 
 		//根据mapperId从数据库中获取对应模型
 		DataScopeModel dataScopeDb = scopeModelHandler.getDataScopeByMapper(mapperId, bladeUser.getRoleId());
@@ -58,14 +58,14 @@ public class BladeDataScopeHandler implements DataScopeHandler {
 		dataScope = (dataScopeDb != null) ? dataScopeDb : dataScope;
 
 		//判断数据权限类型并组装对应Sql
-		Integer scopeRule = Objects.requireNonNull(dataScope).getType();
+		Integer scopeRule = Objects.requireNonNull(dataScope).getScopeType();
 		DataScopeEnum scopeTypeEnum = DataScopeEnum.of(scopeRule);
 		List<Long> ids = new ArrayList<>();
 		String whereSql = "where scope.{} in ({})";
 		if (DataScopeEnum.ALL == scopeTypeEnum) {
 			return null;
 		} else if (DataScopeEnum.CUSTOM == scopeTypeEnum) {
-			whereSql = PlaceholderUtil.getDefaultResolver().resolveByMap(dataScope.getValue(), BeanUtil.toMap(bladeUser));
+			whereSql = PlaceholderUtil.getDefaultResolver().resolveByMap(dataScope.getScopeValue(), BeanUtil.toMap(bladeUser));
 		} else if (DataScopeEnum.OWN == scopeTypeEnum) {
 			ids.add(bladeUser.getUserId());
 		} else if (DataScopeEnum.OWN_DEPT == scopeTypeEnum) {
@@ -78,7 +78,7 @@ public class BladeDataScopeHandler implements DataScopeHandler {
 				ids.addAll(deptIdList);
 			});
 		}
-		return StringUtil.format(" select {} from ({}) scope " + whereSql, Func.toStr(dataScope.getField(), "*"), originalSql, dataScope.getColumn(), StringUtil.join(ids));
+		return StringUtil.format(" select {} from ({}) scope " + whereSql, Func.toStr(dataScope.getScopeField(), "*"), originalSql, dataScope.getScopeColumn(), StringUtil.join(ids));
 	}
 
 }
