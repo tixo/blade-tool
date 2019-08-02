@@ -17,15 +17,15 @@
 
 package org.springblade.core.log.config;
 
-import lombok.AllArgsConstructor;
-import org.springblade.core.log.aspect.ApiLogAspect;
-import org.springblade.core.log.event.ApiLogListener;
-import org.springblade.core.log.event.UsualLogListener;
-import org.springblade.core.log.event.ErrorLogListener;
-import org.springblade.core.log.logger.BladeLogger;
 import org.springblade.core.launch.props.BladeProperties;
 import org.springblade.core.launch.server.ServerInfo;
+import org.springblade.core.log.aspect.ApiLogAspect;
+import org.springblade.core.log.event.ApiLogListener;
+import org.springblade.core.log.event.ErrorLogListener;
+import org.springblade.core.log.event.UsualLogListener;
 import org.springblade.core.log.feign.ILogClient;
+import org.springblade.core.log.logger.BladeLogger;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -36,13 +36,8 @@ import org.springframework.context.annotation.Configuration;
  * @author Chill
  */
 @Configuration
-@AllArgsConstructor
 @ConditionalOnWebApplication
 public class BladeLogToolAutoConfiguration {
-
-	private final ILogClient logService;
-	private final ServerInfo serverInfo;
-	private final BladeProperties bladeProperties;
 
 	@Bean
 	public ApiLogAspect apiLogAspect() {
@@ -55,17 +50,20 @@ public class BladeLogToolAutoConfiguration {
 	}
 
 	@Bean
-	public ApiLogListener apiLogListener() {
+	@ConditionalOnMissingBean(name = "apiLogListener")
+	public ApiLogListener apiLogListener(ILogClient logService, ServerInfo serverInfo, BladeProperties bladeProperties) {
 		return new ApiLogListener(logService, serverInfo, bladeProperties);
 	}
 
 	@Bean
-	public ErrorLogListener errorEventListener() {
+	@ConditionalOnMissingBean(name = "errorEventListener")
+	public ErrorLogListener errorEventListener(ILogClient logService, ServerInfo serverInfo, BladeProperties bladeProperties) {
 		return new ErrorLogListener(logService, serverInfo, bladeProperties);
 	}
 
 	@Bean
-	public UsualLogListener bladeEventListener() {
+	@ConditionalOnMissingBean(name = "usualEventListener")
+	public UsualLogListener usualEventListener(ILogClient logService, ServerInfo serverInfo, BladeProperties bladeProperties) {
 		return new UsualLogListener(logService, serverInfo, bladeProperties);
 	}
 

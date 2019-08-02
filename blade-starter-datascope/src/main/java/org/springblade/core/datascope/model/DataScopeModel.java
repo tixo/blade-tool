@@ -20,13 +20,18 @@ import lombok.Data;
 import org.springblade.core.datascope.constant.DataScopeConstant;
 import org.springblade.core.datascope.enums.DataScopeEnum;
 
+import java.io.Serializable;
+
 /**
  * 数据权限实体类
  *
  * @author Chill
  */
 @Data
-public class DataScopeModel {
+public class DataScopeModel implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * 资源编号
 	 */
