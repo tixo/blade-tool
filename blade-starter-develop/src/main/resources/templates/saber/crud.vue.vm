@@ -7,6 +7,7 @@
                :permission="permissionList"
                :before-open="beforeOpen"
                v-model="form"
+               ref="crud"
                @row-update="rowUpdate"
                @row-save="rowSave"
                @row-del="rowDel"
@@ -175,6 +176,10 @@
       selectionChange(list) {
         this.selectionList = list;
       },
+      selectionClear() {
+        this.selectionList = [];
+        this.$refs.crud.toggleSelection();
+      },
       currentChange(currentPage){
         this.page.currentPage = currentPage;
       },
@@ -188,6 +193,7 @@
           this.page.total = data.total;
           this.data = data.records;
           this.loading = false;
+          this.selectionClear();
         });
       }
     }
