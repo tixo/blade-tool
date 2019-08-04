@@ -55,8 +55,9 @@ public class QiniuConfiguration {
 	}
 
 	@Bean
+	@ConditionalOnMissingBean(com.qiniu.storage.Configuration.class)
 	public com.qiniu.storage.Configuration qnConfiguration() {
-		return new com.qiniu.storage.Configuration(Zone.zone0());
+		return new com.qiniu.storage.Configuration(Zone.autoZone());
 	}
 
 	@Bean

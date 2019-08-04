@@ -55,14 +55,14 @@ public class QiniuTemplate implements OssTemplate {
 	@SneakyThrows
 	public void makeBucket(String bucketName) {
 		if (!CollectionUtil.contains(bucketManager.buckets(), getBucketName(bucketName))) {
-			bucketManager.createBucket(getBucketName(bucketName), Zone.zone0().getRegion());
+			bucketManager.createBucket(getBucketName(bucketName), Zone.autoZone().getRegion());
 		}
 	}
 
 	@Override
 	@SneakyThrows
 	public void removeBucket(String bucketName) {
-		bucketManager.deleteBucket(getBucketName(bucketName));
+
 	}
 
 	@Override
