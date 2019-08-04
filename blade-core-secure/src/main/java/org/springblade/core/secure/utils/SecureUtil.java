@@ -309,6 +309,11 @@ public class SecureUtil {
 				auth = auth.substring(7);
 				return SecureUtil.parseJWT(auth);
 			}
+		} else {
+			String parameter = request.getParameter(SecureUtil.HEADER);
+			if (StringUtil.isNotBlank(parameter)) {
+				return SecureUtil.parseJWT(parameter);
+			}
 		}
 		return null;
 	}
