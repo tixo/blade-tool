@@ -18,9 +18,7 @@ package org.springblade.core.launch;
 
 import org.springblade.core.launch.constant.AppConstant;
 import org.springblade.core.launch.constant.NacosConstant;
-import org.springblade.core.launch.constant.SentinelConstant;
 import org.springblade.core.launch.service.LauncherService;
-import org.springblade.core.launch.utils.PropsUtil;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.*;
@@ -97,12 +95,8 @@ public class BladeApplication {
 		props.setProperty("blade.dev-mode", profile.equals(AppConstant.PROD_CODE) ? "false" : "true");
 		props.setProperty("blade.service.version", AppConstant.APPLICATION_VERSION);
 		props.setProperty("spring.main.allow-bean-definition-overriding", "true");
-		props.setProperty("spring.cloud.sentinel.transport.dashboard", SentinelConstant.SENTINEL_ADDR);
 		props.setProperty("spring.cloud.nacos.config.prefix", NacosConstant.NACOS_CONFIG_PREFIX);
 		props.setProperty("spring.cloud.nacos.config.file-extension", NacosConstant.NACOS_CONFIG_FORMAT);
-		// 设置Nacos默认地址，存在则跳过
-		PropsUtil.setProperty(props, "spring.cloud.nacos.discovery.server-addr", NacosConstant.NACOS_ADDR);
-		PropsUtil.setProperty(props, "spring.cloud.nacos.config.server-addr", NacosConstant.NACOS_ADDR);
 		// 加载自定义组件
 		List<LauncherService> launcherList = new ArrayList<>();
 		ServiceLoader.load(LauncherService.class).forEach(launcherList::add);
