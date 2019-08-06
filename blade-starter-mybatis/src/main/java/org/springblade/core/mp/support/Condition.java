@@ -64,6 +64,7 @@ public class Condition {
 	 * @return
 	 */
 	public static <T> QueryWrapper<T> getQueryWrapper(Map<String, Object> query, Class<T> clazz) {
+		query.remove("Blade-Auth");
 		query.remove("current");
 		query.remove("size");
 		QueryWrapper<T> qw = new QueryWrapper<>();
