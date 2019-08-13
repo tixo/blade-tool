@@ -20,6 +20,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springblade.core.jwt.JwtUtil;
 import lombok.SneakyThrows;
 import org.springblade.core.launch.constant.TokenConstant;
 import org.springblade.core.secure.BladeUser;
@@ -56,7 +57,6 @@ public class SecureUtil {
 	private final static String TENANT_ID = TokenConstant.TENANT_ID;
 	private final static String CLIENT_ID = TokenConstant.CLIENT_ID;
 	private final static Integer AUTH_LENGTH = TokenConstant.AUTH_LENGTH;
-	private static String BASE64_SECURITY = Base64.getEncoder().encodeToString(TokenConstant.SIGN_KEY.getBytes(Charsets.UTF_8));
 
 	private static IClientDetailsService clientDetailsService;
 
@@ -121,6 +121,7 @@ public class SecureUtil {
 
 	/**
 	 * 是否为超管
+	 *
 	 * @return boolean
 	 */
 	public static boolean isAdministrator() {
@@ -303,11 +304,10 @@ public class SecureUtil {
 	 */
 	public static Claims getClaims(HttpServletRequest request) {
 		String auth = request.getHeader(SecureUtil.HEADER);
-		if ((auth != null) && (auth.length() > AUTH_LENGTH)) {
-			String headStr = auth.substring(0, 6).toLowerCase();
-			if (headStr.compareTo(SecureUtil.BEARER) == 0) {
-				auth = auth.substring(7);
-				return SecureUtil.parseJWT(auth);
+		if (StringUtil.isNotBlank(auth)) {
+			String token = JwtUtil.getToken(auth);
+			if (StringUtil.isNotBlank(token)) {
+				return SecureUtil.parseJWT(token);
 			}
 		} else {
 			String parameter = request.getParameter(SecureUtil.HEADER);
@@ -344,13 +344,7 @@ public class SecureUtil {
 	 * @return Claims
 	 */
 	public static Claims parseJWT(String jsonWebToken) {
-		try {
-			return Jwts.parser()
-				.setSigningKey(Base64.getDecoder().decode(BASE64_SECURITY))
-				.parseClaimsJws(jsonWebToken).getBody();
-		} catch (Exception ex) {
-			return null;
-		}
+		return JwtUtil.parseJWT(jsonWebToken);
 	}
 
 	/**
@@ -383,7 +377,7 @@ public class SecureUtil {
 		Date now = new Date(nowMillis);
 
 		//生成签名密钥
-		byte[] apiKeySecretBytes = Base64.getDecoder().decode(BASE64_SECURITY);
+		byte[] apiKeySecretBytes = Base64.getDecoder().decode(JwtUtil.BASE64_SECURITY);
 		Key signingKey = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
 
 		//添加构成JWT的类

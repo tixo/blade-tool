@@ -18,6 +18,7 @@ package org.springblade.core.tool.config;
 
 
 import org.springblade.core.tool.support.xss.XssProperties;
+import org.springblade.core.tool.support.xss.XssUrlProperties;
 import org.springblade.core.tool.utils.SpringUtil;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -29,7 +30,7 @@ import org.springframework.context.annotation.Configuration;
  * @author Chill
  */
 @Configuration
-@EnableConfigurationProperties(XssProperties.class)
+@EnableConfigurationProperties({XssProperties.class, XssUrlProperties.class})
 public class ToolConfiguration {
 
 	/**

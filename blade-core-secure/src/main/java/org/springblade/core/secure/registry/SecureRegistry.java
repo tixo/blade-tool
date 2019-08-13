@@ -30,7 +30,7 @@ import java.util.List;
 @Data
 public class SecureRegistry {
 
-	private boolean enable = true;
+	private boolean enable = false;
 
 	private final List<String> defaultExcludePatterns = new ArrayList<>();
 

@@ -59,6 +59,7 @@
         <module>blade-starter-minio</module>
         <module>blade-starter-qiniu</module>
         <module>blade-starter-datascope</module>
+        <module>blade-starter-jwt</module>
     </modules>
 
     <dependencyManagement>

@@ -16,12 +16,6 @@
     <packaging>jar</packaging>
 
     <dependencies>
-        <!-- JWT -->
-        <dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt</artifactId>
-            <version>0.9.1</version>
-        </dependency>
         <!--Blade-->
         <dependency>
             <groupId>org.springblade</groupId>
@@ -31,6 +25,11 @@
         <dependency>
             <groupId>org.springblade</groupId>
             <artifactId>blade-starter-cache</artifactId>
+            <version>${bladex.tool.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springblade</groupId>
+            <artifactId>blade-starter-jwt</artifactId>
             <version>${bladex.tool.version}</version>
         </dependency>
         <!--Jdbc-->

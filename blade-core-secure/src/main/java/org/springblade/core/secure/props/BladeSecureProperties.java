@@ -23,14 +23,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * secure放行额外配置
+ * 客户端校验配置
  *
  * @author Chill
  */
 @Data
-@ConfigurationProperties("blade.secure.url")
+@ConfigurationProperties("blade.secure")
 public class BladeSecureProperties {
 
-	private final List<String> excludePatterns = new ArrayList<>();
+	private final List<ClientSecure> client = new ArrayList<>();
+
+	private final List<String> skipUrl = new ArrayList<>();
 
 }

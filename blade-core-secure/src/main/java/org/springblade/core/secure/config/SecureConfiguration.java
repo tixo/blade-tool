@@ -20,8 +20,8 @@ package org.springblade.core.secure.config;
 import lombok.AllArgsConstructor;
 import org.springblade.core.secure.aspect.AuthAspect;
 import org.springblade.core.secure.handler.ISecureHandler;
-import org.springblade.core.secure.props.BladeClientProperties;
 import org.springblade.core.secure.props.BladeSecureProperties;
+import org.springblade.core.secure.props.BladeSecureUrlProperties;
 import org.springblade.core.secure.provider.ClientDetailsServiceImpl;
 import org.springblade.core.secure.provider.IClientDetailsService;
 import org.springblade.core.secure.registry.SecureRegistry;
@@ -42,14 +42,14 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Order
 @Configuration
 @AllArgsConstructor
-@EnableConfigurationProperties({BladeSecureProperties.class, BladeClientProperties.class})
+@EnableConfigurationProperties({BladeSecureUrlProperties.class, BladeSecureProperties.class})
 public class SecureConfiguration implements WebMvcConfigurer {
 
 	private final SecureRegistry secureRegistry;
 
-	private final BladeSecureProperties secureProperties;
+	private final BladeSecureUrlProperties secureUrlProperties;
 
-	private final BladeClientProperties clientProperties;
+	private final BladeSecureProperties secureProperties;
 
 	private final JdbcTemplate jdbcTemplate;
 
@@ -57,7 +57,7 @@ public class SecureConfiguration implements WebMvcConfigurer {
 
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
-		clientProperties.getClient().forEach(
+		secureProperties.getClient().forEach(
 			cs -> registry.addInterceptor(secureHandler.clientInterceptor(cs.getClientId()))
 				.addPathPatterns(cs.getPathPatterns())
 		);
@@ -66,7 +66,8 @@ public class SecureConfiguration implements WebMvcConfigurer {
 			registry.addInterceptor(secureHandler.tokenInterceptor())
 				.excludePathPatterns(secureRegistry.getExcludePatterns())
 				.excludePathPatterns(secureRegistry.getDefaultExcludePatterns())
-				.excludePathPatterns(secureProperties.getExcludePatterns());
+				.excludePathPatterns(secureUrlProperties.getExcludePatterns())
+				.excludePathPatterns(secureProperties.getSkipUrl());
 		}
 	}
 

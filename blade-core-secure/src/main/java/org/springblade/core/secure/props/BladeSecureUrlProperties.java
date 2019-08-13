@@ -14,7 +14,7 @@
  *  this software without specific prior written permission.
  *  Author: Chill 庄骞 (smallchill@163.com)
  */
-package org.springblade.core.tool.support.xss;
+package org.springblade.core.secure.props;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -23,14 +23,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Xss配置类
+ * secure放行额外配置
  *
  * @author Chill
  */
 @Data
-@ConfigurationProperties("blade.xss")
-public class XssProperties {
+@ConfigurationProperties("blade.secure.url")
+public class BladeSecureUrlProperties {
 
-	private final List<String> skipUrl = new ArrayList<>();
+	private final List<String> excludePatterns = new ArrayList<>();
 
 }
