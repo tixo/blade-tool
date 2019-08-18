@@ -60,8 +60,11 @@ public class SecureUtil {
 
 	private static IClientDetailsService clientDetailsService;
 
-	static {
-		clientDetailsService = SpringUtil.getBean(IClientDetailsService.class);
+	private static IClientDetailsService getClientDetailsService() {
+		if (clientDetailsService == null) {
+			clientDetailsService = SpringUtil.getBean(IClientDetailsService.class);
+		}
+		return clientDetailsService;
 	}
 
 	/**
@@ -473,7 +476,7 @@ public class SecureUtil {
 	 * @return clientDetails
 	 */
 	private static IClientDetails clientDetails(String clientId) {
-		return clientDetailsService.loadClientByClientId(clientId);
+		return getClientDetailsService().loadClientByClientId(clientId);
 	}
 
 	/**
