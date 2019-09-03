@@ -47,9 +47,9 @@ public class BladeBeanSerializerModifier extends BeanSerializerModifier {
 			} else if (type.isTypeOrSubTypeOf(Boolean.class)) {
 				writer.assignNullSerializer(NullJsonSerializers.BOOLEAN_JSON_SERIALIZER);
 			} else if (type.isTypeOrSubTypeOf(Character.class)) {
-				writer.assignNullSerializer(NullJsonSerializers.STRING_JSON_SERIALIZER);
+				writer.assignNullSerializer(NullJsonSerializers.DEFAULT_NULL_SERIALIZER);
 			} else if (type.isTypeOrSubTypeOf(String.class)) {
-				writer.assignNullSerializer(NullJsonSerializers.STRING_JSON_SERIALIZER);
+				writer.assignNullSerializer(NullJsonSerializers.DEFAULT_NULL_SERIALIZER);
 			} else if (type.isArrayType() || clazz.isArray() || type.isTypeOrSubTypeOf(Collection.class)) {
 				writer.assignNullSerializer(NullJsonSerializers.ARRAY_JSON_SERIALIZER);
 			} else if (type.isTypeOrSubTypeOf(OffsetDateTime.class)) {
@@ -64,6 +64,12 @@ public class BladeBeanSerializerModifier extends BeanSerializerModifier {
 	}
 
 	public interface NullJsonSerializers {
+		JsonSerializer<Object> DEFAULT_NULL_SERIALIZER = new JsonSerializer<Object>() {
+			@Override
+			public void serialize(Object value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
+				serializers.defaultSerializeNull(gen);
+			}
+		};
 
 		JsonSerializer<Object> STRING_JSON_SERIALIZER = new JsonSerializer<Object>() {
 			@Override

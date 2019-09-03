@@ -19,7 +19,7 @@
     <appender name="INFO" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- 日志文件输出的文件名 -->
-            <FileNamePattern>target/blade/log/info-%d{yyyy-MM-dd}.log</FileNamePattern>
+            <FileNamePattern>logs/info-%d{yyyy-MM-dd}.log</FileNamePattern>
             <!-- 日志文件保留天数 -->
             <MaxHistory>365</MaxHistory>
         </rollingPolicy>
@@ -42,7 +42,7 @@
     <appender name="ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- 日志文件输出的文件名 -->
-            <FileNamePattern>target/blade/log/error-%d{yyyy-MM-dd}.log</FileNamePattern>
+            <FileNamePattern>logs/error-%d{yyyy-MM-dd}.log</FileNamePattern>
             <!-- 日志文件保留天数 -->
             <MaxHistory>365</MaxHistory>
         </rollingPolicy>
