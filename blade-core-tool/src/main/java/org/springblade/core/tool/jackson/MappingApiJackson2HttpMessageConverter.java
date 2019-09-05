@@ -1,5 +1,6 @@
 package org.springblade.core.tool.jackson;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.MediaType;
@@ -7,6 +8,8 @@ import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.lang.Nullable;
 
 import java.io.IOException;
+
+import static org.springblade.core.tool.jackson.BladeBeanSerializerModifier.NullJsonSerializers.STRING_JSON_SERIALIZER;
 
 /**
  * 针对 api 服务对 android 和 ios 和 web 处理的 分读写的 jackson 处理
@@ -42,11 +45,12 @@ public class MappingApiJackson2HttpMessageConverter extends AbstractReadWriteJac
 	}
 
 	private static ObjectMapper initWriteObjectMapper(ObjectMapper readObjectMapper) {
+		readObjectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
 		// 拷贝 readObjectMapper
 		ObjectMapper writeObjectMapper = readObjectMapper.copy();
 		// null 处理
 		writeObjectMapper.setSerializerFactory(writeObjectMapper.getSerializerFactory().withSerializerModifier(new BladeBeanSerializerModifier()));
-		writeObjectMapper.getSerializerProvider().setNullValueSerializer(BladeBeanSerializerModifier.NullJsonSerializers.DEFAULT_NULL_SERIALIZER);
+		writeObjectMapper.getSerializerProvider().setNullValueSerializer(STRING_JSON_SERIALIZER);
 		return writeObjectMapper;
 	}
 
