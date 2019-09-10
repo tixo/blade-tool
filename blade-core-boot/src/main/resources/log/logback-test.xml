@@ -7,6 +7,8 @@
     <conversionRule conversionWord="wEx" converterClass="org.springframework.boot.logging.logback.ExtendedWhitespaceThrowableProxyConverter" />
     <!-- 彩色日志格式 -->
     <property name="CONSOLE_LOG_PATTERN" value="${CONSOLE_LOG_PATTERN:-%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}" />
+    <springProperty scope="context" name="appname" source="logback.appname"/>
+    <springProperty scope="context" name="logdir" source="logback.logdir"/>
     <!-- 控制台输出 -->
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
@@ -19,16 +21,16 @@
     <appender name="INFO" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- 日志文件输出的文件名 -->
-            <FileNamePattern>logs/info-%d{yyyy-MM-dd}.log</FileNamePattern>
+            <FileNamePattern>${logdir}/${appname}-info-%d{yyyy-MM-dd}.log</FileNamePattern>
             <!-- 日志文件保留天数 -->
-            <MaxHistory>365</MaxHistory>
+            <MaxHistory>90</MaxHistory>
         </rollingPolicy>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <pattern>%n%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread]  [%logger{50}] %n%-5level: %msg%n</pattern>
         </encoder>
         <!-- 日志文件最大的大小 -->
         <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
-            <MaxFileSize>500MB</MaxFileSize>
+            <MaxFileSize>200MB</MaxFileSize>
         </triggeringPolicy>
         <!-- 打印日志级别 -->
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
@@ -42,16 +44,17 @@
     <appender name="ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- 日志文件输出的文件名 -->
-            <FileNamePattern>logs/error-%d{yyyy-MM-dd}.log</FileNamePattern>
+            <FileNamePattern>${logdir}/${appname}-error-%d{yyyy-MM-dd}.log
+            </FileNamePattern>            <!-- 日志文件保留天数 -->
             <!-- 日志文件保留天数 -->
-            <MaxHistory>365</MaxHistory>
+            <MaxHistory>90</MaxHistory>
         </rollingPolicy>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <pattern>%n%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread]  [%logger{50}] %n%-5level: %msg%n</pattern>
         </encoder>
         <!-- 日志文件最大的大小 -->
         <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
-            <MaxFileSize>500MB</MaxFileSize>
+            <MaxFileSize>200MB</MaxFileSize>
         </triggeringPolicy>
         <!-- 打印日志级别 -->
         <filter class="ch.qos.logback.classic.filter.LevelFilter">

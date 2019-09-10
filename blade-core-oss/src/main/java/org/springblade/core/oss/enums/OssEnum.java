@@ -37,6 +37,18 @@ public enum OssEnum {
 	 * qiniu
 	 */
 	QINIU("qiniu", 2),
+	/**
+	 * Aliyun
+	 */
+	Aliyun("aliyun", 3),
+	/**
+	 * 腾讯云
+	 */
+	Tencent("tengcent", 4),
+	/**
+	 * aws
+	 */
+	AWS("aws", 5)
 	;
 
 	final String name;

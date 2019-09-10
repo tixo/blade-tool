@@ -60,6 +60,7 @@
         <module>blade-starter-qiniu</module>
         <module>blade-starter-datascope</module>
         <module>blade-starter-jwt</module>
+        <module>blade-starter-aliyun</module>
     </modules>
 
     <dependencyManagement>
