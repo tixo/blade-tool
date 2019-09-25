@@ -371,6 +371,7 @@ public class JsonUtil {
 			super.getDeserializationConfig().withoutFeatures(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 			//日期格式化
 			super.registerModule(new BladeJavaTimeModule());
+			super.registerModule(new BigNumberModule());
 			super.findAndRegisterModules();
 		}
 

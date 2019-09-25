@@ -20,6 +20,7 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import org.springblade.core.tool.jackson.BigNumberModule;
 import org.springblade.core.tool.jackson.BladeJavaTimeModule;
 import org.springblade.core.tool.utils.DateUtil;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
@@ -72,6 +73,8 @@ public class JacksonConfiguration {
 		objectMapper.getDeserializationConfig().withoutFeatures(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 		//日期格式化
 		objectMapper.registerModule(new BladeJavaTimeModule());
+
+		objectMapper.registerModule(new BigNumberModule());
 		objectMapper.findAndRegisterModules();
 		return objectMapper;
 	}
