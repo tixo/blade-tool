@@ -9,8 +9,6 @@ import org.springframework.lang.Nullable;
 
 import java.io.IOException;
 
-import static org.springblade.core.tool.jackson.BladeBeanSerializerModifier.NullJsonSerializers.STRING_JSON_SERIALIZER;
-
 /**
  * 针对 api 服务对 android 和 ios 和 web 处理的 分读写的 jackson 处理
  *
@@ -49,8 +47,9 @@ public class MappingApiJackson2HttpMessageConverter extends AbstractReadWriteJac
 		// 拷贝 readObjectMapper
 		ObjectMapper writeObjectMapper = readObjectMapper.copy();
 		// null 处理
-		writeObjectMapper.setSerializerFactory(writeObjectMapper.getSerializerFactory().withSerializerModifier(new BladeBeanSerializerModifier()));
-		writeObjectMapper.getSerializerProvider().setNullValueSerializer(STRING_JSON_SERIALIZER);
+		//去掉null处理
+//		writeObjectMapper.setSerializerFactory(writeObjectMapper.getSerializerFactory().withSerializerModifier(new BladeBeanSerializerModifier()));
+//		writeObjectMapper.getSerializerProvider().setNullValueSerializer(STRING_JSON_SERIALIZER);
 		return writeObjectMapper;
 	}
 
