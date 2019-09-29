@@ -20,8 +20,9 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import org.springblade.core.jwt.JwtUtil;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
+import org.springblade.core.jwt.JwtUtil;
 import org.springblade.core.launch.constant.TokenConstant;
 import org.springblade.core.secure.BladeUser;
 import org.springblade.core.secure.TokenInfo;
@@ -42,6 +43,7 @@ import java.util.*;
  *
  * @author Chill
  */
+@Slf4j
 public class SecureUtil {
 	private static final String BLADE_USER_REQUEST_ATTR = "_BLADE_USER_REQUEST_ATTR_";
 
@@ -318,6 +320,8 @@ public class SecureUtil {
 				return SecureUtil.parseJWT(parameter);
 			}
 		}
+		log.warn(" -------------   auth warning   --------------------");
+		log.warn("auth = null, url = [{}]", request.getRequestURI());
 		return null;
 	}
 
