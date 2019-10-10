@@ -12,7 +12,7 @@
 
     <artifactId>blade-starter-log</artifactId>
     <name>${project.artifactId}</name>
-    <version>${bladex.tool.version}</version>
+    <version>2.0.9.SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <dependencies>
