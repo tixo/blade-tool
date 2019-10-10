@@ -25,44 +25,40 @@ import org.springblade.core.log.event.ErrorLogListener;
 import org.springblade.core.log.event.UsualLogListener;
 import org.springblade.core.log.feign.ILogClient;
 import org.springblade.core.log.logger.BladeLogger;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
 /**
  * 日志工具自动配置
  *
  * @author Chill
  */
-@Configuration
-@ConditionalOnWebApplication
+//@Configuration
+//@ConditionalOnWebApplication
 public class BladeLogToolAutoConfiguration {
 
-	@Bean
+	//@Bean
 	public ApiLogAspect apiLogAspect() {
 		return new ApiLogAspect();
 	}
 
-	@Bean
+	//@Bean
 	public BladeLogger bladeLogger() {
 		return new BladeLogger();
 	}
 
-	@Bean
-	@ConditionalOnMissingBean(name = "apiLogListener")
+	//	@Bean
+//	@ConditionalOnMissingBean(name = "apiLogListener")
 	public ApiLogListener apiLogListener(ILogClient logService, ServerInfo serverInfo, BladeProperties bladeProperties) {
 		return new ApiLogListener(logService, serverInfo, bladeProperties);
 	}
 
-	@Bean
-	@ConditionalOnMissingBean(name = "errorEventListener")
+	//	@Bean
+//	@ConditionalOnMissingBean(name = "errorEventListener")
 	public ErrorLogListener errorEventListener(ILogClient logService, ServerInfo serverInfo, BladeProperties bladeProperties) {
 		return new ErrorLogListener(logService, serverInfo, bladeProperties);
 	}
 
-	@Bean
-	@ConditionalOnMissingBean(name = "usualEventListener")
+	//	@Bean
+//	@ConditionalOnMissingBean(name = "usualEventListener")
 	public UsualLogListener usualEventListener(ILogClient logService, ServerInfo serverInfo, BladeProperties bladeProperties) {
 		return new UsualLogListener(logService, serverInfo, bladeProperties);
 	}

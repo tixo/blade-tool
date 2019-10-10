@@ -18,13 +18,10 @@ package org.springblade.core.log.error;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springblade.core.log.exception.ServiceException;
-import org.springblade.core.log.publisher.ErrorLogPublisher;
 import org.springblade.core.secure.exception.SecureException;
 import org.springblade.core.tool.api.R;
 import org.springblade.core.tool.api.ResultCode;
 import org.springblade.core.tool.utils.Func;
-import org.springblade.core.tool.utils.UrlUtil;
-import org.springblade.core.tool.utils.WebUtil;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.context.annotation.Configuration;
@@ -69,7 +66,6 @@ public class BladeRestExceptionTranslator {
 	public R handleError(Throwable e) {
 		log.error("服务器异常", e);
 		//发送服务异常事件
-		ErrorLogPublisher.publishEvent(e, UrlUtil.getPath(WebUtil.getRequest().getRequestURI()));
 		return R.fail(ResultCode.INTERNAL_SERVER_ERROR, (Func.isEmpty(e.getMessage()) ? ResultCode.INTERNAL_SERVER_ERROR.getMessage() : e.getMessage()));
 	}
 

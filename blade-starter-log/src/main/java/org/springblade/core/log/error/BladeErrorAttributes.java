@@ -17,7 +17,6 @@
 package org.springblade.core.log.error;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springblade.core.log.publisher.ErrorLogPublisher;
 import org.springblade.core.tool.api.R;
 import org.springblade.core.tool.api.ResultCode;
 import org.springblade.core.tool.utils.BeanUtil;
@@ -49,8 +48,8 @@ public class BladeErrorAttributes extends DefaultErrorAttributes {
 			log.error(String.format("URL:%s error status:%d", requestUri, status), error);
 			result = R.fail(status, error.getMessage());
 		}
-		//发送服务异常事件
-		ErrorLogPublisher.publishEvent(error, requestUri);
+		//暂时不用log组件
+		//ErrorLogPublisher.publishEvent(error, requestUri);
 		return BeanUtil.toMap(result);
 	}
 

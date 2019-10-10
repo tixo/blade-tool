@@ -17,58 +17,39 @@
 
 package org.springblade.core.log.event;
 
-import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springblade.core.launch.props.BladeProperties;
-import org.springblade.core.launch.server.ServerInfo;
-import org.springblade.core.log.constant.EventConstant;
-import org.springblade.core.log.feign.ILogClient;
-import org.springblade.core.log.model.LogApi;
-import org.springblade.core.secure.utils.SecureUtil;
-import org.springblade.core.tool.utils.DateUtil;
-import org.springblade.core.tool.utils.UrlUtil;
-import org.springblade.core.tool.utils.WebUtil;
-import org.springframework.context.event.EventListener;
-import org.springframework.core.annotation.Order;
-import org.springframework.scheduling.annotation.Async;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.Map;
-
-
 /**
  * 异步监听日志事件
  *
  * @author Chill
  */
-@Slf4j
-@AllArgsConstructor
+//@Slf4j
+//@AllArgsConstructor
 public class ApiLogListener {
 
-	private final ILogClient logService;
-	private final ServerInfo serverInfo;
-	private final BladeProperties bladeProperties;
+//	private final ILogClient logService;
+//	private final ServerInfo serverInfo;
+//	private final BladeProperties bladeProperties;
 
 
-	@Async
-	@Order
-	@EventListener(ApiLogEvent.class)
+	//	@Async
+//	@Order
+//	@EventListener(ApiLogEvent.class)
 	public void saveApiLog(ApiLogEvent event) {
-		Map<String, Object> source = (Map<String, Object>) event.getSource();
-		LogApi logApi = (LogApi) source.get(EventConstant.EVENT_LOG);
-		HttpServletRequest request = (HttpServletRequest) source.get(EventConstant.EVENT_REQUEST);
-		logApi.setServiceId(bladeProperties.getName());
-		logApi.setServerHost(serverInfo.getHostName());
-		logApi.setServerIp(serverInfo.getIpWithPort());
-		logApi.setEnv(bladeProperties.getEnv());
-		logApi.setRemoteIp(WebUtil.getIP(request));
-		logApi.setUserAgent(request.getHeader(WebUtil.USER_AGENT_HEADER));
-		logApi.setRequestUri(UrlUtil.getPath(request.getRequestURI()));
-		logApi.setMethod(request.getMethod());
-		logApi.setParams(WebUtil.getRequestParamString(request));
-		logApi.setCreateBy(SecureUtil.getUserAccount(request));
-		logApi.setCreateTime(DateUtil.now());
-		logService.saveApiLog(logApi);
+//		Map<String, Object> source = (Map<String, Object>) event.getSource();
+//		LogApi logApi = (LogApi) source.get(EventConstant.EVENT_LOG);
+//		HttpServletRequest request = (HttpServletRequest) source.get(EventConstant.EVENT_REQUEST);
+//		logApi.setServiceId(bladeProperties.getName());
+//		logApi.setServerHost(serverInfo.getHostName());
+//		logApi.setServerIp(serverInfo.getIpWithPort());
+//		logApi.setEnv(bladeProperties.getEnv());
+//		logApi.setRemoteIp(WebUtil.getIP(request));
+//		logApi.setUserAgent(request.getHeader(WebUtil.USER_AGENT_HEADER));
+//		logApi.setRequestUri(UrlUtil.getPath(request.getRequestURI()));
+//		logApi.setMethod(request.getMethod());
+//		logApi.setParams(WebUtil.getRequestParamString(request));
+//		logApi.setCreateBy(SecureUtil.getUserAccount(request));
+//		logApi.setCreateTime(DateUtil.now());
+//		logService.saveApiLog(logApi);
 	}
 
 }

@@ -22,7 +22,6 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springblade.core.log.annotation.ApiLog;
-import org.springblade.core.log.publisher.ApiLogPublisher;
 
 /**
  * 操作日志使用spring event异步入库
@@ -39,14 +38,14 @@ public class ApiLogAspect {
 		String className = point.getTarget().getClass().getName();
 		//获取方法
 		String methodName = point.getSignature().getName();
-		// 发送异步日志事件
+		String classMethod = className + "." + methodName;
 		long beginTime = System.currentTimeMillis();
 		//执行方法
 		Object result = point.proceed();
 		//执行时长(毫秒)
 		long time = System.currentTimeMillis() - beginTime;
 		//记录日志
-		ApiLogPublisher.publishEvent(methodName, className, apiLog, time);
+		log.info("Method{} execute tooks [{}] ms", classMethod, time);
 		return result;
 	}
 

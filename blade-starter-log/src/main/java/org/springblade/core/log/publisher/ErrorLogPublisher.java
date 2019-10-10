@@ -17,15 +17,6 @@
 
 package org.springblade.core.log.publisher;
 
-import org.springblade.core.log.constant.EventConstant;
-import org.springblade.core.log.event.ErrorLogEvent;
-import org.springblade.core.tool.utils.*;
-import org.springblade.core.log.model.LogError;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * 异常信息事件发送
  *
@@ -34,26 +25,26 @@ import java.util.Map;
 public class ErrorLogPublisher {
 
 	public static void publishEvent(Throwable error, String requestUri) {
-		HttpServletRequest request = WebUtil.getRequest();
-		LogError logError = new LogError();
-		logError.setRequestUri(requestUri);
-		if (Func.isNotEmpty(error)) {
-			logError.setStackTrace(Exceptions.getStackTraceAsString(error));
-			logError.setExceptionName(error.getClass().getName());
-			logError.setMessage(error.getMessage());
-			StackTraceElement[] elements = error.getStackTrace();
-			if (Func.isNotEmpty(elements)) {
-				StackTraceElement element = elements[0];
-				logError.setMethodName(element.getMethodName());
-				logError.setMethodClass(element.getClassName());
-				logError.setFileName(element.getFileName());
-				logError.setLineNumber(element.getLineNumber());
-			}
-		}
-		Map<String, Object> event = new HashMap<>(16);
-		event.put(EventConstant.EVENT_LOG, logError);
-		event.put(EventConstant.EVENT_REQUEST, request);
-		SpringUtil.publishEvent(new ErrorLogEvent(event));
+//		HttpServletRequest request = WebUtil.getRequest();
+//		LogError logError = new LogError();
+//		logError.setRequestUri(requestUri);
+//		if (Func.isNotEmpty(error)) {
+//			logError.setStackTrace(Exceptions.getStackTraceAsString(error));
+//			logError.setExceptionName(error.getClass().getName());
+//			logError.setMessage(error.getMessage());
+//			StackTraceElement[] elements = error.getStackTrace();
+//			if (Func.isNotEmpty(elements)) {
+//				StackTraceElement element = elements[0];
+//				logError.setMethodName(element.getMethodName());
+//				logError.setMethodClass(element.getClassName());
+//				logError.setFileName(element.getFileName());
+//				logError.setLineNumber(element.getLineNumber());
+//			}
+//		}
+//		Map<String, Object> event = new HashMap<>(16);
+//		event.put(EventConstant.EVENT_LOG, logError);
+//		event.put(EventConstant.EVENT_REQUEST, request);
+//		SpringUtil.publishEvent(new ErrorLogEvent(event));
 	}
 
 }

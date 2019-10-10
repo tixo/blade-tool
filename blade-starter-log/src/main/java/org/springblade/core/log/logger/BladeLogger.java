@@ -16,20 +16,17 @@
  */
 package org.springblade.core.log.logger;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springblade.core.log.publisher.UsualLogPublisher;
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Value;
 
 /**
  * 日志工具类
  *
  * @author Chill
  */
-@Slf4j
-public class BladeLogger implements InitializingBean {
+//@Slf4j
+public class BladeLogger /*implements InitializingBean*/ {
 
-	@Value("${spring.application.name}")
+	//@Value("${spring.application.name}")
 	private String serviceId;
 
 	public void info(String id, String data) {
@@ -48,9 +45,9 @@ public class BladeLogger implements InitializingBean {
 		UsualLogPublisher.publishEvent("error", id, data);
 	}
 
-	@Override
-	public void afterPropertiesSet() throws Exception {
-		log.info(serviceId + ": BladeLogger init success!");
-	}
+	//@Override
+//	public void afterPropertiesSet() throws Exception {
+//		//log.info(serviceId + ": BladeLogger init success!");
+//	}
 
 }

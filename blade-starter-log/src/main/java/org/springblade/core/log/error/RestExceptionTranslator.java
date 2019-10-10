@@ -64,7 +64,7 @@ public class RestExceptionTranslator {
 	@ExceptionHandler(MissingServletRequestParameterException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public R handleError(MissingServletRequestParameterException e) {
-		log.warn("缺少请求参数", e.getMessage());
+		log.error("缺少请求参数", e.getMessage());
 		String message = String.format("缺少必要的请求参数: %s", e.getParameterName());
 		return R.fail(ResultCode.PARAM_MISS, message);
 	}
@@ -72,7 +72,7 @@ public class RestExceptionTranslator {
 	@ExceptionHandler(MethodArgumentTypeMismatchException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public R handleError(MethodArgumentTypeMismatchException e) {
-		log.warn("请求参数格式错误", e.getMessage());
+		log.error("请求参数格式错误", e.getMessage());
 		String message = String.format("请求参数格式错误: %s", e.getName());
 		return R.fail(ResultCode.PARAM_TYPE_ERROR, message);
 	}
@@ -80,14 +80,14 @@ public class RestExceptionTranslator {
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public R handleError(MethodArgumentNotValidException e) {
-		log.warn("参数验证失败", e.getMessage());
+		log.error("参数验证失败", e.getMessage());
 		return handleError(e.getBindingResult());
 	}
 
 	@ExceptionHandler(BindException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public R handleError(BindException e) {
-		log.warn("参数绑定失败", e.getMessage());
+		log.error("参数绑定失败", e.getMessage());
 		return handleError(e.getBindingResult());
 	}
 
@@ -100,7 +100,7 @@ public class RestExceptionTranslator {
 	@ExceptionHandler(ConstraintViolationException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public R handleError(ConstraintViolationException e) {
-		log.warn("参数验证失败", e.getMessage());
+		log.error("参数验证失败", e.getMessage());
 		Set<ConstraintViolation<?>> violations = e.getConstraintViolations();
 		ConstraintViolation<?> violation = violations.iterator().next();
 		String path = ((PathImpl) violation.getPropertyPath()).getLeafNode().getName();
